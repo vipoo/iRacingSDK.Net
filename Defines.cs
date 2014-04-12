@@ -1,18 +1,16 @@
-﻿using System;
+using System;
 using System.IO.MemoryMappedFiles;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
-using Win32.Synchronization;
 
 namespace SpikeIRacing
 {
-	class MainClass
+	public class Defines
 	{
-
+		public const int MaxString = 32;
+		public const int MaxDesc = 64;
 	}
-
-
+	
 }
-
