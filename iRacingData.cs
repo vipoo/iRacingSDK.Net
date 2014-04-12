@@ -1,20 +1,16 @@
 using System;
-using System.IO.MemoryMappedFiles;
-using System.Runtime.InteropServices;
 using System.Collections.Generic;
-using System.Threading;
+using System.IO.MemoryMappedFiles;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading;
 using Win32.Synchronization;
+using iRacingData;
 
-namespace SpikeIRacing
+namespace iRacingData
 {
-
-	public unsafe class iRacingDataFeed : IDisposable
+	public unsafe class Feed : IDisposable
 	{
-		public iRacingDataFeed()
-		{
-		}
-
 		public bool Connect()
 		{
 			try
@@ -27,30 +23,6 @@ namespace SpikeIRacing
 				return false;
 			}
 			return true;
-		}
-
-		IntPtr dataValidEvent;
-		MemoryMappedFile irsdkMappedMemory;
-		MemoryMappedViewAccessor accessor;
-		iRSDKHeader header;
-		VarHeader[] varHeaders;
-		Dictionary<string, object> values;
-		public string SessionInfo { get; private set; }
-
-		void OpenDataValidEvent()
-		{
-			dataValidEvent = Event.OpenEvent(Event.EVENT_ALL_ACCESS | Event.EVENT_MODIFY_STATE, false, "Local\\IRSDKDataValidEvent");
-			if(dataValidEvent != IntPtr.Zero)
-				return;
-
-			int le = Marshal.GetLastWin32Error();
-			throw new ApplicationException(String.Format("Unable to connect to event signals of iRacing"));
-		}
-
-		void OpenMemoryMappedFile()
-		{
-			irsdkMappedMemory = MemoryMappedFile.OpenExisting("Local\\IRSDKMemMapFileName");
-			accessor = irsdkMappedMemory.CreateViewAccessor();
 		}
 
 		public void OnSessionInfo(Action<string> newSessionDataFn)
@@ -77,6 +49,30 @@ namespace SpikeIRacing
 			accessor.Dispose();
 		}
 
+		IntPtr dataValidEvent;
+		MemoryMappedFile irsdkMappedMemory;
+		MemoryMappedViewAccessor accessor;
+		iRSDKHeader header;
+		VarHeader[] varHeaders;
+		Dictionary<string, object> values;
+		public string SessionInfo { get; private set; }
+
+		void OpenDataValidEvent()
+		{
+			dataValidEvent = Event.OpenEvent(Event.EVENT_ALL_ACCESS | Event.EVENT_MODIFY_STATE, false, "Local\\IRSDKDataValidEvent");
+			if(dataValidEvent != IntPtr.Zero)
+				return;
+
+			int le = Marshal.GetLastWin32Error();
+			throw new ApplicationException(String.Format("Unable to connect to event signals of iRacing"));
+		}
+
+		void OpenMemoryMappedFile()
+		{
+			irsdkMappedMemory = MemoryMappedFile.OpenExisting("Local\\IRSDKMemMapFileName");
+			accessor = irsdkMappedMemory.CreateViewAccessor();
+		}
+
 		unsafe Dictionary<string, object> GetNextDataSample()
 		{
 			var r = Event.WaitForSingleObject(dataValidEvent, 100);
@@ -89,13 +85,14 @@ namespace SpikeIRacing
 				ReadHeader(ref ptr);
 				ReadSessionInfo(ref ptr);
 				return ReadVariables();
-			} finally
+			}
+			finally
 			{
 				accessor.SafeMemoryMappedViewHandle.ReleasePointer();
 			}
 		}
 	
-		byte* ptrHeader;
+		byte* ptrHeader = null;
 		void RereadHeader()
 		{
 			byte* ptr = ptrHeader;
@@ -187,12 +184,9 @@ namespace SpikeIRacing
 					value = maps[varHeader.type](offset);
 
 				result.Add(varHeader.name, value);
-
 			}
 
 			return result;
 		}
-
 	}
-	
 }

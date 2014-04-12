@@ -1,11 +1,7 @@
 using System;
-using System.IO.MemoryMappedFiles;
 using System.Runtime.InteropServices;
-using System.Collections.Generic;
-using System.Threading;
-using System.Linq;
 
-namespace SpikeIRacing
+namespace iRacingData
 {
 	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
 	public struct iRSDKHeader

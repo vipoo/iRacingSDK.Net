@@ -6,9 +6,8 @@ using System.Threading;
 using System.Linq;
 using Win32.Synchronization;
 
-namespace SpikeIRacing
+namespace iRacingData
 {
-
 	public static class iRSDKHeaderExtensions
 	{
 		public static bool HasChangedSinceReading(this iRSDKHeader header, VarBufWithIndex buf)
