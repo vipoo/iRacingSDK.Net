@@ -3,6 +3,7 @@ using System.IO.MemoryMappedFiles;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Threading;
+using System.Linq;
 
 namespace SpikeIRacing
 {
@@ -37,6 +38,13 @@ namespace SpikeIRacing
 		public int bufOffset;
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
 		public int[] pad;
+	}
+
+	public struct VarBufWithIndex
+	{
+		public int tickCount;
+		public int bufOffset;
+		public int index;
 	}
 
 	public class Defines
@@ -133,7 +141,7 @@ namespace SpikeIRacing
 		}
 	}
 
-	public class iRacingDataFeed : IDisposable
+	public unsafe class iRacingDataFeed : IDisposable
 	{
 		public iRacingDataFeed()
 		{
@@ -220,8 +228,16 @@ namespace SpikeIRacing
 			}
 		}
 	
+		byte* ptrHeader;
+		void RereadHeader()
+		{
+			byte* ptr = ptrHeader;
+			ReadHeader(ref ptr);
+		}
+
 		unsafe void ReadHeader(ref byte *ptr)
 		{
+			ptrHeader = ptr;
 			header = (iRSDKHeader)System.Runtime.InteropServices.Marshal.PtrToStructure(new IntPtr(ptr), typeof(iRSDKHeader));
 
 			var size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(VarHeader));
@@ -243,25 +259,21 @@ namespace SpikeIRacing
 			SessionInfo = System.Text.Encoding.Default.GetString(sessionInfoData).TrimEnd(new char[] { '\0' });
 		}
 
-		Dictionary<string, object> ReadVariables()
+		unsafe Dictionary<string, object> ReadVariables()
 		{
-			var found = 0;
-			for(int x = 0; x < header.numBuf; x++)
-			{
-				if(header.varBuf[x].tickCount > header.varBuf[found].tickCount)
-					found = x;
-			}
-			var buffOffset = header.varBuf[found].bufOffset;
+			var buf = header.FindLatestBuf();
 
-			var tickCount = header.varBuf[found].tickCount;
-			values = ReadAllValues(accessor, buffOffset, varHeaders);
-			if(header.varBuf[found].tickCount != tickCount)
+			values = ReadAllValues(accessor, buf.bufOffset, varHeaders);
+			//Thread.Sleep(42);
+			RereadHeader();
+
+			if(header.HasChangedSinceReading(buf))
 			{
 				Console.WriteLine("Data Changed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 				return null;
 			}
 
-			values.Add("TickCount", tickCount);
+			values.Add("TickCount", buf.tickCount);
 			return values;
 		}
 
@@ -314,6 +326,23 @@ namespace SpikeIRacing
 			return result;
 		}
 
+	}
+
+	public static class LinqExtensions
+	{
+		public static bool HasChangedSinceReading(this iRSDKHeader header, VarBufWithIndex buf)
+		{
+			return header.varBuf[buf.index].tickCount != buf.tickCount;
+		}
+
+		public static VarBufWithIndex FindLatestBuf(this iRSDKHeader header)
+		{
+			return header.varBuf
+				.Take(header.numBuf)
+					.Select((b, i) => new VarBufWithIndex() { tickCount = b.tickCount, bufOffset =  b.bufOffset, index = i })
+					.OrderByDescending(b => b.tickCount)
+				.FirstOrDefault();
+		}
 	}
 }
 
