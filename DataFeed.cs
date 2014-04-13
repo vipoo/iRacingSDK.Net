@@ -48,7 +48,7 @@ namespace iRacingSDK
 
 		}
 
-		public IEnumerable<Dictionary<string,object>> DataFeed
+		public IEnumerable<Dictionary<string,object>> Feed
 		{
 			get
 			{

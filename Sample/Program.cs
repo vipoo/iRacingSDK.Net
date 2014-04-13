@@ -34,7 +34,7 @@ namespace SpikeIRSDK
 
 			Console.WriteLine(sessionInfo);
 
-			foreach(var data in iRacing.DataFeed)
+			foreach(var data in iRacing.Feed)
 			{
 				Console.WriteLine("Tick, Session Time: " + data["TickCount"] + ", " + data["SessionTime"]);
 			}
