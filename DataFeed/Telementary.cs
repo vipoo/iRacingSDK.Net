@@ -18,12 +18,48 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace iRacingSDK
 {
 	public class Telementary : Dictionary<string, object>
 	{
+		internal SessionInfo SessionInfo { get; set; }
+
 		public int[] 	CarIdxLap				{ get { return (int[])		this["CarIdxLap"]; 			} }
 		public float[] 	CarIdxLapDistPct 		{ get { return (float[])	this["CarIdxLapDistPct"]; 	} }
+
+		Car[] cars;
+		public Car[]   Cars
+		{
+			get
+			{
+				if(cars != null)
+					return cars;
+
+				cars = new Car[CarIdxLap.Length];
+				for(int i = 0; i < CarIdxLap.Length; i++)
+				{
+
+					cars[i] = new Car {
+						Index = i,
+						Driver = SessionInfo.DriverInfo.Drivers.FirstOrDefault(d => d.CarIdx == i),
+						DistancePercentage = CarIdxLapDistPct[i],
+						Lap	= CarIdxLap[i]
+					};
+				}
+
+				return cars;
+			}
+		}
+
+	}
+
+	public class Car
+	{
+		public int Index { get; internal set; }
+		public int Lap { get; internal set; }
+		public float DistancePercentage { get; internal set; }
+		public Driver Driver {	get; internal set; }
 	}
 }

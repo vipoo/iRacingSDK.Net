@@ -23,16 +23,10 @@ using System.Dynamic;
 using System.Collections.Generic;
 using System.Linq;
 using YamlDotNet.Serialization;
+using System.Threading;
 
 namespace SpikeIRSDK
 {
-	struct DriverTable
-	{
-		public int Index;
-		public int Lap;
-		public float Percentage;
-	}
-
 	class MainClass
 	{
 		public unsafe static void Main(string[] args)
@@ -41,56 +35,33 @@ namespace SpikeIRSDK
 			if(!iRacing.Connect())
 				throw new Exception("Unable to connect to iRacing server");
 
-			iRacing.OnSessionInfo( s => Console.WriteLine("New session data "));
-
-
 			foreach(var data in iRacing.Feed)
 			{
-				var numberOfDrivers = iRacing.SessionInfo.DriverInfo.Drivers.Length;
-				var positions = new DriverTable[numberOfDrivers];
-				for(int i = 0; i < numberOfDrivers; i++)
+				var numberOfDrivers = data.SessionInfo.DriverInfo.Drivers.Length;
+
+				var positions = data.Telementary.Cars
+                    .Take(numberOfDrivers)
+                    .Where(c => c.Index != 0)
+                    .OrderByDescending( c => c.Lap + c.DistancePercentage)
+                    .ToArray();
+
+                Console.Clear();
+				foreach(var p in positions)
 				{
-					positions[i].Index = i;
-					positions[i].Lap = data.Telementary.CarIdxLap[i];
-					positions[i].Percentage = data.Telementary.CarIdxLapDistPct[i];
+					Console.Write(p.Driver.UserName);
+					Console.Write(" ");
+					Console.Write(p.Lap);
+					Console.Write(" ");
+
+					Console.WriteLine(p.DistancePercentage);
+
 
 				}
 
-				Console.WriteLine(); //
-				Console.WriteLine("Tick, Session Time: " + data.Telementary["TickCount"] + ", " + data.Telementary["SessionTime"]);
+                Thread.Sleep(2000);
 			}
 		}
-
-		public class IRacingSessionInfo
-		{
-		}
-
-		static void NewMethod(DataFeed iRacing)
-		{
-			var sessionInfo = iRacing.SessionInfo;
-
-			Console.WriteLine(sessionInfo);
-
-			/*
-
-			var mapping = (YamlMappingNode)sessionInfo.Documents[0].RootNode;
-			// List all the items
-
-			dynamic spando = new ExpandoObject();
-			WriteElements(mapping, (IDictionary<string, Object>)spando);
-			var d = (IDictionary<string, Object>)spando.DriverInfo;
-
-
-			var drivers = (object[])spando.DriverInfo.Drivers;
-			foreach(var dr in (dynamic)drivers)
-			{
-				foreach( var kv in dr)
-					Console.WriteLine(kv.Key + "," + kv.Value);
-
-				//Console.WriteLine(dr);
-			}*/
-		}
-
+			
 		static void WriteElements(YamlMappingNode node, IDictionary<string, Object> spando)
 		{
 			foreach(var s in node.Children)

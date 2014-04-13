@@ -46,11 +46,6 @@ namespace iRacingSDK
 			return true;
 		}
 
-		public void OnSessionInfo(Action<string> newSessionDataFn)
-		{
-
-		}
-
 		public IEnumerable<DataSample> Feed
 		{
 			get
@@ -58,8 +53,8 @@ namespace iRacingSDK
 				while(true)
 				{
 					var values = GetNextDataSample();
-					if(values != null )
-						yield return new DataSample {  Telementary = values };
+					if(values != null && values.Telementary != null && values.SessionInfo != null)
+						yield return values;
 				}
 			}
 		}
@@ -75,7 +70,6 @@ namespace iRacingSDK
 		MemoryMappedViewAccessor accessor;
 		iRSDKHeader header;
 		VarHeader[] varHeaders;
-		Telementary values;
 
 		void OpenDataValidEvent()
 		{
@@ -93,23 +87,34 @@ namespace iRacingSDK
 			accessor = irsdkMappedMemory.CreateViewAccessor();
 		}
 
-		unsafe Telementary GetNextDataSample()
+		unsafe DataSample GetNextDataSample()
 		{
-			var r = Event.WaitForSingleObject(dataValidEvent, 100);
+ 			var r = Event.WaitForSingleObject(dataValidEvent, 100);
 
 			byte* ptr = null;
+
+			string sessionInfoString;
+			Telementary variables;
 
 			accessor.SafeMemoryMappedViewHandle.AcquirePointer(ref ptr);
 			try
 			{
 				ReadHeader(ref ptr);
-				ReadSessionInfo(ref ptr);
-				return ReadVariables();
+				sessionInfoString = ReadSessionInfo();
+				variables = ReadVariables();
 			}
 			finally
 			{
 				accessor.SafeMemoryMappedViewHandle.ReleasePointer();
 			}
+
+            lastSessionInfo = sessionInfoString == null ? lastSessionInfo : DeserialiseSessionInfo(sessionInfoString);
+
+			if(variables == null)
+				return null;
+
+			variables.SessionInfo = lastSessionInfo;
+			return new DataSample { Telementary = variables, SessionInfo = lastSessionInfo };
 		}
 	
 		byte* ptrHeader = null;
@@ -138,41 +143,38 @@ namespace iRacingSDK
 
 		string sessionInfoString;
 		int sessionLastInfoUpdate = -1;
+		SessionInfo lastSessionInfo;
 
-		unsafe void ReadSessionInfo(ref byte* ptr)
+		unsafe string ReadSessionInfo()
 		{
 			if(header.sessionInfoUpdate == sessionLastInfoUpdate)
-				return;
+				return null;
 
 			sessionLastInfoUpdate = header.sessionInfoUpdate;
 
 			var sessionInfoData = new byte[header.sessionInfoLen];
 			accessor.ReadArray<byte>(header.sessionInfoOffset, sessionInfoData, 0, header.sessionInfoLen);
 			sessionInfoString = System.Text.Encoding.Default.GetString(sessionInfoData).TrimEnd(new char[] { '\0' });
+
+            Console.WriteLine("Session data changed!!!!!");
+            Thread.Sleep(10000);
+            return sessionInfoString;
 		}
 
-		public SessionInfo SessionInfo
+		static SessionInfo DeserialiseSessionInfo(string sessionInfoString)
 		{
-			get
-			{
-				var input = new StringReader(sessionInfoString);
+			var input = new StringReader(sessionInfoString);
 
-				var deserializer = new Deserializer(ignoreUnmatched: true);
+			var deserializer = new Deserializer(ignoreUnmatched: true);
 
-				var order = (SessionInfo)deserializer.Deserialize(input, typeof(SessionInfo));
-
-				//var yaml = new YamlStream();
-				//yaml.Load(input);
-
-				return order;
-			}
+			return (SessionInfo)deserializer.Deserialize(input, typeof(SessionInfo));
 		}
 
 		unsafe Telementary ReadVariables()
 		{
 			var buf = header.FindLatestBuf();
 
-			values = ReadAllValues(accessor, buf.bufOffset, varHeaders);
+			var values = ReadAllValues(accessor, buf.bufOffset, varHeaders);
 			//Thread.Sleep(42);
 			RereadHeader();
 
