@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -63,4 +63,14 @@
     <Compile Include="iRacingData.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\SuperMFLib\src\MediaFoundation-2010.csproj">
+      <Project>{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}</Project>
+      <Name>MediaFoundation-2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SuperMFLib\SuperMFLib\SuperMFLib.csproj">
+      <Project>{59D2B4B5-2852-4396-A0D9-9CA546AC3C09}</Project>
+      <Name>SuperMFLib</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
