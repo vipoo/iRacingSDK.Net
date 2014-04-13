@@ -27,7 +27,7 @@ using iRacingSDK;
 
 namespace iRacingSDK
 {
-	public unsafe class Feed : IDisposable
+	public unsafe class DataFeed : IDisposable
 	{
 		public bool Connect()
 		{

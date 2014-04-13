@@ -60,7 +60,7 @@
     <Compile Include="SyncObjectAccess.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="iRSDKHeaderExtensions.cs" />
-    <Compile Include="iRacingData.cs" />
+    <Compile Include="DataFeed.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

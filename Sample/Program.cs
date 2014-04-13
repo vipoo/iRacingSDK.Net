@@ -25,7 +25,7 @@ namespace SpikeIRSDK
 	{
 		public unsafe static void Main(string[] args)
 		{
-			var iRacing = new Feed();
+			var iRacing = new DataFeed();
 			if(!iRacing.Connect())
 				throw new Exception("Unable to connect to iRacing server");
 
