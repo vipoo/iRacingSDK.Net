@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
 
-namespace iRacingData
+namespace iRacingSDK
 {
 
 	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]

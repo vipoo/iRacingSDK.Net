@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace iRacingData
+namespace iRacingSDK
 {
 	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
 	public struct iRSDKHeader

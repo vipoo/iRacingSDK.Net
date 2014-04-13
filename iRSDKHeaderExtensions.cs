@@ -6,7 +6,7 @@ using System.Threading;
 using System.Linq;
 using Win32.Synchronization;
 
-namespace iRacingData
+namespace iRacingSDK
 {
 	public static class iRSDKHeaderExtensions
 	{

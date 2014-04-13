@@ -5,9 +5,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Win32.Synchronization;
-using iRacingData;
+using iRacingSDK;
 
-namespace iRacingData
+namespace iRacingSDK
 {
 	public unsafe class Feed : IDisposable
 	{
