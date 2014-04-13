@@ -18,9 +18,21 @@
 
 using System;
 using iRacingSDK;
+using YamlDotNet.RepresentationModel;
+using System.Dynamic;
+using System.Collections.Generic;
+using System.Linq;
+using YamlDotNet.Serialization;
 
 namespace SpikeIRSDK
 {
+	struct DriverTable
+	{
+		public int Index;
+		public int Lap;
+		public float Percentage;
+	}
+
 	class MainClass
 	{
 		public unsafe static void Main(string[] args)
@@ -30,14 +42,99 @@ namespace SpikeIRSDK
 				throw new Exception("Unable to connect to iRacing server");
 
 			iRacing.OnSessionInfo( s => Console.WriteLine("New session data "));
+
+
+
+			//sessionInfo.DriverInfo.Drivers
+			//var competingDrivers = sessionInfo["DriverInfo"]["Drivers"];
+
+
+			foreach(var data in iRacing.Feed)
+			{
+				var numberOfDrivers = iRacing.SessionInfo.DriverInfo.Drivers.Length;
+				var positions = new DriverTable[numberOfDrivers];
+				for(int i = 0; i < numberOfDrivers; i++)
+				{
+					positions[i].Index = i;
+					positions[i].Lap = ((int[])data["CarIdxLap"])[i];
+					positions[i].Percentage = ((float[])data["CarIdxLapDistPct"])[i];
+
+				}
+
+				Console.WriteLine(); //
+				Console.WriteLine("Tick, Session Time: " + data["TickCount"] + ", " + data["SessionTime"]);
+			}
+		}
+
+		public class IRacingSessionInfo
+		{
+		}
+
+		static void NewMethod(DataFeed iRacing)
+		{
 			var sessionInfo = iRacing.SessionInfo;
 
 			Console.WriteLine(sessionInfo);
 
-			foreach(var data in iRacing.Feed)
+			/*
+
+			var mapping = (YamlMappingNode)sessionInfo.Documents[0].RootNode;
+			// List all the items
+
+			dynamic spando = new ExpandoObject();
+			WriteElements(mapping, (IDictionary<string, Object>)spando);
+			var d = (IDictionary<string, Object>)spando.DriverInfo;
+
+
+			var drivers = (object[])spando.DriverInfo.Drivers;
+			foreach(var dr in (dynamic)drivers)
 			{
-				Console.WriteLine("Tick, Session Time: " + data["TickCount"] + ", " + data["SessionTime"]);
+				foreach( var kv in dr)
+					Console.WriteLine(kv.Key + "," + kv.Value);
+
+				//Console.WriteLine(dr);
+			}*/
+		}
+
+		static void WriteElements(YamlMappingNode node, IDictionary<string, Object> spando)
+		{
+			foreach(var s in node.Children)
+			{
+				if(s.Value.GetType() == typeof(YamlMappingNode))
+				{
+					var spando2 = new ExpandoObject();
+					WriteElements((YamlMappingNode)s.Value, spando2);
+					spando.Add(s.Key.ToString(), spando2);
+				}
+				else
+				{
+					if(s.Value.GetType() == typeof(YamlScalarNode))
+					{
+						spando.Add(s.Key.ToString(), s.Value.ToString());
+					}
+					else
+					{
+						if(s.Value.GetType() == typeof(YamlSequenceNode))
+						{
+							var arry = new List<object>();
+							foreach(var x in (YamlSequenceNode)s.Value)
+							{
+								var spando3 = new ExpandoObject();
+								WriteElements((YamlMappingNode)x, spando3);
+								arry.Add(spando3);
+							}
+							spando.Add(s.Key.ToString(), arry.ToArray());
+						} else
+							Console.WriteLine(s.Value.GetType());
+					}
+				}
 			}
 		}
+
+	}
+
+	public class DynamicYamlReader
+	{
+
 	}
 }

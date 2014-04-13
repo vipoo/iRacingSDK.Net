@@ -24,6 +24,9 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Win32.Synchronization;
 using iRacingSDK;
+using System.IO;
+using YamlDotNet.RepresentationModel;
+using YamlDotNet.Serialization;
 
 namespace iRacingSDK
 {
@@ -73,7 +76,6 @@ namespace iRacingSDK
 		iRSDKHeader header;
 		VarHeader[] varHeaders;
 		Dictionary<string, object> values;
-		public string SessionInfo { get; private set; }
 
 		void OpenDataValidEvent()
 		{
@@ -134,11 +136,36 @@ namespace iRacingSDK
 			}
 		}
 
+		string sessionInfoString;
+		int sessionLastInfoUpdate = -1;
+
 		unsafe void ReadSessionInfo(ref byte* ptr)
 		{
+			if(header.sessionInfoUpdate == sessionLastInfoUpdate)
+				return;
+
+			sessionLastInfoUpdate = header.sessionInfoUpdate;
+
 			var sessionInfoData = new byte[header.sessionInfoLen];
 			accessor.ReadArray<byte>(header.sessionInfoOffset, sessionInfoData, 0, header.sessionInfoLen);
-			SessionInfo = System.Text.Encoding.Default.GetString(sessionInfoData).TrimEnd(new char[] { '\0' });
+			sessionInfoString = System.Text.Encoding.Default.GetString(sessionInfoData).TrimEnd(new char[] { '\0' });
+		}
+
+		public SessionInfo SessionInfo
+		{
+			get
+			{
+				var input = new StringReader(sessionInfoString);
+
+				var deserializer = new Deserializer(ignoreUnmatched: true);
+
+				var order = (SessionInfo)deserializer.Deserialize(input, typeof(SessionInfo));
+
+				//var yaml = new YamlStream();
+				//yaml.Load(input);
+
+				return order;
+			}
 		}
 
 		unsafe Dictionary<string, object> ReadVariables()
@@ -206,5 +233,22 @@ namespace iRacingSDK
 
 			return result;
 		}
+	}
+
+	public class SessionInfo
+	{
+		public DriverInfo DriverInfo { get; set; }
+	}
+
+	public class DriverInfo
+	{
+		public int DriverCarIdx { get; set; }
+		public Driver[] Drivers {get;set;}
+	}
+
+	public class Driver
+	{
+		public int CarIdx { get; set; }
+		public string UserName {get;set;}
 	}
 }
