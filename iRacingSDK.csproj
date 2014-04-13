@@ -64,6 +64,11 @@
     <Compile Include="Event.cs" />
     <Compile Include="iRSDKHeaderExtensions.cs" />
     <Compile Include="DataFeed.cs" />
+    <Compile Include="DataFeed\DriverInfo.cs" />
+    <Compile Include="DataFeed\Driver.cs" />
+    <Compile Include="DataFeed\SessionInfo.cs" />
+    <Compile Include="DataFeed\Telementary.cs" />
+    <Compile Include="DataFeed\DataSample.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -89,4 +94,7 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
+  <ItemGroup>
+    <Folder Include="DataFeed\" />
+  </ItemGroup>
 </Project>

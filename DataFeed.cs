@@ -51,7 +51,7 @@ namespace iRacingSDK
 
 		}
 
-		public IEnumerable<Dictionary<string,object>> Feed
+		public IEnumerable<DataSample> Feed
 		{
 			get
 			{
@@ -59,7 +59,7 @@ namespace iRacingSDK
 				{
 					var values = GetNextDataSample();
 					if(values != null )
-						yield return values;
+						yield return new DataSample {  Telementary = values };
 				}
 			}
 		}
@@ -75,7 +75,7 @@ namespace iRacingSDK
 		MemoryMappedViewAccessor accessor;
 		iRSDKHeader header;
 		VarHeader[] varHeaders;
-		Dictionary<string, object> values;
+		Telementary values;
 
 		void OpenDataValidEvent()
 		{
@@ -93,7 +93,7 @@ namespace iRacingSDK
 			accessor = irsdkMappedMemory.CreateViewAccessor();
 		}
 
-		unsafe Dictionary<string, object> GetNextDataSample()
+		unsafe Telementary GetNextDataSample()
 		{
 			var r = Event.WaitForSingleObject(dataValidEvent, 100);
 
@@ -168,7 +168,7 @@ namespace iRacingSDK
 			}
 		}
 
-		unsafe Dictionary<string, object> ReadVariables()
+		unsafe Telementary ReadVariables()
 		{
 			var buf = header.FindLatestBuf();
 
@@ -193,9 +193,9 @@ namespace iRacingSDK
 			return data;
 		}
 
-		static Dictionary<string, object> ReadAllValues(MemoryMappedViewAccessor accessor, int buffOffset, VarHeader[] varHeaders)
+		static Telementary ReadAllValues(MemoryMappedViewAccessor accessor, int buffOffset, VarHeader[] varHeaders)
 		{
-			var result = new Dictionary<string, object>();
+			var result = new Telementary();
 
 			var maps = new Dictionary<VarType, Func<int, object>>() {
 				{ VarType.irInt, (offset) => accessor.ReadInt32(offset) },
@@ -235,20 +235,4 @@ namespace iRacingSDK
 		}
 	}
 
-	public class SessionInfo
-	{
-		public DriverInfo DriverInfo { get; set; }
-	}
-
-	public class DriverInfo
-	{
-		public int DriverCarIdx { get; set; }
-		public Driver[] Drivers {get;set;}
-	}
-
-	public class Driver
-	{
-		public int CarIdx { get; set; }
-		public string UserName {get;set;}
-	}
 }

@@ -44,11 +44,6 @@ namespace SpikeIRSDK
 			iRacing.OnSessionInfo( s => Console.WriteLine("New session data "));
 
 
-
-			//sessionInfo.DriverInfo.Drivers
-			//var competingDrivers = sessionInfo["DriverInfo"]["Drivers"];
-
-
 			foreach(var data in iRacing.Feed)
 			{
 				var numberOfDrivers = iRacing.SessionInfo.DriverInfo.Drivers.Length;
@@ -56,13 +51,13 @@ namespace SpikeIRSDK
 				for(int i = 0; i < numberOfDrivers; i++)
 				{
 					positions[i].Index = i;
-					positions[i].Lap = ((int[])data["CarIdxLap"])[i];
-					positions[i].Percentage = ((float[])data["CarIdxLapDistPct"])[i];
+					positions[i].Lap = data.Telementary.CarIdxLap[i];
+					positions[i].Percentage = data.Telementary.CarIdxLapDistPct[i];
 
 				}
 
 				Console.WriteLine(); //
-				Console.WriteLine("Tick, Session Time: " + data["TickCount"] + ", " + data["SessionTime"]);
+				Console.WriteLine("Tick, Session Time: " + data.Telementary["TickCount"] + ", " + data.Telementary["SessionTime"]);
 			}
 		}
 
