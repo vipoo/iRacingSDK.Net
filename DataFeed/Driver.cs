@@ -20,14 +20,6 @@ using System;
 
 namespace iRacingSDK
 {
-	public class DataSample
-	{
-		public SessionInfo SessionInfo { get; internal set; }
-		public Telementary Telementary { get; internal set;}
-
-
-	}
-
 	public class Driver
 	{
 		public int CarIdx { get; set; }

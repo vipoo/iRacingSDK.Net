@@ -17,20 +17,9 @@
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
-using System.IO.MemoryMappedFiles;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading;
-using Win32.Synchronization;
-using iRacingSDK;
-using System.IO;
-using YamlDotNet.RepresentationModel;
-using YamlDotNet.Serialization;
 
 namespace iRacingSDK
 {
-
 	public class SessionInfo
 	{
 		public DriverInfo DriverInfo { get; internal set; }
