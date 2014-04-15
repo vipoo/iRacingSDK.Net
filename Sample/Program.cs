@@ -31,21 +31,24 @@ namespace SpikeIRSDK
 	{
 		public unsafe static void Main(string[] args)
 		{
-			var iRacing = new DataFeed();
-			if(!iRacing.Connect())
-				throw new Exception("Unable to connect to iRacing server");
-
-			foreach(var data in iRacing.Feed)
+			foreach(var data in iRacing.GetDataFeed())
 			{
+				if(!data.IsConnected)
+				{
+					Console.Clear();
+					Console.WriteLine("Waiting to connect ...");
+					continue;
+				}
+
 				var numberOfDrivers = data.SessionInfo.DriverInfo.Drivers.Length;
 
 				var positions = data.Telementary.Cars
-                    .Take(numberOfDrivers)
-                    .Where(c => c.Index != 0)
-                    .OrderByDescending( c => c.Lap + c.DistancePercentage)
-                    .ToArray();
+					.Take(numberOfDrivers)
+					.Where(c => c.Index != 0)
+					.OrderByDescending(c => c.Lap + c.DistancePercentage)
+					.ToArray();
 
-                Console.Clear();
+				Console.Clear();
 				foreach(var p in positions)
 				{
 					Console.Write(p.Driver.UserName);
@@ -54,12 +57,21 @@ namespace SpikeIRSDK
 					Console.Write(" ");
 
 					Console.WriteLine(p.DistancePercentage);
-
-
 				}
 
-                Thread.Sleep(2000);
+				Thread.Sleep(2000);
 			}
+				
+		/*
+
+			var iRacing = new DataFeed();
+				if(!iRacing.Connect())
+					throw new Exception("Unable to connect to iRacing server");
+
+				foreach(var data in iRacing.Feed)
+				{
+				}
+		*/
 		}
 			
 		static void WriteElements(YamlMappingNode node, IDictionary<string, Object> spando)

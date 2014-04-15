@@ -18,120 +18,57 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.MemoryMappedFiles;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Win32.Synchronization;
-using iRacingSDK;
-using System.IO;
-using YamlDotNet.RepresentationModel;
 using YamlDotNet.Serialization;
 
 namespace iRacingSDK
 {
-	public unsafe class DataFeed : IDisposable
+	public class DataFeed
 	{
-		public bool Connect()
-		{
-			try
-			{
-			OpenDataValidEvent();
-			OpenMemoryMappedFile();
-			} catch(Exception e)
-			{
-				Console.WriteLine(e.Message);
-				return false;
-			}
-			return true;
-		}
-
-		public IEnumerable<DataSample> Feed
-		{
-			get
-			{
-				while(true)
-				{
-					var values = GetNextDataSample();
-					if(values != null && values.Telementary != null && values.SessionInfo != null)
-						yield return values;
-				}
-			}
-		}
-
-		public void Dispose()
-		{
-			irsdkMappedMemory.Dispose();
-			accessor.Dispose();
-		}
-
-		IntPtr dataValidEvent;
-		MemoryMappedFile irsdkMappedMemory;
 		MemoryMappedViewAccessor accessor;
-		iRSDKHeader header;
-		VarHeader[] varHeaders;
 
-		void OpenDataValidEvent()
+		public DataFeed(MemoryMappedViewAccessor accessor)
 		{
-			dataValidEvent = Event.OpenEvent(Event.EVENT_ALL_ACCESS | Event.EVENT_MODIFY_STATE, false, "Local\\IRSDKDataValidEvent");
-			if(dataValidEvent != IntPtr.Zero)
-				return;
-
-			int le = Marshal.GetLastWin32Error();
-			throw new ApplicationException(String.Format("Unable to connect to event signals of iRacing"));
+			this.accessor = accessor;
 		}
 
-		void OpenMemoryMappedFile()
+		public unsafe DataSample GetNextDataSample()
 		{
-			irsdkMappedMemory = MemoryMappedFile.OpenExisting("Local\\IRSDKMemMapFileName");
-			accessor = irsdkMappedMemory.CreateViewAccessor();
-		}
+			var headers = accessor.AcquirePointer( ptr => {
+				var a = ReadHeader(ptr);
+				var b = ReadVariableHeaders(a, ptr);
+				return new {Header = a, VarHeaders = b};
+			});
 
-		unsafe DataSample GetNextDataSample()
-		{
- 			var r = Event.WaitForSingleObject(dataValidEvent, 100);
+			if((headers.Header.status & 1) == 0)
+				return DataSample.YetToConnected;
 
-			byte* ptr = null;
+			var sessionInfo = ReadSessionInfo(headers.Header);
+			var variables = ReadVariables(headers.Header, headers.VarHeaders);
 
-			string sessionInfoString;
-			Telementary variables;
-
-			accessor.SafeMemoryMappedViewHandle.AcquirePointer(ref ptr);
-			try
-			{
-				ReadHeader(ref ptr);
-				sessionInfoString = ReadSessionInfo();
-				variables = ReadVariables();
-			}
-			finally
-			{
-				accessor.SafeMemoryMappedViewHandle.ReleasePointer();
-			}
-
-            lastSessionInfo = sessionInfoString == null ? lastSessionInfo : DeserialiseSessionInfo(sessionInfoString);
+			if(sessionInfo == null)
+				return DataSample.YetToConnected;
 
 			if(variables == null)
 				return null;
 
-			variables.SessionInfo = lastSessionInfo;
-			return new DataSample { Telementary = variables, SessionInfo = lastSessionInfo };
-		}
-	
-		byte* ptrHeader = null;
-		void RereadHeader()
-		{
-			byte* ptr = ptrHeader;
-			ReadHeader(ref ptr);
+			variables.SessionInfo = sessionInfo;
+			return new DataSample { Telementary = variables, SessionInfo = sessionInfo, IsConnected = true };
 		}
 
-		unsafe void ReadHeader(ref byte *ptr)
+		unsafe iRSDKHeader ReadHeader(byte *ptr)
 		{
-			ptrHeader = ptr;
-			header = (iRSDKHeader)System.Runtime.InteropServices.Marshal.PtrToStructure(new IntPtr(ptr), typeof(iRSDKHeader));
+			return (iRSDKHeader)System.Runtime.InteropServices.Marshal.PtrToStructure(new IntPtr(ptr), typeof(iRSDKHeader));
+		}
 
-			var size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(VarHeader));
+		static readonly int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(VarHeader));
 
-			varHeaders = new VarHeader[header.numVars];
+		unsafe VarHeader[] ReadVariableHeaders(iRSDKHeader header, byte* ptr)
+		{
+			var varHeaders = new VarHeader[header.numVars];
 			ptr += header.varHeaderOffset;
 
 			for(var i = 0; i < header.numVars; i++)
@@ -139,46 +76,57 @@ namespace iRacingSDK
 				varHeaders[i] = (VarHeader)Marshal.PtrToStructure(new IntPtr(ptr), typeof(VarHeader));
 				ptr += size;
 			}
+
+			return varHeaders;
 		}
 
-		string sessionInfoString;
-		int sessionLastInfoUpdate = -1;
+		int sessionLastInfoUpdate = -2;
 		SessionInfo lastSessionInfo;
-
-		unsafe string ReadSessionInfo()
+		SessionInfo ReadSessionInfo(iRSDKHeader header)
 		{
 			if(header.sessionInfoUpdate == sessionLastInfoUpdate)
-				return null;
+				return lastSessionInfo;
 
 			sessionLastInfoUpdate = header.sessionInfoUpdate;
 
 			var sessionInfoData = new byte[header.sessionInfoLen];
 			accessor.ReadArray<byte>(header.sessionInfoOffset, sessionInfoData, 0, header.sessionInfoLen);
-			sessionInfoString = System.Text.Encoding.Default.GetString(sessionInfoData).TrimEnd(new char[] { '\0' });
+			var sessionInfoString = System.Text.Encoding.Default.GetString(sessionInfoData);
+            
+            sessionInfoString = sessionInfoString.Substring(0, sessionInfoString.IndexOf('\0'));
 
             Console.WriteLine("Session data changed!!!!!");
-            Thread.Sleep(10000);
-            return sessionInfoString;
+			return lastSessionInfo = DeserialiseSessionInfo(sessionInfoString);
 		}
 
 		static SessionInfo DeserialiseSessionInfo(string sessionInfoString)
 		{
-			var input = new StringReader(sessionInfoString);
+			if(sessionInfoString.Length == 0)
+				return null;
 
-			var deserializer = new Deserializer(ignoreUnmatched: true);
+            try
+            {
+                var input = new StringReader(sessionInfoString);
 
-			return (SessionInfo)deserializer.Deserialize(input, typeof(SessionInfo));
+                var deserializer = new Deserializer(ignoreUnmatched: true);
+
+                return (SessionInfo)deserializer.Deserialize(input, typeof(SessionInfo));
+            }
+            catch(Exception)
+            {
+                return null;
+            }
 		}
 
-		unsafe Telementary ReadVariables()
+		unsafe Telementary ReadVariables( iRSDKHeader header, VarHeader[] varHeaders)
 		{
 			var buf = header.FindLatestBuf();
 
 			var values = ReadAllValues(accessor, buf.bufOffset, varHeaders);
-			//Thread.Sleep(42);
-			RereadHeader();
+			//	Thread.Sleep(48);
+			var latestHeader = accessor.AcquirePointer( ptr => ReadHeader(ptr) );
 
-			if(header.HasChangedSinceReading(buf))
+			if(latestHeader.HasChangedSinceReading(buf))
 			{
 				Console.WriteLine("Data Changed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 				return null;
@@ -186,13 +134,6 @@ namespace iRacingSDK
 
 			values.Add("TickCount", buf.tickCount);
 			return values;
-		}
-
-		static T[] GetArrayData<T>(MemoryMappedViewAccessor accessor, int size, int offset) where T:struct
-		{
-			var data = new T[size];
-			accessor.ReadArray<T>(offset, data, 0, size);
-			return data;
 		}
 
 		static Telementary ReadAllValues(MemoryMappedViewAccessor accessor, int buffOffset, VarHeader[] varHeaders)
@@ -235,6 +176,12 @@ namespace iRacingSDK
 
 			return result;
 		}
-	}
 
+		static T[] GetArrayData<T>(MemoryMappedViewAccessor accessor, int size, int offset) where T:struct
+		{
+			var data = new T[size];
+			accessor.ReadArray<T>(offset, data, 0, size);
+			return data;
+		}
+	}
 }

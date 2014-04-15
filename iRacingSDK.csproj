@@ -69,6 +69,10 @@
     <Compile Include="DataFeed\SessionInfo.cs" />
     <Compile Include="DataFeed\Telementary.cs" />
     <Compile Include="DataFeed\DataSample.cs" />
+    <Compile Include="ConnectionEvent.cs" />
+    <Compile Include="iRacing.cs" />
+    <Compile Include="iRacingConnection.cs" />
+    <Compile Include="MemoryMappedViewAccessorExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
