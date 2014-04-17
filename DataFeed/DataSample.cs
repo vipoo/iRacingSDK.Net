@@ -25,8 +25,8 @@ namespace iRacingSDK
 		public static readonly DataSample YetToConnected = new DataSample { IsConnected = false };
 
 		public bool IsConnected	{ get; internal set; }
-		public SessionInfo SessionInfo { get; internal set; }
-		public Telementary Telementary { get; internal set;}
+		public _SessionInfo SessionInfo { get; internal set; }
+		public Telementary Telementary { get; internal set; }
 
 	}
 	

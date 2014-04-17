@@ -1,4 +1,4 @@
-﻿// This file is part of iRacingSDK.
+// This file is part of iRacingSDK.
 //
 // Copyright 2014 Dean Netherton
 // https://github.com/vipoo/iRacingSDK.Net
@@ -17,13 +17,14 @@
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace iRacingSDK
 {
-    class SessionInfo
-    {
-    }
+	public class _SessionInfo
+	{
+        public string Raw { get; internal set; }
+		public DriverInfo DriverInfo { get; internal set; }
+		//public _SessionInfo SessionInfo { get; internal set; }
+	}
+	
 }

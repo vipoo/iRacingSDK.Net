@@ -36,26 +36,25 @@ namespace SpikeIRSDK
                     continue;
                 }
 
-                var numberOfDrivers = data.SessionInfo.DriverInfo.Drivers.Length;
+                Console.WriteLine("Session Data");
+                Console.WriteLine(data.SessionInfo.Raw);
 
-                var positions = data.Telementary.Cars
-                    .Take(numberOfDrivers)
-                    .Where(c => c.Index != 0)
-                    .OrderByDescending(c => c.Lap + c.DistancePercentage)
-                    .ToArray();
+                Console.WriteLine("Telemtary");
 
-                Console.Clear();
-                foreach (var p in positions)
+                foreach(var kv in data.Telementary)
                 {
-                    Console.Write(p.Driver.UserName);
-                    Console.Write(" ");
-                    Console.Write(p.Lap);
-                    Console.Write(" ");
-
-                    Console.WriteLine(p.DistancePercentage);
+                    Console.WriteLine("{0} = {1}", kv.Key, kv.Value);
                 }
 
-                Thread.Sleep(2000);
+
+				/*var session = data.SessionInfo.SessionInfo.Sessions.Where(s => s.SessionNum == data.Telementary.SessionNum);
+                Console.WriteLine("SessionLaps = {0}", session.SessionLaps);
+                Console.WriteLine("SessionTime = {0}", session.SessionTime);
+
+                Console.WriteLine("Remaining time {0}", session.SessionTime - data.Telementary.SessionTime);
+*/
+                return;
+                //Thread.Sleep(2000);
             }
         }
     }			

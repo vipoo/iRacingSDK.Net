@@ -81,8 +81,8 @@ namespace iRacingSDK
 		}
 
 		int sessionLastInfoUpdate = -2;
-		SessionInfo lastSessionInfo;
-		SessionInfo ReadSessionInfo(iRSDKHeader header)
+		_SessionInfo lastSessionInfo;
+		_SessionInfo ReadSessionInfo(iRSDKHeader header)
 		{
 			if(header.sessionInfoUpdate == sessionLastInfoUpdate)
 				return lastSessionInfo;
@@ -99,7 +99,7 @@ namespace iRacingSDK
 			return lastSessionInfo = DeserialiseSessionInfo(sessionInfoString);
 		}
 
-		static SessionInfo DeserialiseSessionInfo(string sessionInfoString)
+		static _SessionInfo DeserialiseSessionInfo(string sessionInfoString)
 		{
 			if(sessionInfoString.Length == 0)
 				return null;
@@ -110,7 +110,9 @@ namespace iRacingSDK
 
                 var deserializer = new Deserializer(ignoreUnmatched: true);
 
-                return (SessionInfo)deserializer.Deserialize(input, typeof(SessionInfo));
+                var result =  (_SessionInfo)deserializer.Deserialize(input, typeof(_SessionInfo));
+                result.Raw = sessionInfoString.Replace("\n", "\r\n");
+                return result;
             }
             catch(Exception)
             {

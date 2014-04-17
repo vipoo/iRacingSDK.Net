@@ -24,11 +24,12 @@ namespace iRacingSDK
 {
 	public class Telementary : Dictionary<string, object>
 	{
-		internal SessionInfo SessionInfo { get; set; }
+		internal _SessionInfo SessionInfo { get; set; }
 
 		public int[] 	CarIdxLap				{ get { return (int[])		this["CarIdxLap"]; 			} }
 		public float[] 	CarIdxLapDistPct 		{ get { return (float[])	this["CarIdxLapDistPct"]; 	} }
-
+        public int      SessionNum              { get { return (int)        this["SessionNum"];         } }
+   
 		Car[] cars;
 		public Car[]   Cars
 		{
