@@ -17,102 +17,46 @@
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using iRacingSDK;
-using YamlDotNet.RepresentationModel;
-using System.Dynamic;
-using System.Collections.Generic;
 using System.Linq;
-using YamlDotNet.Serialization;
+using iRacingSDK;
 using System.Threading;
 
 namespace SpikeIRSDK
 {
-	class MainClass
-	{
-		public unsafe static void Main(string[] args)
-		{
-			foreach(var data in iRacing.GetDataFeed())
-			{
-				if(!data.IsConnected)
-				{
-					Console.Clear();
-					Console.WriteLine("Waiting to connect ...");
-					continue;
-				}
+    class MainClass
+    {
+        public unsafe static void Main(string[] args)
+        {
+            foreach (var data in iRacing.GetDataFeed())
+            {
+                if (!data.IsConnected)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Waiting to connect ...");
+                    continue;
+                }
 
-				var numberOfDrivers = data.SessionInfo.DriverInfo.Drivers.Length;
+                var numberOfDrivers = data.SessionInfo.DriverInfo.Drivers.Length;
 
-				var positions = data.Telementary.Cars
-					.Take(numberOfDrivers)
-					.Where(c => c.Index != 0)
-					.OrderByDescending(c => c.Lap + c.DistancePercentage)
-					.ToArray();
+                var positions = data.Telementary.Cars
+                    .Take(numberOfDrivers)
+                    .Where(c => c.Index != 0)
+                    .OrderByDescending(c => c.Lap + c.DistancePercentage)
+                    .ToArray();
 
-				Console.Clear();
-				foreach(var p in positions)
-				{
-					Console.Write(p.Driver.UserName);
-					Console.Write(" ");
-					Console.Write(p.Lap);
-					Console.Write(" ");
+                Console.Clear();
+                foreach (var p in positions)
+                {
+                    Console.Write(p.Driver.UserName);
+                    Console.Write(" ");
+                    Console.Write(p.Lap);
+                    Console.Write(" ");
 
-					Console.WriteLine(p.DistancePercentage);
-				}
+                    Console.WriteLine(p.DistancePercentage);
+                }
 
-				Thread.Sleep(2000);
-			}
-				
-		/*
-
-			var iRacing = new DataFeed();
-				if(!iRacing.Connect())
-					throw new Exception("Unable to connect to iRacing server");
-
-				foreach(var data in iRacing.Feed)
-				{
-				}
-		*/
-		}
-			
-		static void WriteElements(YamlMappingNode node, IDictionary<string, Object> spando)
-		{
-			foreach(var s in node.Children)
-			{
-				if(s.Value.GetType() == typeof(YamlMappingNode))
-				{
-					var spando2 = new ExpandoObject();
-					WriteElements((YamlMappingNode)s.Value, spando2);
-					spando.Add(s.Key.ToString(), spando2);
-				}
-				else
-				{
-					if(s.Value.GetType() == typeof(YamlScalarNode))
-					{
-						spando.Add(s.Key.ToString(), s.Value.ToString());
-					}
-					else
-					{
-						if(s.Value.GetType() == typeof(YamlSequenceNode))
-						{
-							var arry = new List<object>();
-							foreach(var x in (YamlSequenceNode)s.Value)
-							{
-								var spando3 = new ExpandoObject();
-								WriteElements((YamlMappingNode)x, spando3);
-								arry.Add(spando3);
-							}
-							spando.Add(s.Key.ToString(), arry.ToArray());
-						} else
-							Console.WriteLine(s.Value.GetType());
-					}
-				}
-			}
-		}
-
-	}
-
-	public class DynamicYamlReader
-	{
-
-	}
+                Thread.Sleep(2000);
+            }
+        }
+    }			
 }

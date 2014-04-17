@@ -39,15 +39,12 @@ namespace iRacingSDK
 
 				cars = new Car[CarIdxLap.Length];
 				for(int i = 0; i < CarIdxLap.Length; i++)
-				{
-
 					cars[i] = new Car {
 						Index = i,
 						Driver = SessionInfo.DriverInfo.Drivers.FirstOrDefault(d => d.CarIdx == i),
 						DistancePercentage = CarIdxLapDistPct[i],
 						Lap	= CarIdxLap[i]
 					};
-				}
 
 				return cars;
 			}
