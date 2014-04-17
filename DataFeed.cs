@@ -120,7 +120,7 @@ namespace iRacingSDK
             }
 		}
 
-		unsafe Telementary ReadVariables( iRSDKHeader header, VarHeader[] varHeaders)
+		unsafe Telemetry ReadVariables( iRSDKHeader header, VarHeader[] varHeaders)
 		{
 			var buf = header.FindLatestBuf();
 
@@ -138,9 +138,9 @@ namespace iRacingSDK
 			return values;
 		}
 
-		static Telementary ReadAllValues(MemoryMappedViewAccessor accessor, int buffOffset, VarHeader[] varHeaders)
+		static Telemetry ReadAllValues(MemoryMappedViewAccessor accessor, int buffOffset, VarHeader[] varHeaders)
 		{
-			var result = new Telementary();
+			var result = new Telemetry();
 
 			var maps = new Dictionary<VarType, Func<int, object>>() {
 				{ VarType.irInt, (offset) => accessor.ReadInt32(offset) },

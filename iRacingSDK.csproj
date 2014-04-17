@@ -66,7 +66,6 @@
     <Compile Include="DataFeed.cs" />
     <Compile Include="DataFeed\DriverInfo.cs" />
     <Compile Include="DataFeed\Driver.cs" />
-    <Compile Include="DataFeed\Telementary.cs" />
     <Compile Include="DataFeed\DataSample.cs" />
     <Compile Include="ConnectionEvent.cs" />
     <Compile Include="iRacing.cs" />
@@ -74,6 +73,7 @@
     <Compile Include="MemoryMappedViewAccessorExtensions.cs" />
     <Compile Include="DataFeed\SessionInfo.cs" />
     <Compile Include="DataFeed\_SessionInfo.cs" />
+    <Compile Include="DataFeed\Telemetry.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

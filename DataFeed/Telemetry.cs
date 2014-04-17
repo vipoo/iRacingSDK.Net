@@ -22,7 +22,7 @@ using System.Linq;
 
 namespace iRacingSDK
 {
-	public class Telementary : Dictionary<string, object>
+	public class Telemetry : Dictionary<string, object>
 	{
 		internal _SessionInfo SessionInfo { get; set; }
 
