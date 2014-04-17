@@ -56,7 +56,7 @@ namespace iRacingSDK
 				return null;
 
 			variables.SessionInfo = sessionInfo;
-			return new DataSample { Telementary = variables, SessionInfo = sessionInfo, IsConnected = true };
+			return new DataSample { Telemetry = variables, SessionInfo = sessionInfo, IsConnected = true };
 		}
 
 		unsafe iRSDKHeader ReadHeader(byte *ptr)

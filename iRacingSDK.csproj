@@ -74,6 +74,7 @@
     <Compile Include="DataFeed\SessionInfo.cs" />
     <Compile Include="DataFeed\_SessionInfo.cs" />
     <Compile Include="DataFeed\Telemetry.cs" />
+    <Compile Include="DataFeed\Session.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

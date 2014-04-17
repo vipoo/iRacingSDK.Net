@@ -27,34 +27,37 @@ namespace SpikeIRSDK
     {
         public unsafe static void Main(string[] args)
         {
-            foreach (var data in iRacing.GetDataFeed())
+			foreach (var data in iRacing.GetDataFeed())
             {
                 if (!data.IsConnected)
                 {
-                    Console.Clear();
                     Console.WriteLine("Waiting to connect ...");
                     continue;
                 }
 
+                Console.Clear();
+
+                /*
                 Console.WriteLine("Session Data");
                 Console.WriteLine(data.SessionInfo.Raw);
 
                 Console.WriteLine("Telemtary");
 
-                foreach(var kv in data.Telementary)
+
+				foreach(var kv in data.Telemetry)
                 {
                     Console.WriteLine("{0} = {1}", kv.Key, kv.Value);
                 }
+                */
 
-
-				/*var session = data.SessionInfo.SessionInfo.Sessions.Where(s => s.SessionNum == data.Telementary.SessionNum);
+				var session = data.SessionInfo.SessionInfo.Sessions.First(s => s.SessionNum == data.Telemetry.SessionNum);
                 Console.WriteLine("SessionLaps = {0}", session.SessionLaps);
                 Console.WriteLine("SessionTime = {0}", session.SessionTime);
 
-                Console.WriteLine("Remaining time {0}", session.SessionTime - data.Telementary.SessionTime);
-*/
-                return;
-                //Thread.Sleep(2000);
+                Console.WriteLine("Remaining time {0}", session.SessionTimeSeconds - data.Telemetry.SessionTime);
+                
+                //return;
+                Thread.Sleep(2000);
             }
         }
     }			

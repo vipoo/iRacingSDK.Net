@@ -24,7 +24,7 @@ namespace iRacingSDK
 	{
         public string Raw { get; internal set; }
 		public DriverInfo DriverInfo { get; internal set; }
-		//public _SessionInfo SessionInfo { get; internal set; }
+		public SessionInfo SessionInfo { get; internal set; }
 	}
 	
 }

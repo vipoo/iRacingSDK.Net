@@ -26,7 +26,7 @@ namespace iRacingSDK
 
 		public bool IsConnected	{ get; internal set; }
 		public _SessionInfo SessionInfo { get; internal set; }
-		public Telemetry Telementary { get; internal set; }
+		public Telemetry Telemetry { get; internal set; }
 
 	}
 	

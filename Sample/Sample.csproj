@@ -36,12 +36,12 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <None Include="LICENSE.txt" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\iRacingSDK.csproj">
       <Project>{5422AE20-F220-4BE1-9E61-5296981ABB5C}</Project>
       <Name>iRacingSDK</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="LICENSE.txt" />
   </ItemGroup>
 </Project>

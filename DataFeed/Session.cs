@@ -1,4 +1,4 @@
-﻿// This file is part of iRacingSDK.
+// This file is part of iRacingSDK.
 //
 // Copyright 2014 Dean Netherton
 // https://github.com/vipoo/iRacingSDK.Net
@@ -23,8 +23,18 @@ using System.Text;
 
 namespace iRacingSDK
 {
-	public class SessionInfo
-    {
-		public Session[] Sessions { get; internal set;	}
-    }
+	public class Session
+	{
+		public int SessionNum { get; internal set; }
+		public string SessionLaps { get; internal set; }
+		public string SessionTime { get; internal set; }
+
+        public float SessionTimeSeconds
+        {
+            get
+            {
+                return float.Parse(SessionTime.Split(' ')[0]);
+            }
+        }
+	}
 }

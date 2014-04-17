@@ -29,6 +29,7 @@ namespace iRacingSDK
 		public int[] 	CarIdxLap				{ get { return (int[])		this["CarIdxLap"]; 			} }
 		public float[] 	CarIdxLapDistPct 		{ get { return (float[])	this["CarIdxLapDistPct"]; 	} }
         public int      SessionNum              { get { return (int)        this["SessionNum"];         } }
+		public double   SessionTime 			{ get { return (double)		this["SessionTime"]; 		} }
    
 		Car[] cars;
 		public Car[]   Cars
