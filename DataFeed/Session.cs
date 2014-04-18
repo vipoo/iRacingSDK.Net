@@ -42,7 +42,7 @@ namespace iRacingSDK
         {
             get
             {
-                return SessionLaps != "Unlimited"; 
+                return SessionLaps.ToLower() != "unlimited"; 
             }
         }
 
@@ -50,7 +50,7 @@ namespace iRacingSDK
         {
             get
             {
-                return SessionTime != "Unlimited";
+                return SessionTime.ToLower() != "unlimited";
             }
         }
 	}
