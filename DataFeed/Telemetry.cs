@@ -30,7 +30,13 @@ namespace iRacingSDK
 		public float[] 	CarIdxLapDistPct 		{ get { return (float[])	this["CarIdxLapDistPct"]; 	} }
         public int      SessionNum              { get { return (int)        this["SessionNum"];         } }
 		public double   SessionTime 			{ get { return (double)		this["SessionTime"]; 		} }
-   
+
+        public int SessionLapsRemain { get { return (int)this["SessionLapsRemain"]; } }
+        public double SessionTimeRemain { get { return (double)this["SessionTimeRemain"]; } }
+        public int CamCarIdx { get { return (int)this["CamCarIdx"]; } }
+
+        public Car CamCar { get { return Cars.FirstOrDefault(c => c.Index == CamCarIdx); } }
+
 		Car[] cars;
 		public Car[]   Cars
 		{

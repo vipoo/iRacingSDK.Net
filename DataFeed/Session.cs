@@ -29,11 +29,28 @@ namespace iRacingSDK
 		public string SessionLaps { get; internal set; }
 		public string SessionTime { get; internal set; }
 
-        public float SessionTimeSeconds
+        public int _SessionLaps
         {
             get
             {
-                return float.Parse(SessionTime.Split(' ')[0]);
+                int result = 0;
+                int.TryParse(SessionLaps, out result);
+                return result;
+            }
+        }
+        public bool IsLimitedSessionLaps
+        {
+            get
+            {
+                return SessionLaps != "Unlimited"; 
+            }
+        }
+
+        public bool IsLimitedTime
+        {
+            get
+            {
+                return SessionTime != "Unlimited";
             }
         }
 	}

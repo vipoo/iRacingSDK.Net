@@ -37,7 +37,6 @@ namespace SpikeIRSDK
 
                 Console.Clear();
 
-                /*
                 Console.WriteLine("Session Data");
                 Console.WriteLine(data.SessionInfo.Raw);
 
@@ -48,13 +47,12 @@ namespace SpikeIRSDK
                 {
                     Console.WriteLine("{0} = {1}", kv.Key, kv.Value);
                 }
-                */
 
 				var session = data.SessionInfo.SessionInfo.Sessions.First(s => s.SessionNum == data.Telemetry.SessionNum);
                 Console.WriteLine("SessionLaps = {0}", session.SessionLaps);
                 Console.WriteLine("SessionTime = {0}", session.SessionTime);
-
-                Console.WriteLine("Remaining time {0}", session.SessionTimeSeconds - data.Telemetry.SessionTime);
+                Console.WriteLine("SessionTimeRemaing = {0}", data.Telemetry.SessionTimeRemain);
+                Console.WriteLine("SessionLapRemining = {0}", data.Telemetry.SessionLapsRemain);
                 
                 //return;
                 Thread.Sleep(2000);
