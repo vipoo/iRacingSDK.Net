@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataFeed\GeneratedTelemetry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="iRSDKHeader.cs" />
     <Compile Include="VarBuf.cs" />

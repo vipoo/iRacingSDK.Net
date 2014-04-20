@@ -1,3 +1,10 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="iRacingSDK" #>
+
 // This file is part of iRacingSDK.
 //
 // Copyright 2014 Dean Netherton
@@ -24,35 +31,17 @@ namespace iRacingSDK
 {
 	public partial class Telemetry : Dictionary<string, object>
 	{
-        public Car CamCar { get { return Cars.FirstOrDefault(c => c.Index == CamCarIdx); } }
+		internal _SessionInfo SessionInfo { get; set; }
 
-		Car[] cars;
-		public Car[]   Cars
-		{
-			get
-			{
-				if(cars != null)
-					return cars;
+<# var data = iRacing.GetDataFeed().First(d => d.IsConnected); #>
 
-				cars = new Car[CarIdxLap.Length];
-				for(int i = 0; i < CarIdxLap.Length; i++)
-					cars[i] = new Car {
-						Index = i,
-						Driver = SessionInfo.DriverInfo.Drivers.FirstOrDefault(d => d.CarIdx == i),
-						DistancePercentage = CarIdxLapDistPct[i],
-						Lap	= CarIdxLap[i]
-					};
+<# foreach(var kv in data.Telemetry) 
+{
+	var type =  kv.Value.GetType().ToString();
+ #>
 
-				return cars;
-			}
-		}
-	}
+		public <#= type #> 	<#= kv.Key #>				{ get { return (<#= type #>)		this["<#= kv.Key #>"]; 			} }
+<#} #>
 
-	public class Car
-	{
-		public int Index { get; internal set; }
-		public int Lap { get; internal set; }
-		public float DistancePercentage { get; internal set; }
-		public Driver Driver {	get; internal set; }
 	}
 }
