@@ -24,7 +24,7 @@ namespace iRacingSDK
 {
     public partial class Telemetry : Dictionary<string, object>
     {
-        internal _SessionInfo SessionInfo { get; set; }
+        internal SessionData SessionData { get; set; }
 
 
 

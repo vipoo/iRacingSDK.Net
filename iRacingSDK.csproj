@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataFeed\GeneratedTelemetry.cs" />
+    <Compile Include="DataFeed\GeneratedSessionData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="iRSDKHeader.cs" />
     <Compile Include="VarBuf.cs" />
@@ -65,15 +66,12 @@
     <Compile Include="Event.cs" />
     <Compile Include="iRSDKHeaderExtensions.cs" />
     <Compile Include="DataFeed.cs" />
-    <Compile Include="DataFeed\DriverInfo.cs" />
-    <Compile Include="DataFeed\Driver.cs" />
     <Compile Include="DataFeed\DataSample.cs" />
     <Compile Include="ConnectionEvent.cs" />
     <Compile Include="iRacing.cs" />
     <Compile Include="iRacingConnection.cs" />
     <Compile Include="MemoryMappedViewAccessorExtensions.cs" />
-    <Compile Include="DataFeed\SessionInfo.cs" />
-    <Compile Include="DataFeed\_SessionInfo.cs" />
+    <Compile Include="DataFeed\SessionData.cs" />
     <Compile Include="DataFeed\Telemetry.cs" />
     <Compile Include="DataFeed\Session.cs" />
   </ItemGroup>

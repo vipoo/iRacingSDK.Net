@@ -4,6 +4,7 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="iRacingSDK" #>
+<# var data = iRacing.GetDataFeed().First(d => d.IsConnected); #>
 
 // This file is part of iRacingSDK.
 //
@@ -32,8 +33,6 @@ namespace iRacingSDK
 	public partial class Telemetry : Dictionary<string, object>
 	{
 		internal _SessionInfo SessionInfo { get; set; }
-
-<# var data = iRacing.GetDataFeed().First(d => d.IsConnected); #>
 
 <# foreach(var kv in data.Telemetry) 
 {

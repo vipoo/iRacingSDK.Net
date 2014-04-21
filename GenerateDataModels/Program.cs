@@ -16,7 +16,9 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.IO;
+using YamlDotNet.RepresentationModel;
 
 namespace GenerateDataModels
 {
@@ -26,6 +28,9 @@ namespace GenerateDataModels
         {
             var x = new TelemetryTemplate();
             File.WriteAllText("GeneratedTelemetry.cs", x.TransformText());
+
+            var y = new SessionInfoTemplate();
+            File.WriteAllText(@"GeneratedSessionData.cs", y.TransformText());
         }
     }
 }

@@ -23,34 +23,36 @@ using System.Text;
 
 namespace iRacingSDK
 {
-	public class Session
-	{
-		public int SessionNum { get; internal set; }
-		public string SessionLaps { get; internal set; }
-		public string SessionTime { get; internal set; }
+    public partial class SessionData
+    {
+        public partial class _SessionInfo
+        {
+            public partial class _Sessions
+            {
+                public int _SessionLaps
+                {
+                    get
+                    {
+                        int result = 0;
+                        int.TryParse(SessionLaps, out result);
+                        return result;
+                    }
+                }
+                public bool IsLimitedSessionLaps
+                {
+                    get
+                    {
+                        return SessionLaps.ToLower() != "unlimited";
+                    }
+                }
 
-        public int _SessionLaps
-        {
-            get
-            {
-                int result = 0;
-                int.TryParse(SessionLaps, out result);
-                return result;
-            }
-        }
-        public bool IsLimitedSessionLaps
-        {
-            get
-            {
-                return SessionLaps.ToLower() != "unlimited"; 
-            }
-        }
-
-        public bool IsLimitedTime
-        {
-            get
-            {
-                return SessionTime.ToLower() != "unlimited";
+                public bool IsLimitedTime
+                {
+                    get
+                    {
+                        return SessionTime.ToLower() != "unlimited";
+                    }
+                }
             }
         }
 	}

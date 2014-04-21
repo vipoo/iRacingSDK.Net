@@ -13,15 +13,17 @@ namespace GenerateDataModels
     using System.Text;
     using System.Collections.Generic;
     using iRacingSDK;
+    using YamlDotNet.RepresentationModel;
+    using System.IO;
     using System;
     
     /// <summary>
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\TelemetryTemplate.tt"
+    #line 1 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
-    public partial class TelemetryTemplate : TelemetryTemplateBase
+    public partial class SessionInfoTemplate : SessionInfoTemplateBase
     {
 #line hidden
         /// <summary>
@@ -29,9 +31,17 @@ namespace GenerateDataModels
         /// </summary>
         public virtual string TransformText()
         {
+            this.Write("\r\n");
             
-            #line 7 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\TelemetryTemplate.tt"
- var data = iRacing.GetDataFeed().First(d => d.IsConnected); 
+            #line 10 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+ 
+	var data = iRacing.GetDataFeed().First(d => d.IsConnected);
+
+	var yaml = new YamlStream();
+	yaml.Load(new StringReader(data.SessionData.Raw));
+
+	var mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
+
             
             #line default
             #line hidden
@@ -54,64 +64,250 @@ namespace GenerateDataModels
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
+
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace iRacingSDK
 {
-	public partial class Telemetry : Dictionary<string, object>
+	public partial class SessionData
 	{
-		internal _SessionInfo SessionInfo { get; set; }
-
-");
+		");
             
-            #line 37 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\TelemetryTemplate.tt"
- foreach(var kv in data.Telemetry) 
-{
-	var type =  kv.Value.GetType().ToString();
- 
+            #line 47 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+ foreach(var kv in mapping)
+			Process(kv.Key.ToString(), kv.Value);
+		 
             
             #line default
             #line hidden
-            this.Write("\r\n\t\tpublic ");
-            
-            #line 42 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\TelemetryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(type));
-            
-            #line default
-            #line hidden
-            this.Write(" \t");
-            
-            #line 42 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\TelemetryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(kv.Key));
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\t\t{ get { return (");
-            
-            #line 42 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\TelemetryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(type));
-            
-            #line default
-            #line hidden
-            this.Write(")\t\tthis[\"");
-            
-            #line 42 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\TelemetryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(kv.Key));
-            
-            #line default
-            #line hidden
-            this.Write("\"]; \t\t\t} }\r\n");
-            
-            #line 43 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\TelemetryTemplate.tt"
-} 
-            
-            #line default
-            #line hidden
-            this.Write("\r\n\t}\r\n}\r\n");
+            this.Write("    }\r\n}\r\n\r\n");
             return this.GenerationEnvironment.ToString();
         }
+        
+        #line 53 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+
+	private void Process(string name, YamlNode node)
+	{
+		var mappingNode = node as YamlMappingNode;
+        var scalarNode = node as YamlScalarNode;
+        var sequenceNode = node as YamlSequenceNode;
+
+		if( scalarNode != null )
+		{
+			long result;
+			var isLong = long.TryParse(scalarNode.Value, out result);
+			double doubleResult;
+
+			var isDouble = double.TryParse(scalarNode.Value, out doubleResult);
+
+			var type = "string";
+			if( isDouble)
+				type = "double";
+			if( isLong)
+				type = "long";
+
+        
+        #line default
+        #line hidden
+        
+        #line 73 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+this.Write("\t\t\t\tpublic ");
+
+        
+        #line default
+        #line hidden
+        
+        #line 73 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+this.Write(this.ToStringHelper.ToStringWithCulture(type));
+
+        
+        #line default
+        #line hidden
+        
+        #line 73 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+this.Write(" ");
+
+        
+        #line default
+        #line hidden
+        
+        #line 73 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+this.Write(this.ToStringHelper.ToStringWithCulture(name));
+
+        
+        #line default
+        #line hidden
+        
+        #line 73 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+this.Write(" { get; set; }\r\n");
+
+        
+        #line default
+        #line hidden
+        
+        #line 74 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+			
+		}
+		else if (sequenceNode != null )
+		{
+
+        
+        #line default
+        #line hidden
+        
+        #line 78 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+this.Write("\t\t\tpublic partial class _");
+
+        
+        #line default
+        #line hidden
+        
+        #line 79 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+this.Write(this.ToStringHelper.ToStringWithCulture(name));
+
+        
+        #line default
+        #line hidden
+        
+        #line 79 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+this.Write("\r\n\t\t\t{\r\n");
+
+        
+        #line default
+        #line hidden
+        
+        #line 81 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+
+				var nodes = (YamlMappingNode)sequenceNode.First();
+				foreach( var kv in nodes)
+				{
+					Process(kv.Key.ToString(), kv.Value);
+				}
+
+
+        
+        #line default
+        #line hidden
+        
+        #line 88 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+this.Write("\t\t\t}\r\n\r\n\t\t\tpublic _");
+
+        
+        #line default
+        #line hidden
+        
+        #line 90 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+this.Write(this.ToStringHelper.ToStringWithCulture(name));
+
+        
+        #line default
+        #line hidden
+        
+        #line 90 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+this.Write("[] ");
+
+        
+        #line default
+        #line hidden
+        
+        #line 90 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+this.Write(this.ToStringHelper.ToStringWithCulture(name));
+
+        
+        #line default
+        #line hidden
+        
+        #line 90 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+this.Write(" { get; set; }\r\n");
+
+        
+        #line default
+        #line hidden
+        
+        #line 91 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+		}
+		else if( mappingNode != null )
+		{
+
+        
+        #line default
+        #line hidden
+        
+        #line 94 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+this.Write("\r\n\t\t\tpublic partial class _");
+
+        
+        #line default
+        #line hidden
+        
+        #line 96 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+this.Write(this.ToStringHelper.ToStringWithCulture(name));
+
+        
+        #line default
+        #line hidden
+        
+        #line 96 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+this.Write("\r\n\t\t\t{\r\n");
+
+        
+        #line default
+        #line hidden
+        
+        #line 98 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+				foreach(var kv in mappingNode)
+					Process(kv.Key.ToString(), kv.Value);
+
+        
+        #line default
+        #line hidden
+        
+        #line 100 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+this.Write("\t\t\t}\r\n\r\n\t\t\tpublic _");
+
+        
+        #line default
+        #line hidden
+        
+        #line 102 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+this.Write(this.ToStringHelper.ToStringWithCulture(name));
+
+        
+        #line default
+        #line hidden
+        
+        #line 102 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+this.Write(" ");
+
+        
+        #line default
+        #line hidden
+        
+        #line 102 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+this.Write(this.ToStringHelper.ToStringWithCulture(name));
+
+        
+        #line default
+        #line hidden
+        
+        #line 102 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+this.Write("  { get; set; }\r\n");
+
+        
+        #line default
+        #line hidden
+        
+        #line 103 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
+		
+		}
+	}
+
+        
+        #line default
+        #line hidden
     }
     
     #line default
@@ -121,7 +317,7 @@ namespace iRacingSDK
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
-    public class TelemetryTemplateBase
+    public class SessionInfoTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

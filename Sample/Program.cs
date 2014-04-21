@@ -21,6 +21,8 @@ using System.Linq;
 using iRacingSDK;
 using System.Threading;
 using System.Runtime.InteropServices;
+using System.IO;
+using YamlDotNet.RepresentationModel;
 
 namespace SpikeIRSDK
 {
@@ -60,15 +62,47 @@ namespace SpikeIRSDK
 
         public static void Main(string[] args)
         {
-            CaptureDriverPositionPerLap();
+            //CaptureDriverPositionPerLap();
+            GetData_Main(args);
         }
 
         public static void CaptureDriverPositionPerLap()
         {
-            foreach( var data in iRacing.GetDataFeed().Where(d => !d.IsConnected))
+            foreach( var data in iRacing.GetDataFeed().TakeWhile(d => !d.IsConnected))
             {
                 Console.WriteLine("Waiting to connect ...");
                 continue;
+            }
+
+            var data2 = iRacing.GetDataFeed().First();
+
+            var yamlData = data2.SessionData.Raw;
+
+            Console.WriteLine(yamlData);
+
+            var input = new StringReader(yamlData);
+
+            // Load the stream
+            var yaml = new YamlStream();
+            yaml.Load(input);
+
+            // Examine the stream
+            var mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
+
+            foreach (var entry in mapping)
+            {
+                Process(1, entry.Key.ToString(), entry.Value);
+            }
+
+            return;
+            // List all the items
+            var items = (YamlSequenceNode)mapping.Children[new YamlScalarNode("items")];
+            foreach (YamlMappingNode item in items)
+            {
+                Console.WriteLine( "{0}\t{1}",
+                    item.Children[new YamlScalarNode("part_no")],
+                    item.Children[new YamlScalarNode("descrip")]
+                );
             }
 
             //iRacing.Replay.ToStart();
@@ -89,6 +123,39 @@ namespace SpikeIRSDK
                 iRacing.Replay.ToStart();
                 
             }*/
+        }
+
+        private static void Process(int a, string key, YamlNode value)
+        {
+            for (int i = 0; i < a; i++)
+                Console.Write(" ");
+
+            Console.Write(key);
+
+            var mappingNode = value as YamlMappingNode;
+            var scalarNode = value as YamlScalarNode;
+            var sequenceNode = value as YamlSequenceNode;
+
+            if (mappingNode != null)
+            {
+                Console.WriteLine(":");
+                foreach (var x in mappingNode)
+                    Process(a+1, x.Key.ToString(), x.Value);
+            }
+            else if( scalarNode != null )
+            {
+                
+                Console.WriteLine(" = " + scalarNode);
+
+            } else if(sequenceNode != null)
+            {
+                Console.WriteLine("[");
+                foreach (var x in sequenceNode)
+                    Process(a+1,"", x);
+                Console.WriteLine("]");
+
+            }
+            //foreach( var k )
         }
 
         public static void Spike()
@@ -141,17 +208,16 @@ var2
                 Console.Clear();
 
                 Console.WriteLine("Session Data");
-                Console.WriteLine(data.SessionInfo.Raw);
+                //Console.WriteLine(data.SessionData.Raw);
 
                 Console.WriteLine("Telemtary");
-
 
 				foreach(var kv in data.Telemetry)
                 {
                     Console.WriteLine("{0} = {1}", kv.Key, kv.Value);
                 }
 
-				var session = data.SessionInfo.SessionInfo.Sessions.First(s => s.SessionNum == data.Telemetry.SessionNum);
+                var session = data.SessionData.SessionInfo.Sessions.First(s => s.SessionNum == data.Telemetry.SessionNum);
                 Console.WriteLine("SessionLaps = {0}", session.SessionLaps);
                 Console.WriteLine("SessionTime = {0}", session.SessionTime);
                 Console.WriteLine("SessionTimeRemaing = {0}", data.Telemetry.SessionTimeRemain);

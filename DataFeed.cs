@@ -46,17 +46,17 @@ namespace iRacingSDK
 			if((headers.Header.status & 1) == 0)
 				return DataSample.YetToConnected;
 
-			var sessionInfo = ReadSessionInfo(headers.Header);
+			var sessionData = ReadSessionInfo(headers.Header);
 			var variables = ReadVariables(headers.Header, headers.VarHeaders);
 
-			if(sessionInfo == null)
+			if(sessionData == null)
 				return DataSample.YetToConnected;
 
 			if(variables == null)
 				return null;
 
-			variables.SessionInfo = sessionInfo;
-			return new DataSample { Telemetry = variables, SessionInfo = sessionInfo, IsConnected = true };
+            variables.SessionData = sessionData;
+            return new DataSample { Telemetry = variables, SessionData = sessionData, IsConnected = true };
 		}
 
 		unsafe iRSDKHeader ReadHeader(byte *ptr)
@@ -81,8 +81,8 @@ namespace iRacingSDK
 		}
 
 		int sessionLastInfoUpdate = -2;
-		_SessionInfo lastSessionInfo;
-		_SessionInfo ReadSessionInfo(iRSDKHeader header)
+        SessionData lastSessionInfo;
+        SessionData ReadSessionInfo(iRSDKHeader header)
 		{
 			if(header.sessionInfoUpdate == sessionLastInfoUpdate)
 				return lastSessionInfo;
@@ -99,7 +99,7 @@ namespace iRacingSDK
 			return lastSessionInfo = DeserialiseSessionInfo(sessionInfoString);
 		}
 
-		static _SessionInfo DeserialiseSessionInfo(string sessionInfoString)
+		static SessionData DeserialiseSessionInfo(string sessionInfoString)
 		{
 			if(sessionInfoString.Length == 0)
 				return null;
@@ -110,7 +110,7 @@ namespace iRacingSDK
 
                 var deserializer = new Deserializer(ignoreUnmatched: true);
 
-                var result =  (_SessionInfo)deserializer.Deserialize(input, typeof(_SessionInfo));
+                var result = (SessionData)deserializer.Deserialize(input, typeof(SessionData));
                 result.Raw = sessionInfoString.Replace("\n", "\r\n");
                 return result;
             }
