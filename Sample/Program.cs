@@ -43,9 +43,12 @@ namespace iRacingSDKSample
 
         public static void ChangeCamDriver()
         {
-           // iRacing.Replay.CameraOnDriver(5, 1, 1);
+            var data = iRacing.GetDataFeed().First();
+            var camera = data.SessionData.CameraInfo.Groups.First(g => g.GroupName == "TV1");
 
-            iRacing.Replay.CameraOnDriver(1, 0, 15);
+            var driverNumber = data.SessionData.DriverInfo.Drivers.Skip(1).First().CarNumber;
+
+            iRacing.Replay.CameraOnDriver((short)driverNumber, (short)camera.GroupNum, 0);
         
         }
 

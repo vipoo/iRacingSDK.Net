@@ -119,14 +119,14 @@ namespace iRacingSDK
             ReplaySearch(ReplaySearchMode.NextFrame);
         }
 
-        public void CameraOnDriver(short carNumber, short camera, short group)
+        public void CameraOnDriver(short carNumber, short group, short camera = 0)
         {
-            SendMessage(BroadcastMessage.CameraSwitchNum, carNumber, camera, group);
+            SendMessage(BroadcastMessage.CameraSwitchNum, carNumber, group, camera);
         }
 
-        public void CameraOnPositon(short carPosition, short camera, short group)
+        public void CameraOnPositon(short carPosition, short group, short camera = 0)
         {
-            SendMessage(BroadcastMessage.CameraSwitchNum, carPosition, camera, group);
+            SendMessage(BroadcastMessage.CameraSwitchNum, carPosition, group, camera);
         }
 
 		void ReplaySearch(ReplaySearchMode mode)
