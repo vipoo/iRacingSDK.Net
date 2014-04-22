@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="DataFeed\GeneratedTelemetry.cs" />
     <Compile Include="DataFeed\GeneratedSessionData.cs" />
+    <Compile Include="DataSampleExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="iRSDKHeader.cs" />
     <Compile Include="VarBuf.cs" />
@@ -105,8 +106,5 @@
     </MonoDevelop>
   </ProjectExtensions>
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="Win32\" />
-    <Folder Include="Win32\Synchronization\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
