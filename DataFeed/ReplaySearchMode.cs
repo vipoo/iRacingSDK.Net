@@ -34,7 +34,11 @@ namespace iRacingSDK
 		PrevFrame,
 		NextFrame,
 		PrevIncident,
-		NextIncident
+		
+        /// <summary>
+        /// Camera select car and move to 4 seconds before incident
+        /// </summary>
+        NextIncident
 	};
 	
 }

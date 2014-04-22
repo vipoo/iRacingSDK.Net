@@ -17,6 +17,9 @@
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace iRacingSDK
 {
@@ -29,34 +32,98 @@ namespace iRacingSDK
 			messageId = Win32.Messages.RegisterWindowMessage("IRSDK_BROADCASTMSG");
 		}
 
-		public static int FromShorts(short lowPart, short highPart)
-		{
-			return ((int)highPart << 16) | (ushort)lowPart;
+
+        public void SetSpeed(double p)
+        {
+            SendMessage(BroadcastMessage.ReplaySetPlaySpeed, (short)p, 0);
 		}
 
         public void MoveToStart()
         {
 			ReplaySearch(ReplaySearchMode.ToStart);
+
+            WaitAndVerify(data => data.Telemetry.ReplayFrameNum != 0);
         }
 
+        void WaitAndVerify(Func<DataSample, bool> verifyFn)
+        {
+            WaitAndVerify(verifyFn, () => { });
+        }
+
+        void WaitAndVerify(Func<DataSample, bool> verifyFn, Action action)
+        {
+            var timeout = DateTime.Now + TimeSpan.FromMilliseconds(1000);
+            var data = iRacing.GetDataFeed().First();
+            while (verifyFn(data) && DateTime.Now < timeout)
+            {
+                action();
+                data = iRacing.GetDataFeed().First();
+                Thread.Sleep(1);
+            }
+            System.Diagnostics.Debug.Assert(!verifyFn(data));
+
+        }
         public void MoveToNextSession()
         {
+            var data = iRacing.GetDataFeed().First();
+            if (data.Telemetry.SessionNum == data.SessionData.SessionInfo.Sessions.Length)
+                return;
+
 			ReplaySearch(ReplaySearchMode.NextSession);
+
+            WaitAndVerify(data2 => data.Telemetry.SessionNum + 1 != data2.Telemetry.SessionNum);
         }
 
-		private void ReplaySearch(ReplaySearchMode mode)
+        public void MoveToStartOfRace()
+        {
+            MoveToStart();
+            var data = iRacing.GetDataFeed().First();
+
+            var session = data.SessionData.SessionInfo.Sessions.FirstOrDefault(s => s.SessionType == "Race");
+            if( session == null )
+                throw new Exception("No race session found in this replay");
+            
+            WaitAndVerify(d => d.Telemetry.SessionNum != session.SessionNum, () => MoveToNextSession());
+        }
+
+
+        /// <summary>
+        /// Select the camera onto a car and position to 4 seconds before the incident
+        /// </summary>
+        public void MoveToNextIncident()
+        {
+            ReplaySearch(ReplaySearchMode.NextIncident);
+        }
+
+		public void MoveToNextLap()
+		{
+			ReplaySearch(ReplaySearchMode.NextLap);
+		}
+
+        public void MoveToNextFrame()
+        {
+            ReplaySearch(ReplaySearchMode.NextFrame);
+        }
+
+		void ReplaySearch(ReplaySearchMode mode)
 		{
 			SendMessage(BroadcastMessage.ReplaySearch, (short)mode);
 		}
 
-		private void SendMessage(BroadcastMessage message, short var1 = 0, short var2 = 0, short var3 = 0)
+        DateTime lastMessagePostedTime = DateTime.Now;
+
+		void SendMessage(BroadcastMessage message, short var1 = 0, short var2 = 0, short var3 = 0)
 		{
-			var var23 = FromShorts(var2, var3);
-			var msgVar1 = FromShorts((short)message, var1);
+            var var23 = FromShorts(var2, var3);
+            var msgVar1 = FromShorts((short)message, var1);
 
-			if(!Win32.Messages.SendNotifyMessage(Win32.Messages.HWND_BROADCAST, messageId, msgVar1, var23))
-				throw new Exception(String.Format("Error in broadcasting message {0}", message));
-
+            if (!Win32.Messages.SendNotifyMessage(Win32.Messages.HWND_BROADCAST, messageId, msgVar1, var23))
+                throw new Exception(String.Format("Error in broadcasting message {0}", message));
 		}
+
+        static int FromShorts(short lowPart, short highPart)
+        {
+            return ((int)highPart << 16) | (ushort)lowPart;
+        }
     }
 }

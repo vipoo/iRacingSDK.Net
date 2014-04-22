@@ -27,7 +27,7 @@ namespace iRacingSDK
         public Car CamCar { get { return Cars.FirstOrDefault(c => c.Index == CamCarIdx); } }
 
 		Car[] cars;
-		public Car[]   Cars
+		public Car[] Cars
 		{
 			get
 			{
@@ -53,6 +53,6 @@ namespace iRacingSDK
 		public int Index { get; internal set; }
 		public int Lap { get; internal set; }
 		public float DistancePercentage { get; internal set; }
-		public SessionData._DriverInfo._Drivers Driver {	get; internal set; }
+		public SessionData._DriverInfo._Drivers Driver { get; internal set; }
 	}
 }

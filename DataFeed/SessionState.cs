@@ -20,7 +20,7 @@ using System;
 
 namespace iRacingSDK
 {
-	enum SessionState
+	public enum SessionState
 	{
 		Invalid,
 		GetInCar,

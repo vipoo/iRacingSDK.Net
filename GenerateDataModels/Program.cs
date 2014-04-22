@@ -35,7 +35,14 @@ namespace GenerateDataModels
 
         public static string GetTypeFor(string fieldName, object sampleValue)
         {
-            return sampleValue.GetType().ToString();
+            switch(fieldName)
+            {
+                case "SessionState":
+                    return "iRacingSDK.SessionState";
+
+                default:
+                    return sampleValue.GetType().ToString();         
+            }
         }
     }
 }

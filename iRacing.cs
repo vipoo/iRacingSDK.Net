@@ -45,9 +45,13 @@ namespace iRacingSDK
 			}
 		}
 
+        static DataFeed dataFeed = null;
+
 		static IEnumerable<DataSample> AllSamples()
 		{
-			var dataFeed = new DataFeed(iRacingConnection.Accessor);
+            if( dataFeed == null )
+			    dataFeed = new DataFeed(iRacingConnection.Accessor);
+
 			while(true)
 			{
                 if (!iRacingConnection.WaitForData())
@@ -59,10 +63,7 @@ namespace iRacingSDK
 			}
 		}
 
-        public static Replay Replay
-        {
-            get { return new Replay(); }
-        }
+        public static readonly Replay Replay = new Replay();
 	}
 
 }
