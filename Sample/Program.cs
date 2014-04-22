@@ -49,7 +49,6 @@ namespace iRacingSDKSample
             var driverNumber = data.SessionData.DriverInfo.Drivers.Skip(1).First().CarNumber;
 
             iRacing.Replay.CameraOnDriver((short)driverNumber, (short)camera.GroupNum, 0);
-        
         }
 
         public unsafe static void GetData_Main(string[] args)
