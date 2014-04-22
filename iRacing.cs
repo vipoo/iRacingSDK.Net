@@ -39,13 +39,16 @@ namespace iRacingSDK
 
 		static IEnumerable<DataSample> WaitForInitialConnection()
 		{
-            Trace.WriteLine("Waiting to connect to iRacing application");
-			while(!iRacingConnection.IsConnected())
+            bool wasConnected = iRacingConnection.Accessor != null;
+            Trace.WriteLineIf(!wasConnected, "Waiting to connect to iRacing application");
+			
+            while(!iRacingConnection.IsConnected())
 			{
 				yield return DataSample.YetToConnected;
 				Thread.Sleep(10);
 			}
-            Trace.WriteLine("Connected to iRacing application");
+            
+            Trace.WriteLineIf(!wasConnected, "Connected to iRacing application");
 		}
 
         static DataFeed dataFeed = null;

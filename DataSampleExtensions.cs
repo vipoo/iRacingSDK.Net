@@ -48,9 +48,6 @@ namespace iRacingSDK
                 if (data.Telemetry.SessionState != SessionState.Racing)
                     continue;
 
-                if (data.Telemetry.RaceLaps > 5)
-                    break;
-
                 yield return data;
             }
         }
