@@ -63,7 +63,6 @@
     <Compile Include="VarHeader.cs" />
     <Compile Include="VarType.cs" />
     <Compile Include="SyncObjectAccess.cs" />
-    <Compile Include="Event.cs" />
     <Compile Include="iRSDKHeaderExtensions.cs" />
     <Compile Include="DataFeed.cs" />
     <Compile Include="DataFeed\DataSample.cs" />
@@ -74,6 +73,12 @@
     <Compile Include="DataFeed\SessionData.cs" />
     <Compile Include="DataFeed\Telemetry.cs" />
     <Compile Include="DataFeed\Session.cs" />
+    <Compile Include="Replay.cs" />
+    <Compile Include="Win32\Synchronization\Event.cs" />
+    <Compile Include="Win32\Messages.cs" />
+    <Compile Include="DataFeed\BroadcastMessage.cs" />
+    <Compile Include="DataFeed\ReplaySearchMode.cs" />
+    <Compile Include="DataFeed\SessionState.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -100,4 +105,8 @@
     </MonoDevelop>
   </ProjectExtensions>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Win32\" />
+    <Folder Include="Win32\Synchronization\" />
+  </ItemGroup>
 </Project>

@@ -1,11 +1,3 @@
-﻿<#@ template language="C#" #>
-<#@ assembly name="System.Core" #>
-<#@ import namespace="System.Linq" #>
-<#@ import namespace="System.Text" #>
-<#@ import namespace="System.Collections.Generic" #>
-<#@ import namespace="iRacingSDK" #>
-<# var data = iRacing.GetDataFeed().First(d => d.IsConnected); #>
-
 // This file is part of iRacingSDK.
 //
 // Copyright 2014 Dean Netherton
@@ -25,22 +17,17 @@
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace iRacingSDK
 {
-	public partial class Telemetry : Dictionary<string, object>
+	enum SessionState
 	{
-		internal _SessionInfo SessionInfo { get; set; }
-
-<# foreach(var kv in data.Telemetry) 
-{
-	var type =  GenerateDataModels.Program.GetTypeFor(kv.Key, kv.Value);
- #>
-
-		public <#= type #> 	<#= kv.Key #>				{ get { return (<#= type #>)		this["<#= kv.Key #>"]; 			} }
-<#} #>
-
-	}
+		Invalid,
+		GetInCar,
+		Warmup,
+		ParadeLaps,
+		Racing,
+		Checkered,
+		CoolDown
+	};
 }

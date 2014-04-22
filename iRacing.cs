@@ -58,5 +58,11 @@ namespace iRacingSDK
                     yield return data;
 			}
 		}
+
+        public static Replay Replay
+        {
+            get { return new Replay(); }
+        }
 	}
+
 }

@@ -26,24 +26,6 @@ using YamlDotNet.RepresentationModel;
 
 namespace SpikeIRSDK
 {
-    //----
-    // Remote controll the sim by sending these windows messages
-    // camera and replay commands only work when you are out of your car, 
-    // pit commands only work when in your car
-    enum irsdk_BroadcastMsg
-    {
-        irsdk_BroadcastCamSwitchPos = 0,      // car position, group, camera
-        irsdk_BroadcastCamSwitchNum,	      // driver #, group, camera
-        irsdk_BroadcastCamSetState,           // irsdk_CameraState, unused, unused 
-        irsdk_BroadcastReplaySetPlaySpeed,    // speed, slowMotion, unused
-        irskd_BroadcastReplaySetPlayPosition, // irsdk_RpyPosMode, Frame Number (high, low)
-        irsdk_BroadcastReplaySearch,          // irsdk_RpySrchMode, unused, unused
-        irsdk_BroadcastReplaySetState,        // irsdk_RpyStateMode, unused, unused
-        irsdk_BroadcastReloadTextures,        // irsdk_ReloadTexturesMode, carIdx, unused
-        irsdk_BroadcastChatComand,		      // irsdk_ChatCommandMode, subCommand, unused
-        irsdk_BroadcastPitCommand,            // irsdk_PitCommandMode, parameter
-        irsdk_BroadcastLast                   // unused placeholder
-    };
 
     class MainClass
     {
@@ -59,11 +41,11 @@ namespace SpikeIRSDK
         {
             return ((int)highPart << 16) | (ushort)lowPart;
         }
-
+        
         public static void Main(string[] args)
         {
-            //CaptureDriverPositionPerLap();
-            GetData_Main(args);
+            CaptureDriverPositionPerLap();
+			// GetData_Main(args);
         }
 
         public static void CaptureDriverPositionPerLap()
@@ -76,89 +58,28 @@ namespace SpikeIRSDK
 
             var data2 = iRacing.GetDataFeed().First();
 
-            var yamlData = data2.SessionData.Raw;
+            //Goto to race start
 
-            Console.WriteLine(yamlData);
+            iRacing.Replay.MoveToStart();
+            data2 = iRacing.GetDataFeed().First();
+			Console.WriteLine(data2.Telemetry.SessionFlags);
 
-            var input = new StringReader(yamlData);
+			while(data2.SessionData.SessionInfo.Sessions[data2.Telemetry.SessionNum].SessionType != "Race")
+			{
+				iRacing.Replay.MoveToNextSession();
+				data2 = iRacing.GetDataFeed().First();
+				Console.WriteLine(data2.Telemetry.SessionFlags);
 
-            // Load the stream
-            var yaml = new YamlStream();
-            yaml.Load(input);
+			}
 
-            // Examine the stream
-            var mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
-
-            foreach (var entry in mapping)
-            {
-                Process(1, entry.Key.ToString(), entry.Value);
-            }
-
-            return;
-            // List all the items
-            var items = (YamlSequenceNode)mapping.Children[new YamlScalarNode("items")];
-            foreach (YamlMappingNode item in items)
-            {
-                Console.WriteLine( "{0}\t{1}",
-                    item.Children[new YamlScalarNode("part_no")],
-                    item.Children[new YamlScalarNode("descrip")]
-                );
-            }
-
-            //iRacing.Replay.ToStart();
-            //while( iRacing.
-
-            /*
-            foreach (var data in iRacing.GetDataFeed())
-            {
-                
-                if (!data.IsConnected)
-                {
-                    Console.WriteLine("Waiting to connect ...");
-                    continue;
-                }
-
-                Console.Clear();
-
-                iRacing.Replay.ToStart();
-                
-            }*/
+			foreach( var data in iRacing.GetDataFeed() )
+				Console.WriteLine("{0}, {1}", data.Telemetry.SessionTime, data.Telemetry.SessionState);
+				
+            //Goto lap 0!
+            
         }
 
-        private static void Process(int a, string key, YamlNode value)
-        {
-            for (int i = 0; i < a; i++)
-                Console.Write(" ");
-
-            Console.Write(key);
-
-            var mappingNode = value as YamlMappingNode;
-            var scalarNode = value as YamlScalarNode;
-            var sequenceNode = value as YamlSequenceNode;
-
-            if (mappingNode != null)
-            {
-                Console.WriteLine(":");
-                foreach (var x in mappingNode)
-                    Process(a+1, x.Key.ToString(), x.Value);
-            }
-            else if( scalarNode != null )
-            {
-                
-                Console.WriteLine(" = " + scalarNode);
-
-            } else if(sequenceNode != null)
-            {
-                Console.WriteLine("[");
-                foreach (var x in sequenceNode)
-                    Process(a+1,"", x);
-                Console.WriteLine("]");
-
-            }
-            //foreach( var k )
-        }
-
-        public static void Spike()
+		/*  public static void Spike()
         {
             var IRSDK_BROADCASTMSGNAME = "IRSDK_BROADCASTMSG";
 
@@ -187,14 +108,14 @@ namespace SpikeIRSDK
 1048579
 var2
 1
-*/
+
 
             r = SendNotifyMessageA(HWND_BROADCAST, msgId, msgVar1, var23);
             Console.WriteLine(r);
 
             //irsdk_broadcastMsg(irsdk_BroadcastReplaySetPlaySpeed, 16, true, 0);
         }
-
+	*/
         public unsafe static void GetData_Main(string[] args)
         {
 			foreach (var data in iRacing.GetDataFeed())

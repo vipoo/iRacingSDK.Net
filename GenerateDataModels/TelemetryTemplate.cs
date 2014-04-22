@@ -69,7 +69,7 @@ namespace iRacingSDK
             #line 37 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\TelemetryTemplate.tt"
  foreach(var kv in data.Telemetry) 
 {
-	var type =  kv.Value.GetType().ToString();
+	var type =  GenerateDataModels.Program.GetTypeFor(kv.Key, kv.Value);
  
             
             #line default

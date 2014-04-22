@@ -32,5 +32,10 @@ namespace GenerateDataModels
             var y = new SessionInfoTemplate();
             File.WriteAllText(@"GeneratedSessionData.cs", y.TransformText());
         }
+
+        public static string GetTypeFor(string fieldName, object sampleValue)
+        {
+            return sampleValue.GetType().ToString();
+        }
     }
 }
