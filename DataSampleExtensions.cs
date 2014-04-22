@@ -26,6 +26,35 @@ namespace iRacingSDK
 {
     public static class DataSampleExtensions
     {
+        public static IEnumerable<DataSample> AtSpeed(this IEnumerable<DataSample> samples, int replaySpeed)
+        {
+            foreach (var data in samples)
+            {
+                iRacing.Replay.SetSpeed(replaySpeed);
+
+                yield return data;
+            }
+        }
+
+        public static IEnumerable<DataSample> RaceOnly(this IEnumerable<DataSample> samples)
+        {
+            iRacing.Replay.MoveToStartOfRace();
+
+            foreach (var data in samples)
+            {
+                if (data.Telemetry.SessionState == SessionState.Checkered)
+                    break;
+
+                if (data.Telemetry.SessionState != SessionState.Racing)
+                    continue;
+
+                if (data.Telemetry.RaceLaps > 5)
+                    break;
+
+                yield return data;
+            }
+        }
+
         /// <summary>
         /// Work around bug in iRacing data stream, where cars lap percentage is reported slightly behind 
         /// actual frame - so that as cars cross the line, their percentage still is in the 99% range
