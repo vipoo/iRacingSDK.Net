@@ -86,6 +86,20 @@ namespace iRacingSDK
             WaitAndVerify(d => d.Telemetry.SessionNum != session.SessionNum, () => MoveToNextSession());
         }
 
+        public void MoveToParadeLap()
+        {
+            MoveToStartOfRace();
+
+            foreach( var data in iRacing.GetDataFeed())
+            {
+                if (data.Telemetry.SessionState == SessionState.Racing)
+                    break;
+
+                this.SetSpeed(16);
+            }
+
+            this.SetSpeed(0);
+        }
 
         /// <summary>
         /// Select the camera onto a car and position to 4 seconds before the incident
@@ -103,6 +117,16 @@ namespace iRacingSDK
         public void MoveToNextFrame()
         {
             ReplaySearch(ReplaySearchMode.NextFrame);
+        }
+
+        public void CameraOnDriver(short carNumber, short camera, short group)
+        {
+            SendMessage(BroadcastMessage.CameraSwitchNum, carNumber, camera, group);
+        }
+
+        public void CameraOnPositon(short carPosition, short camera, short group)
+        {
+            SendMessage(BroadcastMessage.CameraSwitchNum, carPosition, camera, group);
         }
 
 		void ReplaySearch(ReplaySearchMode mode)

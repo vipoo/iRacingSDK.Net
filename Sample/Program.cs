@@ -37,9 +37,17 @@ namespace iRacingSDKSample
                 continue;
             }
 
-			GetData_Main(args);
+			//GetData_Main(args);
+            ChangeCamDriver();
         }
 
+        public static void ChangeCamDriver()
+        {
+           // iRacing.Replay.CameraOnDriver(5, 1, 1);
+
+            iRacing.Replay.CameraOnDriver(1, 0, 15);
+        
+        }
 
         public unsafe static void GetData_Main(string[] args)
         {
