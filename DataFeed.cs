@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Runtime.InteropServices;
@@ -43,8 +44,11 @@ namespace iRacingSDK
 				return new {Header = a, VarHeaders = b};
 			});
 
-			if((headers.Header.status & 1) == 0)
-				return DataSample.YetToConnected;
+            if ((headers.Header.status & 1) == 0)
+            {
+                Trace.WriteLine("iRacing Application appears to have been closed");
+                return DataSample.YetToConnected;
+            }
 
 			var sessionData = ReadSessionInfo(headers.Header);
 			var variables = ReadVariables(headers.Header, headers.VarHeaders);
@@ -95,7 +99,7 @@ namespace iRacingSDK
             
             sessionInfoString = sessionInfoString.Substring(0, sessionInfoString.IndexOf('\0'));
 
-            Console.WriteLine("Session data changed!!!!!");
+            Trace.WriteLine("New Session data retrieved from iRacing");
 			return lastSessionInfo = DeserialiseSessionInfo(sessionInfoString);
 		}
 
@@ -125,12 +129,11 @@ namespace iRacingSDK
 			var buf = header.FindLatestBuf();
 
 			var values = ReadAllValues(accessor, buf.bufOffset, varHeaders);
-			//	Thread.Sleep(48);
 			var latestHeader = accessor.AcquirePointer( ptr => ReadHeader(ptr) );
 
 			if(latestHeader.HasChangedSinceReading(buf))
 			{
-				Console.WriteLine("Data Changed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				Trace.WriteLine("Failed to read data before iRacing overwrote new sample!", "Critical");
 				return null;
 			}
 
@@ -156,7 +159,6 @@ namespace iRacingSDK
 				{ VarType.irDouble, (size, offset) => GetArrayData<double>(accessor, size, offset) },
 				{ VarType.irFloat, (size, offset) => GetArrayData<float>(accessor, size, offset) },
 				{ VarType.irBool, (size, offset) => GetArrayData<bool>(accessor, size, offset) }
-
 			};
 
 			for(var i = 0; i < varHeaders.Length; i++)

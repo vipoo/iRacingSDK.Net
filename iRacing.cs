@@ -22,6 +22,7 @@ using System.Threading;
 using Win32.Synchronization;
 using System.Runtime.InteropServices;
 using System.IO.MemoryMappedFiles;
+using System.Diagnostics;
 
 namespace iRacingSDK
 {
@@ -38,11 +39,13 @@ namespace iRacingSDK
 
 		static IEnumerable<DataSample> WaitForInitialConnection()
 		{
+            Trace.WriteLine("Waiting to connect to iRacing application");
 			while(!iRacingConnection.IsConnected())
 			{
 				yield return DataSample.YetToConnected;
 				Thread.Sleep(10);
 			}
+            Trace.WriteLine("Connected to iRacing application");
 		}
 
         static DataFeed dataFeed = null;

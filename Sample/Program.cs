@@ -23,113 +23,31 @@ using System.Threading;
 using System.Runtime.InteropServices;
 using System.IO;
 using YamlDotNet.RepresentationModel;
+using System.Collections.Generic;
 
-namespace SpikeIRSDK
+namespace iRacingSDKSample
 {
-
     class MainClass
-    {
-         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-         private static extern int RegisterWindowMessage(string lpString);
-
-         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-         static extern bool SendNotifyMessageA(IntPtr hWnd, int Msg, int wParam, int lParam);
-
-        static IntPtr HWND_BROADCAST = new IntPtr(0xffff);
-
-        public static int FromShorts(short lowPart, short highPart)
-        {
-            return ((int)highPart << 16) | (ushort)lowPart;
-        }
-        
+    {        
         public static void Main(string[] args)
         {
-            CaptureDriverPositionPerLap();
-			// GetData_Main(args);
-        }
-
-        public static void CaptureDriverPositionPerLap()
-        {
-            foreach( var data in iRacing.GetDataFeed().TakeWhile(d => !d.IsConnected))
+            foreach (var data in iRacing.GetDataFeed().TakeWhile(d => !d.IsConnected))
             {
                 Console.WriteLine("Waiting to connect ...");
                 continue;
             }
 
-            var data2 = iRacing.GetDataFeed().First();
-
-            //Goto to race start
-
-            iRacing.Replay.MoveToStart();
-            data2 = iRacing.GetDataFeed().First();
-			Console.WriteLine(data2.Telemetry.SessionFlags);
-
-			while(data2.SessionData.SessionInfo.Sessions[data2.Telemetry.SessionNum].SessionType != "Race")
-			{
-				iRacing.Replay.MoveToNextSession();
-				data2 = iRacing.GetDataFeed().First();
-				Console.WriteLine(data2.Telemetry.SessionFlags);
-
-			}
-
-			foreach( var data in iRacing.GetDataFeed() )
-				Console.WriteLine("{0}, {1}", data.Telemetry.SessionTime, data.Telemetry.SessionState);
-				
-            //Goto lap 0!
-            
+			GetData_Main(args);
         }
 
-		/*  public static void Spike()
-        {
-            var IRSDK_BROADCASTMSGNAME = "IRSDK_BROADCASTMSG";
 
-            var msgId = RegisterWindowMessage(IRSDK_BROADCASTMSGNAME);
-
-            var msg = (short)irsdk_BroadcastMsg.irsdk_BroadcastCamSwitchPos;
-            short var1 = 1;
-            short var2 = 1;
-            short var3 = 0;
-
-            var var23 = FromShorts(var2, var3);
-            var msgVar1 = FromShorts(msg, var1);
-
-            var r = SendNotifyMessageA(HWND_BROADCAST, msgId, msgVar1, var23);
-            Console.WriteLine(r);
-
-            msg = (short)irsdk_BroadcastMsg.irsdk_BroadcastReplaySetPlaySpeed;
-            var1 = 16;
-            var2 = 1; //true
-            var3 = 0;
-
-            var23 = FromShorts(var2, var3);
-            msgVar1 = FromShorts(msg, var1);
-
-/*x
-1048579
-var2
-1
-
-
-            r = SendNotifyMessageA(HWND_BROADCAST, msgId, msgVar1, var23);
-            Console.WriteLine(r);
-
-            //irsdk_broadcastMsg(irsdk_BroadcastReplaySetPlaySpeed, 16, true, 0);
-        }
-	*/
         public unsafe static void GetData_Main(string[] args)
         {
-			foreach (var data in iRacing.GetDataFeed())
+			foreach (var data in iRacing.GetDataFeed().WithCorrectedPercentages().AtSpeed(16).RaceOnly())
             {
-                if (!data.IsConnected)
-                {
-                    Console.WriteLine("Waiting to connect ...");
-                    continue;
-                }
-
                 Console.Clear();
 
                 Console.WriteLine("Session Data");
-                //Console.WriteLine(data.SessionData.Raw);
 
                 Console.WriteLine("Telemtary");
 
@@ -144,7 +62,6 @@ var2
                 Console.WriteLine("SessionTimeRemaing = {0}", data.Telemetry.SessionTimeRemain);
                 Console.WriteLine("SessionLapRemining = {0}", data.Telemetry.SessionLapsRemain);
                 
-                //return;
                 Thread.Sleep(2000);
             }
         }

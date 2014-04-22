@@ -26,6 +26,20 @@ namespace iRacingSDK
 	{
         public Car CamCar { get { return Cars.FirstOrDefault(c => c.Index == CamCarIdx); } }
 
+        private float[] carIdxDistance;
+        public float[] CarIdxDistance
+        {
+            get
+            {
+                if (carIdxDistance == null)
+                    carIdxDistance = Enumerable.Range(0, this.SessionData.DriverInfo.Drivers.Length)
+                        .Select(CarIdx => this.CarIdxLap[CarIdx] + this.CarIdxLapDistPct[CarIdx] )
+                        .ToArray();
+
+                return carIdxDistance;
+            }
+        }
+
 		Car[] cars;
 		public Car[] Cars
 		{
