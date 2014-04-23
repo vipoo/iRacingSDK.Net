@@ -51,7 +51,7 @@ namespace iRacingSDK
             }
         }
 
-        private static void FixPercentagesOnLapChange(int[] lastLaps, int[] zeroOnFrame, Telemetry telemetry, int i)
+        static void FixPercentagesOnLapChange(int[] lastLaps, int[] zeroOnFrame, Telemetry telemetry, int i)
         {
             var carIdxLapDistPct = telemetry.CarIdxLapDistPct[i];
 
@@ -64,16 +64,16 @@ namespace iRacingSDK
                 var carIdxLap = telemetry.CarIdxLap[i];
                 var lastLap = lastLaps[i];
 
-                if (lastLap != carIdxLap)
+                if (lastLap == carIdxLap)
+                    return;
+             
+                if (carIdxLap == lastLap + 1 && carIdxLapDistPct > 0.90)
                 {
-                    if (carIdxLap == lastLap + 1 && carIdxLapDistPct > 0.90)
-                    {
-                        telemetry.CarIdxLapDistPct[i] = 0;
-                        zeroOnFrame[i] = telemetry.ReplayFrameNum;
-                    }
-
-                    lastLaps[i] = carIdxLap;
+                    telemetry.CarIdxLapDistPct[i] = 0;
+                    zeroOnFrame[i] = telemetry.ReplayFrameNum;
                 }
+
+                lastLaps[i] = carIdxLap;
             }
         }
     }

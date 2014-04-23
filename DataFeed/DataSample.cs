@@ -20,14 +20,12 @@ using System;
 
 namespace iRacingSDK
 {
-	public class DataSample
-	{
-		public static readonly DataSample YetToConnected = new DataSample { IsConnected = false };
+    public class DataSample
+    {
+        public static readonly DataSample YetToConnected = new DataSample { IsConnected = false };
 
-		public bool IsConnected	{ get; internal set; }
-        public SessionData SessionData  { get; internal set; }
-		public Telemetry Telemetry { get; internal set; }
-
-	}
-	
+        public bool IsConnected { get; internal set; }
+        public SessionData SessionData { get; internal set; }
+        public Telemetry Telemetry { get; internal set; }
+    }
 }
