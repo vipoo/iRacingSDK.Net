@@ -31,7 +31,7 @@ namespace iRacingSDK
             public int[] CarSectorIdx; //0 -> Start/Finish, 1 -> 33%, 2-> 66%
         }
 
-        public static IEnumerable<DataSample> OnDriverCrossesSector(this IEnumerable<DataSample> samples)
+        public static IEnumerable<DataSample> OnDriverCrossingSectors(this IEnumerable<DataSample> samples)
         {
             var lastRaceLaps = -1;
 
