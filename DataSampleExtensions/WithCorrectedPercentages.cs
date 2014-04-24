@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,6 +39,9 @@ namespace iRacingSDK
         {
             var lastLaps = new int[64];
             var zeroOnFrame = new int[64];
+
+            for (var i = 0; i < 64; i++)
+                lastLaps[i] = -2;
 
             foreach (var data in samples)
             {
@@ -69,11 +73,12 @@ namespace iRacingSDK
              
                 if (carIdxLap == lastLap + 1 && carIdxLapDistPct > 0.90)
                 {
+                    //Trace.WriteLine(string.Format("Zero pct for car {0} for lap starting {1}", i, lastLap));
                     telemetry.CarIdxLapDistPct[i] = 0;
                     zeroOnFrame[i] = telemetry.ReplayFrameNum;
                 }
-
-                lastLaps[i] = carIdxLap;
+                else
+                    lastLaps[i] = carIdxLap;
             }
         }
     }

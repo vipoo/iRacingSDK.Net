@@ -26,6 +26,17 @@ namespace iRacingSDK
 {
     public static partial class DataSampleExtensions
     {
+        public static IEnumerable<DataSample> AtSpeed(this IEnumerable<DataSample> samples, int replaySpeed, Func<DataSample, bool> fn)
+        {
+            foreach (var data in samples)
+            {
+                if(fn(data))
+                    iRacing.Replay.SetSpeed(replaySpeed);
+
+                yield return data;
+            }
+        }
+
         public static IEnumerable<DataSample> AtSpeed(this IEnumerable<DataSample> samples, int replaySpeed)
         {
             foreach (var data in samples)

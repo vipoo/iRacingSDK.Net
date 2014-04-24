@@ -43,7 +43,6 @@ namespace iRacingSDK
 
             iRacing.Replay.SetSpeed(0);
             DataSample data = null;
-
             while( data == null || data.Telemetry.SessionState != SessionState.CoolDown)
             {
                 Thread.Sleep(1000);
