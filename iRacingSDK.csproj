@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="DataFeed\GeneratedTelemetry.cs" />
     <Compile Include="DataFeed\GeneratedSessionData.cs" />
+    <Compile Include="DataFeed\ReplayPositionMode.cs" />
     <Compile Include="DataSampleExtensions\Incidents.cs" />
     <Compile Include="DataSampleExtensions\WithDriverSectors.cs" />
     <Compile Include="DataSampleExtensions\WithCorrectedPercentages.cs" />

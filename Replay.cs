@@ -74,6 +74,12 @@ namespace iRacingSDK
             WaitAndVerify(data2 => data.Telemetry.SessionNum + 1 != data2.Telemetry.SessionNum);
         }
 
+
+        public void MoveToFrame(int frameNumber, ReplayPositionMode mode = ReplayPositionMode.Begin)
+        {
+            SendMessage(BroadcastMessage.ReplaySetPlayPosition, (short)mode, frameNumber);
+        }
+
         public void MoveToStartOfRace()
         {
             MoveToStart();
@@ -136,14 +142,19 @@ namespace iRacingSDK
 
         DateTime lastMessagePostedTime = DateTime.Now;
 
-		void SendMessage(BroadcastMessage message, short var1 = 0, short var2 = 0, short var3 = 0)
-		{
-            var var23 = FromShorts(var2, var3);
+        void SendMessage(BroadcastMessage message, short var1 = 0, int var2 = 0)
+        {
             var msgVar1 = FromShorts((short)message, var1);
 
-            if (!Win32.Messages.SendNotifyMessage(Win32.Messages.HWND_BROADCAST, messageId, msgVar1, var23))
+            if (!Win32.Messages.SendNotifyMessage(Win32.Messages.HWND_BROADCAST, messageId, msgVar1, var2))
                 throw new Exception(String.Format("Error in broadcasting message {0}", message));
-		}
+        }
+
+		void SendMessage(BroadcastMessage message, short var1, short var2, short var3)
+		{
+            var var23 = FromShorts(var2, var3);
+            SendMessage(message, var1, var23);
+        }
 
         static int FromShorts(short lowPart, short highPart)
         {
