@@ -52,7 +52,7 @@ namespace iRacingSDK
 				for(int i = 0; i < CarIdxLap.Length; i++)
 					cars[i] = new Car {
 						Index = i,
-						Driver = SessionData.DriverInfo.Drivers.FirstOrDefault(d => d.CarIdx == i),
+						Driver = SessionData.DriverInfo.Drivers[i],
 						DistancePercentage = CarIdxLapDistPct[i],
 						Lap	= CarIdxLap[i]
 					};

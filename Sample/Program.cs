@@ -47,6 +47,9 @@ namespace iRacingSDKSample
             var lastTickCount = 0;
             var lastFrame = 0;
 
+            var firstData = iRacing.GetDataFeed().First();
+            var offset = firstData.Telemetry.SessionTime - (float)firstData.Telemetry.ReplayFrameNum / 60f;
+
             foreach( var data in iRacing.GetDataFeed() )
             {
                 if( data.Telemetry.TickCount != lastTickCount+1 )
@@ -59,7 +62,12 @@ namespace iRacingSDKSample
                     Console.WriteLine("Frame number count glitch {0}, {1}", lastFrame, data.Telemetry.ReplayFrameNum);
                 }
 
-                Thread.Sleep(14);
+                var newTimeDelta = (int)((float)data.Telemetry.ReplayFrameNum/ 60f + offset - data.Telemetry.SessionTime) * 1000;
+
+                if( newTimeDelta != 0)
+                    Console.WriteLine("Frame time {0}", newTimeDelta);
+
+                Thread.Sleep(15);
                 lastTickCount = data.Telemetry.TickCount;
                 lastFrame = data.Telemetry.ReplayFrameNum;
             }

@@ -58,6 +58,7 @@ namespace iRacingSDK
             if( dataFeed == null )
 			    dataFeed = new DataFeed(iRacingConnection.Accessor);
 
+            var nextTickCount = 0;
 			while(true)
 			{
                 if (!iRacingConnection.WaitForData())
@@ -65,7 +66,12 @@ namespace iRacingSDK
 
 				var data = dataFeed.GetNextDataSample();
                 if (data != null)
+                {
+                    if (data.Telemetry.TickCount != nextTickCount && nextTickCount != 0)
+                        Debug.WriteLine(string.Format("Warning tick count glitch - {0}, {1}", data.Telemetry.TickCount, nextTickCount), "WARN");
+                    nextTickCount = data.Telemetry.TickCount+1;
                     yield return data;
+                }
 			}
 		}
 

@@ -72,7 +72,6 @@
     <Compile Include="iRSDKHeaderExtensions.cs" />
     <Compile Include="DataFeed.cs" />
     <Compile Include="DataFeed\DataSample.cs" />
-    <Compile Include="ConnectionEvent.cs" />
     <Compile Include="iRacing.cs" />
     <Compile Include="iRacingConnection.cs" />
     <Compile Include="MemoryMappedViewAccessorExtensions.cs" />
