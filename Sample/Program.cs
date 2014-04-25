@@ -38,7 +38,31 @@ namespace iRacingSDKSample
             }
 
 			//GetData_Main(args);
-            ChangeCamDriver();
+            //ChangeCamDriver();
+            VerifyDataStream();
+        }
+
+        private static void VerifyDataStream()
+        {
+            var lastTickCount = 0;
+            var lastFrame = 0;
+
+            foreach( var data in iRacing.GetDataFeed() )
+            {
+                if( data.Telemetry.TickCount != lastTickCount+1 )
+                {
+                    Console.WriteLine("Tick count glitch {0}, {1}", lastTickCount, data.Telemetry.TickCount);
+                }
+
+                if( data.Telemetry.ReplayFrameNum != lastFrame+1)
+                {
+                    Console.WriteLine("Frame number count glitch {0}, {1}", lastFrame, data.Telemetry.ReplayFrameNum);
+                }
+
+                Thread.Sleep(14);
+                lastTickCount = data.Telemetry.TickCount;
+                lastFrame = data.Telemetry.ReplayFrameNum;
+            }
         }
 
         public static void ChangeCamDriver()
