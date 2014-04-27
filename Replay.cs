@@ -200,7 +200,7 @@ namespace iRacingSDK
             return ((int)highPart << 16) | (ushort)lowPart;
         }
 
-        internal void Wait()
+        public void Wait()
         {
             currentMessageTask.Wait();
         }
