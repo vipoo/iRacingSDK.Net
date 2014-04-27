@@ -40,6 +40,7 @@ namespace iRacingSDK
             while( data == null || data.Telemetry.SessionState != SessionState.CoolDown)
             {
                 iRacing.Replay.MoveToNextIncident();
+                Thread.Sleep(250); //Wait a bit more to ensure iRacing has moved to the incident
                 data = samples.First();
 
                 yield return data;
