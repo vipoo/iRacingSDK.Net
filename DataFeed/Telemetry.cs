@@ -48,8 +48,8 @@ namespace iRacingSDK
 				if(cars != null)
 					return cars;
 
-				cars = new Car[CarIdxLap.Length];
-				for(int i = 0; i < CarIdxLap.Length; i++)
+                cars = new Car[this.SessionData.DriverInfo.Drivers.Length];
+                for (int i = 0; i < this.SessionData.DriverInfo.Drivers.Length; i++)
 					cars[i] = new Car {
 						Index = i,
 						Driver = SessionData.DriverInfo.Drivers[i],

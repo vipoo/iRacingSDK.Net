@@ -132,7 +132,7 @@ namespace iRacingSDK
 
         public void CameraOnPositon(short carPosition, short group, short camera = 0)
         {
-            SendMessage(BroadcastMessage.CameraSwitchNum, carPosition, group, camera);
+            SendMessage(BroadcastMessage.CameraSwitchPos, carPosition, group, camera);
         }
 
 		void ReplaySearch(ReplaySearchMode mode)

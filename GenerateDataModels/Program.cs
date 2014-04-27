@@ -40,6 +40,9 @@ namespace GenerateDataModels
                 case "SessionState":
                     return "iRacingSDK.SessionState";
 
+                case "SessionFlags":
+                    return "iRacingSDK.SessionFlags";
+
                 default:
                     return sampleValue.GetType().ToString();         
             }

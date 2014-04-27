@@ -41,7 +41,7 @@ namespace iRacingSDK
             var zeroOnFrame = new int[64];
 
             for (var i = 0; i < 64; i++)
-                lastLaps[i] = -2;
+                lastLaps[i] = 0;
 
             foreach (var data in samples)
             {
@@ -57,6 +57,9 @@ namespace iRacingSDK
 
         static void FixPercentagesOnLapChange(int[] lastLaps, int[] zeroOnFrame, Telemetry telemetry, int i)
         {
+            if (telemetry.CarIdxLap[i] == -1)
+                return;
+
             var carIdxLapDistPct = telemetry.CarIdxLapDistPct[i];
 
             if (zeroOnFrame[i] == telemetry.ReplayFrameNum && carIdxLapDistPct > 0.90)
@@ -73,7 +76,6 @@ namespace iRacingSDK
              
                 if (carIdxLap == lastLap + 1 && carIdxLapDistPct > 0.90)
                 {
-                    //Trace.WriteLine(string.Format("Zero pct for car {0} for lap starting {1}", i, lastLap));
                     telemetry.CarIdxLapDistPct[i] = 0;
                     zeroOnFrame[i] = telemetry.ReplayFrameNum;
                 }

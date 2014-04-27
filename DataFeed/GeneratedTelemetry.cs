@@ -36,7 +36,7 @@ namespace iRacingSDK
 
 		public System.Int32 	SessionUniqueID				{ get { return (System.Int32)		this["SessionUniqueID"]; 			} }
 
-		public System.Int32 	SessionFlags				{ get { return (System.Int32)		this["SessionFlags"]; 			} }
+        public iRacingSDK.SessionFlags SessionFlags { get { return (iRacingSDK.SessionFlags)(System.Int32)this["SessionFlags"]; } }
 
 		public System.Double 	SessionTimeRemain				{ get { return (System.Double)		this["SessionTimeRemain"]; 			} }
 

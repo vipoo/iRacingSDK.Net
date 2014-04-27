@@ -24,6 +24,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using YamlDotNet.RepresentationModel;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace iRacingSDKSample
 {
@@ -37,9 +38,9 @@ namespace iRacingSDKSample
                 continue;
             }
 
-			//GetData_Main(args);
+			GetData_Main(args);
             //ChangeCamDriver();
-            VerifyDataStream();
+            //VerifyDataStream();
         }
 
         private static void VerifyDataStream()
@@ -67,7 +68,7 @@ namespace iRacingSDKSample
                 if( newTimeDelta != 0)
                     Console.WriteLine("Frame time {0}", newTimeDelta);
 
-                Thread.Sleep(15);
+                Thread.Sleep(13);
                 lastTickCount = data.Telemetry.TickCount;
                 lastFrame = data.Telemetry.ReplayFrameNum;
             }
@@ -76,20 +77,86 @@ namespace iRacingSDKSample
         public static void ChangeCamDriver()
         {
             var data = iRacing.GetDataFeed().First();
-            var camera = data.SessionData.CameraInfo.Groups.First(g => g.GroupName == "TV1");
+            var camera = data.SessionData.CameraInfo.Groups.First(g => g.GroupName == "TV3");
 
-            var driverNumber = data.SessionData.DriverInfo.Drivers.Skip(1).First().CarNumber;
+            while(true)
+            {
+                data = iRacing.GetDataFeed().First();
+             
+                var ordered = data.Telemetry.CarIdxDistance
+                    .Select((d, i) => new { CarIdx = i, Distance = d })
+                    .Skip(1)
+                    .Where(d => d.Distance > 0)
+                    .OrderByDescending(d => d.Distance)
+                    .Where(d => d.Distance <= data.SessionData.SessionInfo.Sessions[2].ResultsLapsComplete + 1.01)
+                    .ToArray();
 
-            iRacing.Replay.CameraOnDriver((short)driverNumber, (short)camera.GroupNum, 0);
+                Trace.WriteLine(data.Telemetry.SessionState);
+
+                var next = ordered.FirstOrDefault();
+
+                if (next == null)
+                    break;
+
+                var number = data.SessionData.DriverInfo.Drivers[next.CarIdx].CarNumber;
+
+                iRacing.Replay.CameraOnDriver((short)number, (short)camera.GroupNum, 0);
+
+                Thread.Sleep(1000);
+            }
+            
+            //var camera = data.SessionData.CameraInfo.Groups.First(g => g.GroupName == "Pit Lane");
+
+            //var driverNumber = 1; // data.SessionData.DriverInfo.Drivers.Skip(1).First().CarNumber;
+
+            //iRacing.Replay.CameraOnDriver((short)driverNumber, (short)camera.GroupNum, 0);
         }
 
         public unsafe static void GetData_Main(string[] args)
         {
-			foreach (var data in iRacing.GetDataFeed().WithCorrectedPercentages().AtSpeed(16).RaceOnly())
+            int[] lastLaps = new int[64];
+
+            foreach (var data in iRacing.GetDataFeed().WithCorrectedPercentages().WithCorrectedDistances())
+            {
+                
+
+                if( data.Telemetry.SessionState == SessionState.CoolDown)
+                {
+                    Trace.WriteLine("Finished.");
+                    break;
+                }
+
+                if (data.Telemetry.RaceLaps <= data.SessionData.SessionInfo.Sessions[2].ResultsLapsComplete)
+                {
+                    for( int i = 0; i < 10; i++)
+                        lastLaps[i] = data.Telemetry.CarIdxLap[i];
+                }
+                else
+                for( int i = 0; i < 10; i++)
+                {
+                    if( lastLaps[i] != data.Telemetry.CarIdxLap[i])
+                    {
+                        lastLaps[i] = data.Telemetry.CarIdxLap[i];
+                        var name = data.SessionData.DriverInfo.Drivers[i].UserName;
+                        var position = data.SessionData.SessionInfo.Sessions[2].ResultsPositions.First(r => r.CarIdx == i).Position;
+
+                       // if (lastLaps[i] == data.SessionData.SessionInfo.Sessions[2].ResultsLapsComplete + 1)
+                            Trace.WriteLine(string.Format("Driver {0} Cross line in position {1}", name, position));
+                    }
+                }
+            }
+
+            return;
+
+            foreach (var data in iRacing.GetDataFeed().WithCorrectedPercentages().AtSpeed(16).RaceOnly())
             {
                 Console.Clear();
 
                 Console.WriteLine("Session Data");
+
+
+
+
 
                 Console.WriteLine("Telemtary");
 

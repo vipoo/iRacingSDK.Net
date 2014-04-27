@@ -28,6 +28,9 @@ namespace iRacingSDK
 {
 	public class iRacing
 	{
+        public static readonly Replay Replay = new Replay();
+        static DataFeed dataFeed = null;
+
 		public static IEnumerable<DataSample> GetDataFeed()
 		{
 			foreach(var notConnectedSample in WaitForInitialConnection())
@@ -51,8 +54,6 @@ namespace iRacingSDK
             Trace.WriteLineIf(!wasConnected, "Connected to iRacing application");
 		}
 
-        static DataFeed dataFeed = null;
-
 		static IEnumerable<DataSample> AllSamples()
 		{
             if( dataFeed == null )
@@ -67,15 +68,12 @@ namespace iRacingSDK
 				var data = dataFeed.GetNextDataSample();
                 if (data != null)
                 {
-                    if (data.Telemetry.TickCount != nextTickCount && nextTickCount != 0)
+                    if (data.IsConnected && data.Telemetry.TickCount != nextTickCount && nextTickCount != 0)
                         Debug.WriteLine(string.Format("Warning tick count glitch - {0}, {1}", data.Telemetry.TickCount, nextTickCount), "WARN");
                     nextTickCount = data.Telemetry.TickCount+1;
                     yield return data;
                 }
 			}
 		}
-
-        public static readonly Replay Replay = new Replay();
 	}
-
 }
