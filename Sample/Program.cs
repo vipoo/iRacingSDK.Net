@@ -25,6 +25,7 @@ using System.IO;
 using YamlDotNet.RepresentationModel;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace iRacingSDKSample
 {
@@ -38,9 +39,20 @@ namespace iRacingSDKSample
                 continue;
             }
 
-			GetData_Main(args);
+			//GetData_Main(args);
             //ChangeCamDriver();
             //VerifyDataStream();
+
+            Recorder();
+        }
+
+        static void Recorder()
+        {
+            var writer = new BinaryFormatter();
+
+            using(var file = new FileStream(@"c:\recordedSamples.bin", FileMode.Create, FileAccess.Write, FileShare.None))
+                foreach( var d in iRacing.GetDataFeed())
+                    writer.Serialize(file, d);
         }
 
         private static void VerifyDataStream()

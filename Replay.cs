@@ -20,6 +20,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Diagnostics;
 
 namespace iRacingSDK
 {
@@ -30,16 +31,20 @@ namespace iRacingSDK
 		public Replay()
 		{
 			messageId = Win32.Messages.RegisterWindowMessage("IRSDK_BROADCASTMSG");
+            currentMessageTask = new Task(() =>{});
+            currentMessageTask.Start();
 		}
-
 
         public void SetSpeed(double p)
         {
+            Trace.WriteLine(string.Format("Setting speed to {0}", p));
             SendMessage(BroadcastMessage.ReplaySetPlaySpeed, (short)p, 0);
 		}
 
         public void MoveToStart()
         {
+            currentMessageTask.Wait();
+
 			ReplaySearch(ReplaySearchMode.ToStart);
 
             WaitAndVerify(data => data.Telemetry.ReplayFrameNum != 0);
@@ -65,6 +70,8 @@ namespace iRacingSDK
         }
         public void MoveToNextSession()
         {
+            currentMessageTask.Wait();
+
             var data = iRacing.GetDataFeed().First();
             if (data.Telemetry.SessionNum == data.SessionData.SessionInfo.Sessions.Length)
                 return;
@@ -112,17 +119,29 @@ namespace iRacingSDK
         /// </summary>
         public void MoveToNextIncident()
         {
+            currentMessageTask.Wait();
+
             ReplaySearch(ReplaySearchMode.NextIncident);
+
+            currentMessageTask.Wait();
         }
 
 		public void MoveToNextLap()
 		{
+            currentMessageTask.Wait();
+
 			ReplaySearch(ReplaySearchMode.NextLap);
-		}
+
+            currentMessageTask.Wait();
+        }
 
         public void MoveToNextFrame()
         {
+            currentMessageTask.Wait();
+
             ReplaySearch(ReplaySearchMode.NextFrame);
+
+            currentMessageTask.Wait();
         }
 
         public void CameraOnDriver(short carNumber, short group, short camera = 0)
@@ -141,13 +160,33 @@ namespace iRacingSDK
 		}
 
         DateTime lastMessagePostedTime = DateTime.Now;
+        Task currentMessageTask;
 
         void SendMessage(BroadcastMessage message, short var1 = 0, int var2 = 0)
         {
             var msgVar1 = FromShorts((short)message, var1);
 
-            if (!Win32.Messages.SendNotifyMessage(Win32.Messages.HWND_BROADCAST, messageId, msgVar1, var2))
-                throw new Exception(String.Format("Error in broadcasting message {0}", message));
+            var lastTask = currentMessageTask;
+            currentMessageTask = new Task(() =>
+            {
+                lastTask.Wait();
+                lastTask.Dispose();
+                lastTask = null;
+
+                var timeSinceLastMsg = DateTime.Now - lastMessagePostedTime;
+                var throttleTime = (int)(500d - timeSinceLastMsg.TotalMilliseconds);
+                if (throttleTime > 0)
+                {
+                    Trace.WriteLine(string.Format("Throttle message {0} delivery to iRacing by {1} millisecond", message, throttleTime));
+                    Thread.Sleep(throttleTime);
+                }
+                lastMessagePostedTime = DateTime.Now;
+
+                if (!Win32.Messages.SendNotifyMessage(Win32.Messages.HWND_BROADCAST, messageId, msgVar1, var2))
+                    throw new Exception(String.Format("Error in broadcasting message {0}", message));
+            });
+
+            currentMessageTask.Start();
         }
 
 		void SendMessage(BroadcastMessage message, short var1, short var2, short var3)
@@ -159,6 +198,11 @@ namespace iRacingSDK
         static int FromShorts(short lowPart, short highPart)
         {
             return ((int)highPart << 16) | (ushort)lowPart;
+        }
+
+        internal void Wait()
+        {
+            currentMessageTask.Wait();
         }
     }
 }

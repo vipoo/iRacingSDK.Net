@@ -49,7 +49,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="YamlDotNet">
-      <HintPath>packages\YamlDotNet.3.1.1\lib\net35\YamlDotNet.dll</HintPath>
+      <HintPath>..\iRacingReplayOverlay.net\packages\YamlDotNet.3.1.1\lib\net35\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

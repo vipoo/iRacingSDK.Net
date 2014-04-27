@@ -31,21 +31,14 @@ namespace iRacingSDK
         {
             iRacing.Replay.MoveToStartOfRace();
 
-            iRacing.Replay.SetSpeed(8);
-            foreach (var preRace in samples)
-            {
-                if( preRace.Telemetry.SessionState == SessionState.GetInCar)
-                    iRacing.Replay.SetSpeed(8);
-
-                if (preRace.Telemetry.SessionState == SessionState.Racing)
-                    break;
-            }
+            samples.AtSpeed(8).First(d => d.Telemetry.SessionState == SessionState.Racing);
 
             iRacing.Replay.SetSpeed(0);
+            iRacing.Replay.Wait();
+
             DataSample data = null;
             while( data == null || data.Telemetry.SessionState != SessionState.CoolDown)
             {
-                Thread.Sleep(1000);
                 iRacing.Replay.MoveToNextIncident();
                 data = samples.First();
 

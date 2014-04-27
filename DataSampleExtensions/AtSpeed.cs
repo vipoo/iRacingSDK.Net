@@ -28,10 +28,19 @@ namespace iRacingSDK
     {
         public static IEnumerable<DataSample> AtSpeed(this IEnumerable<DataSample> samples, int replaySpeed, Func<DataSample, bool> fn)
         {
+            var speedBeenSet = false;
+
             foreach (var data in samples)
             {
-                if(fn(data))
+                if (fn(data) && !speedBeenSet && data.Telemetry.ReplayPlaySpeed != replaySpeed)
+                {
                     iRacing.Replay.SetSpeed(replaySpeed);
+                    speedBeenSet = true;
+                }
+
+                if (speedBeenSet)
+                    if (data.Telemetry.ReplayPlaySpeed == replaySpeed)
+                        speedBeenSet = false;
 
                 yield return data;
             }
@@ -39,12 +48,7 @@ namespace iRacingSDK
 
         public static IEnumerable<DataSample> AtSpeed(this IEnumerable<DataSample> samples, int replaySpeed)
         {
-            foreach (var data in samples)
-            {
-                iRacing.Replay.SetSpeed(replaySpeed);
-
-                yield return data;
-            }
+            return AtSpeed(samples, replaySpeed, (data) => true);
         }
     }
 }
