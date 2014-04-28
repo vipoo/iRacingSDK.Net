@@ -39,9 +39,20 @@ namespace iRacingSDK
             DataSample data = null;
             while( data == null || data.Telemetry.SessionState != SessionState.CoolDown)
             {
+                var frameNumber = data == null ? 0 : data.Telemetry.ReplayFrameNum;
                 iRacing.Replay.MoveToNextIncident();
-                Thread.Sleep(250); //Wait a bit more to ensure iRacing has moved to the incident
                 data = samples.First();
+
+                var retryCount = 4;
+                while (data.Telemetry.ReplayFrameNum == frameNumber && retryCount >= 0)
+                {
+                    retryCount++;
+                    Thread.Sleep(600); //Wait a bit more to ensure iRacing has moved to the incident
+                    data = samples.First();
+                }
+
+                if (retryCount < 0)
+                    break;
 
                 yield return data;
             }
