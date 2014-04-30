@@ -29,9 +29,9 @@ namespace iRacingSDK
     {
         public static IEnumerable<DataSample> RaceIncidents(this IEnumerable<DataSample> samples)
         {
-            iRacing.Replay.MoveToStartOfRace();
+            //iRacing.Replay.MoveToStartOfRace();
 
-            samples.AtSpeed(8).First(d => d.Telemetry.SessionState == SessionState.Racing);
+            //samples.AtSpeed(8).First(d => d.Telemetry.SessionState == SessionState.Racing);
 
             iRacing.Replay.SetSpeed(0);
             iRacing.Replay.Wait();

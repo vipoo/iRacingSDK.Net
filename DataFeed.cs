@@ -46,7 +46,7 @@ namespace iRacingSDK
 
             if ((headers.Header.status & 1) == 0)
             {
-                Trace.WriteLine("iRacing Application appears to have been closed");
+                Trace.WriteLine("iRacing Application appears to have been closed", "USER");
                 return DataSample.YetToConnected;
             }
 

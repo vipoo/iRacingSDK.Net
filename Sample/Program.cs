@@ -39,11 +39,11 @@ namespace iRacingSDKSample
                 continue;
             }
 
-			//GetData_Main(args);
+			GetData_Main(args);
             //ChangeCamDriver();
             //VerifyDataStream();
 
-            Recorder();
+            //Recorder();
         }
 
         static void Recorder()
@@ -103,8 +103,6 @@ namespace iRacingSDKSample
                     .Where(d => d.Distance <= data.SessionData.SessionInfo.Sessions[2].ResultsLapsComplete + 1.01)
                     .ToArray();
 
-                Trace.WriteLine(data.Telemetry.SessionState);
-
                 var next = ordered.FirstOrDefault();
 
                 if (next == null)
@@ -116,12 +114,6 @@ namespace iRacingSDKSample
 
                 Thread.Sleep(1000);
             }
-            
-            //var camera = data.SessionData.CameraInfo.Groups.First(g => g.GroupName == "Pit Lane");
-
-            //var driverNumber = 1; // data.SessionData.DriverInfo.Drivers.Skip(1).First().CarNumber;
-
-            //iRacing.Replay.CameraOnDriver((short)driverNumber, (short)camera.GroupNum, 0);
         }
 
         public unsafe static void GetData_Main(string[] args)
@@ -130,8 +122,6 @@ namespace iRacingSDKSample
 
             foreach (var data in iRacing.GetDataFeed().WithCorrectedPercentages().WithCorrectedDistances())
             {
-                
-
                 if( data.Telemetry.SessionState == SessionState.CoolDown)
                 {
                     Trace.WriteLine("Finished.");

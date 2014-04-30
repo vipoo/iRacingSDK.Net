@@ -38,6 +38,17 @@ namespace iRacingSDK
                         return result;
                     }
                 }
+
+                public double _SessionTime
+                {
+                    get
+                    {
+                        double result = 0;
+                        double.TryParse(SessionTime.Replace(" sec", ""), out result);
+                        return result;
+                    }
+                }
+
                 public bool IsLimitedSessionLaps
                 {
                     get

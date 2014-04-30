@@ -44,12 +44,12 @@ namespace iRacingSDK
                 for (int i = 0; i < data.SessionData.DriverInfo.Drivers.Length; i++)
                 {
                     var distance = data.Telemetry.CarIdxLap[i] + data.Telemetry.CarIdxLapDistPct[i];
-                    if (distance > maxDistance[i])
+                    if (distance > maxDistance[i] && distance > 0)
                         maxDistance[i] = distance;
 
-                    if (data.Telemetry.CarIdxLap[i] == -1)
+                    if (data.Telemetry.CarIdxLap[i] == -1 && distance > 0)
                     {
-                        Trace.WriteLine(string.Format("Adjusting distance for {0} back to {1}", i, distance));
+                        Trace.WriteLine(string.Format("Adjusting distance for {0} back to {1}", data.SessionData.DriverInfo.Drivers[i].UserName, distance), "INFO");
 
                         data.Telemetry.CarIdxLap[i] = (int)maxDistance[i];
                         data.Telemetry.CarIdxLapDistPct[i] = maxDistance[i] - (int)maxDistance[i];

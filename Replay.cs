@@ -37,7 +37,7 @@ namespace iRacingSDK
 
         public void SetSpeed(double p)
         {
-            Trace.WriteLine(string.Format("Setting speed to {0}", p));
+            Trace.WriteLine(string.Format("Setting speed to {0}", p), "INFO");
             SendMessage(BroadcastMessage.ReplaySetPlaySpeed, (short)p, 0);
 		}
 
@@ -55,15 +55,15 @@ namespace iRacingSDK
             WaitAndVerify(verifyFn, () => { });
         }
 
-        void WaitAndVerify(Func<DataSample, bool> verifyFn, Action action)
+        void WaitAndVerify(Func<DataSample, bool> verifyFn, Action action, int wait = 1000)
         {
-            var timeout = DateTime.Now + TimeSpan.FromMilliseconds(1000);
+            var timeout = DateTime.Now + TimeSpan.FromMilliseconds(wait);
             var data = iRacing.GetDataFeed().First();
             while (verifyFn(data) && DateTime.Now < timeout)
             {
                 action();
                 data = iRacing.GetDataFeed().First();
-                Thread.Sleep(1);
+                Thread.Sleep(10);
             }
             System.Diagnostics.Debug.Assert(!verifyFn(data));
 
@@ -84,7 +84,20 @@ namespace iRacingSDK
 
         public void MoveToFrame(int frameNumber, ReplayPositionMode mode = ReplayPositionMode.Begin)
         {
+            currentMessageTask.Wait();
+
+            Trace.WriteLine(string.Format("Moving to frame {0}", frameNumber), "INFO");
+
             SendMessage(BroadcastMessage.ReplaySetPlayPosition, (short)mode, frameNumber);
+
+            currentMessageTask.Wait();
+
+            WaitAndVerify(data => data.Telemetry.ReplayFrameNum != frameNumber, 
+                () => SendMessage(BroadcastMessage.ReplaySetPlayPosition, (short)mode, frameNumber),
+                2000);
+
+            currentMessageTask.Wait();
+
         }
 
         public void MoveToStartOfRace()
@@ -177,7 +190,7 @@ namespace iRacingSDK
                 var throttleTime = (int)(500d - timeSinceLastMsg.TotalMilliseconds);
                 if (throttleTime > 0)
                 {
-                    Trace.WriteLine(string.Format("Throttle message {0} delivery to iRacing by {1} millisecond", message, throttleTime));
+                    Trace.WriteLine(string.Format("Throttle message {0} delivery to iRacing by {1} millisecond", message, throttleTime), "DEBUG");
                     Thread.Sleep(throttleTime);
                 }
                 lastMessagePostedTime = DateTime.Now;
