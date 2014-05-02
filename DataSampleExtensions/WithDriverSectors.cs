@@ -60,6 +60,22 @@ namespace iRacingSDK
             return !(x == y);
         }
 
+        public static bool operator >=(LapSector x, LapSector y)
+        {
+            if (x.LapNumber > y.LapNumber)
+                return true;
+
+            if (x.LapNumber == y.LapNumber && x.Sector >= y.Sector)
+                return true;
+
+            return false;
+        }
+
+        public static bool operator <=(LapSector x, LapSector y)
+        {
+            return y >= x;
+        }
+
         public override string ToString()
         {
             return string.Format("Lap: {0}, Sector: {1}", LapNumber, Sector);

@@ -120,8 +120,23 @@ namespace iRacingSDKSample
         {
             int[] lastLaps = new int[64];
 
-            foreach (var data in iRacing.GetDataFeed().WithCorrectedPercentages().WithCorrectedDistances())
+            //WithCorrectedPercentages().WithCorrectedDistances()
+            foreach (var data in iRacing.GetDataFeed().WithCorrectedPercentages().WithFinishingStatus())
             {
+                Console.Clear();
+
+                Console.WriteLine("Final Lap is {0}", data.Telemetry.IsFinalLap);
+                Console.WriteLine("Is Finished {0}", data.Telemetry.LeaderHasFinished);
+
+                for (int i = 1; i < data.SessionData.DriverInfo.Drivers.Length; i++)
+                {
+                    Console.WriteLine("{0} lap is {1}", data.SessionData.DriverInfo.Drivers[i].UserName, data.Telemetry.CarIdxLap[i]);
+                    Console.WriteLine("{0} is finished {1}", data.SessionData.DriverInfo.Drivers[i].UserName, data.Telemetry.HasSeenCheckeredFlag[i]);
+                }
+
+                Thread.Sleep(1000);
+                continue;
+
                 if( data.Telemetry.SessionState == SessionState.CoolDown)
                 {
                     Trace.WriteLine("Finished.");

@@ -40,6 +40,28 @@ namespace iRacingSDK
             }
         }
 
+        int[] positions;
+        public int[] Positions
+        {
+            get
+            {
+                if (positions != null)
+                    return positions;
+
+                positions = new int[SessionData.DriverInfo.Drivers.Length];
+
+                var runningOrder = CarIdxDistance
+                    .Select((d, idx) => new { CarIdx = idx, Distance = d})
+                    .OrderByDescending(c => c.Distance)
+                    .Select((c, order) => new { CarIdx = c.CarIdx, Position = order + 1 });
+
+                foreach( var runner in runningOrder )
+                    positions[runner.CarIdx] = runner.Position;
+
+                return positions;
+            }
+        }
+
 		Car[] cars;
 		public Car[] Cars
 		{
@@ -48,25 +70,35 @@ namespace iRacingSDK
 				if(cars != null)
 					return cars;
 
-                cars = new Car[this.SessionData.DriverInfo.Drivers.Length];
-                for (int i = 0; i < this.SessionData.DriverInfo.Drivers.Length; i++)
-					cars[i] = new Car {
-						Index = i,
-						Driver = SessionData.DriverInfo.Drivers[i],
-						DistancePercentage = CarIdxLapDistPct[i],
-						Lap	= CarIdxLap[i]
-					};
-
-				return cars;
+                return cars = Enumerable.Range(0, this.SessionData.DriverInfo.Drivers.Length).Select(i => new Car(this, i)).ToArray();
 			}
 		}
 	}
 
-	public class Car
-	{
-		public int Index { get; internal set; }
-		public int Lap { get; internal set; }
-		public float DistancePercentage { get; internal set; }
-		public SessionData._DriverInfo._Drivers Driver { get; internal set; }
-	}
+    public class Car
+    {
+        readonly int carIdx;
+        readonly Telemetry telemetry;
+        readonly SessionData._DriverInfo._Drivers driver;
+
+        public Car(Telemetry telemetry, int carIdx)
+        {
+            this.telemetry = telemetry;
+            this.carIdx = carIdx;
+            this.driver = telemetry.SessionData.DriverInfo.Drivers[carIdx];
+        }
+
+        public int Index { get { return carIdx; } }
+        public int CarIdx { get { return carIdx; } }
+
+        public int Lap { get { return telemetry.CarIdxLap[carIdx]; } }
+        public float DistancePercentage { get { return telemetry.CarIdxLapDistPct[carIdx]; } }
+        public float TotalDistance { get { return this.Lap + this.DistancePercentage; } }
+        public SessionData._DriverInfo._Drivers Driver { get { return driver; } }
+        public LapSector LapSector { get { return telemetry.CarSectorIdx[carIdx]; } }
+        public int Position { get { return telemetry.Positions[carIdx]; } }
+        public short CarNumber { get { return (short)driver.CarNumber; } }
+        public string UserName { get { return driver.UserName; } }
+        public bool HasSeenCheckeredFlag { get { return telemetry.HasSeenCheckeredFlag[carIdx]; } }
+    }
 }
