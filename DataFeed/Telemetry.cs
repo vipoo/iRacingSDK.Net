@@ -52,9 +52,11 @@ namespace iRacingSDK
 
                 var runningOrder = CarIdxDistance
                     .Select((d, idx) => new { CarIdx = idx, Distance = d})
+                    .Where( c => c.CarIdx != 0 )
                     .OrderByDescending(c => c.Distance)
                     .Select((c, order) => new { CarIdx = c.CarIdx, Position = order + 1 });
 
+                positions[0] = int.MaxValue;
                 foreach( var runner in runningOrder )
                     positions[runner.CarIdx] = runner.Position;
 
