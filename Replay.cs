@@ -98,6 +98,7 @@ namespace iRacingSDK
 
             currentMessageTask.Wait();
 
+            Trace.WriteLine(string.Format("Moved to frame {0}", frameNumber), "INFO");
         }
 
         public void MoveToStartOfRace()

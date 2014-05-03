@@ -30,6 +30,12 @@ namespace iRacingSDK
         public bool[] HasSeenCheckeredFlag;
         public bool IsFinalLap;
         public bool LeaderHasFinished;
+        public bool[] HasRetired;
+
+        public bool HasData(int carIdx)
+        {
+            return this.CarIdxTrackSurface[carIdx] != TrackLocation.NotInWorld;
+        }
     }
 
     public static partial class DataSampleExtensions

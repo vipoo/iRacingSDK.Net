@@ -24,7 +24,7 @@ namespace iRacingSDK
 {
 	public partial class Telemetry : Dictionary<string, object>
 	{
-        public Car CamCar { get { return Cars.FirstOrDefault(c => c.Index == CamCarIdx); } }
+        public Car CamCar { get { return Cars[CamCarIdx]; } }
 
         private float[] carIdxDistance;
         public float[] CarIdxDistance
@@ -103,5 +103,6 @@ namespace iRacingSDK
         public string UserName { get { return driver.UserName; } }
         public bool HasSeenCheckeredFlag { get { return telemetry.HasSeenCheckeredFlag[carIdx]; } }
         public bool IsPaceCar { get { return carIdx == 0; } }
+        public bool HasData { get { return telemetry.HasData(carIdx); } }
     }
 }

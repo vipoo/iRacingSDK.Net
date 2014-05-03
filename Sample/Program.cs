@@ -39,7 +39,9 @@ namespace iRacingSDKSample
                 continue;
             }
 
-			GetData_Main(args);
+            View_FinihsingStatus();
+
+			//GetData_Main(args);
             //ChangeCamDriver();
             //VerifyDataStream();
 
@@ -116,6 +118,38 @@ namespace iRacingSDKSample
             }
         }
 
+        public unsafe static void View_FinihsingStatus()
+        {
+            int[] lastLaps = new int[64];
+
+            //WithCorrectedPercentages().WithCorrectedDistances()
+            foreach (var data in iRacing.GetDataFeed().WithCorrectedPercentages().WithFinishingStatus())
+            {
+                //Console.Clear();
+
+//                Console.WriteLine("Final Lap is {0}", data.Telemetry.IsFinalLap);
+  //              Console.WriteLine("Is Finished {0}", data.Telemetry.LeaderHasFinished);
+
+                for (int i = 1; i < data.SessionData.DriverInfo.Drivers.Length; i++)
+                {
+                    //Console.WriteLine("{0} lap is {1}", data.SessionData.DriverInfo.Drivers[i].UserName, data.Telemetry.CarIdxLap[i]);
+                    //Console.WriteLine("{0} is finished {1}", data.SessionData.DriverInfo.Drivers[i].UserName, data.Telemetry.HasSeenCheckeredFlag[i]);
+
+   //                 Console.WriteLine("{0} is on {1}", data.SessionData.DriverInfo.Drivers[i].UserName, data.Telemetry.CarIdxTrackSurface[i]);
+     //               Console.WriteLine("{0} has no data {1}", data.SessionData.DriverInfo.Drivers[i].UserName, data.Telemetry.HasNoData(i));
+
+                    //Console.WriteLine("{0} is retired {1}", data.SessionData.DriverInfo.Drivers[i].UserName, data.Telemetry.HasRetired[i]);
+
+                    if (data.Telemetry.CarIdxTrackSurface[i] == TrackLocation.NotInWorld)
+                    {
+                        Console.WriteLine("{0} has no data at {1}", data.SessionData.DriverInfo.Drivers[i].UserName, data.Telemetry.SessionTime, data.Telemetry.ReplayFrameNum);
+                    }
+                }
+
+                //Thread.Sleep(1000);
+            }
+        }
+
         public unsafe static void GetData_Main(string[] args)
         {
             int[] lastLaps = new int[64];
@@ -123,20 +157,6 @@ namespace iRacingSDKSample
             //WithCorrectedPercentages().WithCorrectedDistances()
             foreach (var data in iRacing.GetDataFeed().WithCorrectedPercentages().WithFinishingStatus())
             {
-                Console.Clear();
-
-                Console.WriteLine("Final Lap is {0}", data.Telemetry.IsFinalLap);
-                Console.WriteLine("Is Finished {0}", data.Telemetry.LeaderHasFinished);
-
-                for (int i = 1; i < data.SessionData.DriverInfo.Drivers.Length; i++)
-                {
-                    Console.WriteLine("{0} lap is {1}", data.SessionData.DriverInfo.Drivers[i].UserName, data.Telemetry.CarIdxLap[i]);
-                    Console.WriteLine("{0} is finished {1}", data.SessionData.DriverInfo.Drivers[i].UserName, data.Telemetry.HasSeenCheckeredFlag[i]);
-                }
-
-                Thread.Sleep(1000);
-                continue;
-
                 if( data.Telemetry.SessionState == SessionState.CoolDown)
                 {
                     Trace.WriteLine("Finished.");

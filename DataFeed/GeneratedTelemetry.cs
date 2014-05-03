@@ -60,7 +60,7 @@ namespace iRacingSDK
 
 		public System.Single[] 	CarIdxLapDistPct				{ get { return (System.Single[])		this["CarIdxLapDistPct"]; 			} }
 
-		public System.Int32[] 	CarIdxTrackSurface				{ get { return (System.Int32[])		this["CarIdxTrackSurface"]; 			} }
+        public TrackLocation[] CarIdxTrackSurface { get { return (TrackLocation[])this["CarIdxTrackSurface"]; } }
 
 		public System.Boolean[] 	CarIdxOnPitRoad				{ get { return (System.Boolean[])		this["CarIdxOnPitRoad"]; 			} }
 
