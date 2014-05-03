@@ -100,5 +100,6 @@ namespace iRacingSDK
         public short CarNumber { get { return (short)driver.CarNumber; } }
         public string UserName { get { return driver.UserName; } }
         public bool HasSeenCheckeredFlag { get { return telemetry.HasSeenCheckeredFlag[carIdx]; } }
+        public bool IsPaceCar { get { return carIdx == 0; } }
     }
 }
