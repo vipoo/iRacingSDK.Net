@@ -55,7 +55,7 @@ namespace iRacingSDK
             WaitAndVerify(verifyFn, () => { });
         }
 
-        void WaitAndVerify(Func<DataSample, bool> verifyFn, Action action, int wait = 1000)
+        void WaitAndVerify(Func<DataSample, bool> verifyFn, Action action, int wait = 5000)
         {
             var timeout = DateTime.Now + TimeSpan.FromMilliseconds(wait);
             var data = iRacing.GetDataFeed().First();
