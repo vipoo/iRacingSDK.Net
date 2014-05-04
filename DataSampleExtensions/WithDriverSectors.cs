@@ -92,8 +92,11 @@ namespace iRacingSDK
                     .Select((lap, idx) => new { Lap = lap, Idx = idx, Pct = this.CarIdxLapDistPct[idx] })
                     .Where(l => l.Lap == this.RaceLaps)
                     .OrderByDescending(l => l.Pct)
-                    .First();
+                    .FirstOrDefault();
 
+                if( firstSector == null)
+                    return new LapSector(this.RaceLaps, 2);
+                
                 return new LapSector(this.RaceLaps, ToSectorFromPercentage(firstSector.Pct));
             }
         }
