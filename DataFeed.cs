@@ -46,7 +46,7 @@ namespace iRacingSDK
 
             if ((headers.Header.status & 1) == 0)
             {
-                Trace.WriteLine("iRacing Application appears to have been closed", "USER");
+                Trace.WriteLine("iRacing Application appears to have been closed", "INFO");
                 return DataSample.YetToConnected;
             }
 
@@ -99,7 +99,7 @@ namespace iRacingSDK
             
             sessionInfoString = sessionInfoString.Substring(0, sessionInfoString.IndexOf('\0'));
 
-            Trace.WriteLine("New Session data retrieved from iRacing");
+            Trace.WriteLine("New Session data retrieved from iRacing", "INFO");
 			return lastSessionInfo = DeserialiseSessionInfo(sessionInfoString);
 		}
 
@@ -133,7 +133,7 @@ namespace iRacingSDK
 
 			if(latestHeader.HasChangedSinceReading(buf))
 			{
-				Trace.WriteLine("Failed to read data before iRacing overwrote new sample!", "Critical");
+				Trace.WriteLine("Failed to read data before iRacing overwrote new sample!", "DEBUG");
 				return null;
 			}
 

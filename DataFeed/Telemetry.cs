@@ -82,7 +82,7 @@ namespace iRacingSDK
         readonly int carIdx;
         readonly Telemetry telemetry;
         readonly SessionData._DriverInfo._Drivers driver;
-
+      
         public Car(Telemetry telemetry, int carIdx)
         {
             this.telemetry = telemetry;
@@ -104,5 +104,7 @@ namespace iRacingSDK
         public bool HasSeenCheckeredFlag { get { return telemetry.HasSeenCheckeredFlag[carIdx]; } }
         public bool IsPaceCar { get { return carIdx == 0; } }
         public bool HasData { get { return telemetry.HasData(carIdx); } }
+        public bool HasRetired { get { return telemetry.HasRetired[carIdx]; } }
+
     }
 }

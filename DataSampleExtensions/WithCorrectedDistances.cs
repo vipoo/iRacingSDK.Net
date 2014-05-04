@@ -38,19 +38,24 @@ namespace iRacingSDK
         public static IEnumerable<DataSample> WithCorrectedDistances(this IEnumerable<DataSample> samples)
         {
             var maxDistance = new float[64];
+            var lastAdjustment = new int[64];
 
             foreach (var data in samples)
             {
                 for (int i = 0; i < data.SessionData.DriverInfo.Drivers.Length; i++)
                 {
                     var distance = data.Telemetry.CarIdxLap[i] + data.Telemetry.CarIdxLapDistPct[i];
-                    if (distance > maxDistance[i] && distance > 0)
+                    var distanceToNearest1000 = (int)(distance * 1000.0);
+                    var maxDistanceToNearest1000 = (int)(maxDistance[i] * 1000.0);
+
+                    if (distanceToNearest1000 > maxDistanceToNearest1000 && distanceToNearest1000 > 0)
                         maxDistance[i] = distance;
 
-                    if (data.Telemetry.CarIdxLap[i] == -1 && distance > 0)
+                    if( distanceToNearest1000 < maxDistanceToNearest1000)
                     {
-                        Trace.WriteLine(string.Format("Adjusting distance for {0} back to {1}", data.SessionData.DriverInfo.Drivers[i].UserName, distance), "INFO");
+                        Trace.WriteLineIf(lastAdjustment[i] != distanceToNearest1000, string.Format("Adjusting distance for {0} back to {1} from {2}", data.SessionData.DriverInfo.Drivers[i].UserName, maxDistance[i], distance), "DEBUG");
 
+                        lastAdjustment[i] = distanceToNearest1000;
                         data.Telemetry.CarIdxLap[i] = (int)maxDistance[i];
                         data.Telemetry.CarIdxLapDistPct[i] = maxDistance[i] - (int)maxDistance[i];
                     }

@@ -48,6 +48,7 @@ namespace iRacingSDK
         public static IEnumerable<DataSample> WithFinishingStatus(this IEnumerable<DataSample> samples)
         {
             var hasSeenCheckeredFlag = new bool[64];
+            var timeWhenDataStopped = new double[64];
 
             foreach (var data in samples)
             {
@@ -56,10 +57,22 @@ namespace iRacingSDK
                 if (data.Telemetry.RaceLaps > data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum].ResultsLapsComplete)
                     data.Telemetry.LeaderHasFinished = true;
 
-                if (data.LastSample != null && data.Telemetry.LeaderHasFinished)
-                    for (int i = 1; i < data.SessionData.DriverInfo.Drivers.Length; i++)
-                        if (data.LastSample.Telemetry.CarIdxLapDistPct[i] > 0.90 && data.Telemetry.CarIdxLapDistPct[i] < 0.10)
-                            hasSeenCheckeredFlag[i] = true;
+                /*
+                for (int i = 0; i < data.SessionData.DriverInfo.Drivers.Length; i++)
+                {
+                    if (data.Telemetry.HasData(i))
+                        timeWhenDataStopped[i] = data.Telemetry.SessionTime;
+                    else
+                    {
+                        if( timeWhenDataStopped[i])
+                    }
+
+                }*/
+
+                    if (data.LastSample != null && data.Telemetry.LeaderHasFinished)
+                        for (int i = 1; i < data.SessionData.DriverInfo.Drivers.Length; i++)
+                            if (data.LastSample.Telemetry.CarIdxLapDistPct[i] > 0.90 && data.Telemetry.CarIdxLapDistPct[i] < 0.10)
+                                hasSeenCheckeredFlag[i] = true;
 
                 data.Telemetry.HasSeenCheckeredFlag = hasSeenCheckeredFlag;
                 
