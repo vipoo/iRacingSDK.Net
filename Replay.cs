@@ -50,6 +50,15 @@ namespace iRacingSDK
             WaitAndVerify(data => data.Telemetry.ReplayFrameNum != 0);
         }
 
+        public void MoveToEnd()
+        {
+            currentMessageTask.Wait();
+
+            ReplaySearch(ReplaySearchMode.ToEnd);
+
+            currentMessageTask.Wait();
+        }
+
         void WaitAndVerify(Func<DataSample, bool> verifyFn)
         {
             WaitAndVerify(verifyFn, () => { });
@@ -140,6 +149,18 @@ namespace iRacingSDK
             currentMessageTask.Wait();
         }
 
+        /// <summary>
+        /// Select the camera onto a car and position to a previous incident marker
+        /// </summary>
+        public void MoveToPrevIncident()
+        {
+            currentMessageTask.Wait();
+
+            ReplaySearch(ReplaySearchMode.PrevIncident);
+
+            currentMessageTask.Wait();
+        }
+
 		public void MoveToNextLap()
 		{
             currentMessageTask.Wait();
@@ -154,6 +175,15 @@ namespace iRacingSDK
             currentMessageTask.Wait();
 
             ReplaySearch(ReplaySearchMode.NextFrame);
+
+            currentMessageTask.Wait();
+        }
+
+        public void MoveToPrevFrame()
+        {
+            currentMessageTask.Wait();
+
+            ReplaySearch(ReplaySearchMode.PrevFrame);
 
             currentMessageTask.Wait();
         }
