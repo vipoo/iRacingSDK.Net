@@ -36,7 +36,7 @@ namespace iRacingSDK
 
 		public System.Int32 	SessionUniqueID				{ get { return (System.Int32)		this["SessionUniqueID"]; 			} }
 
-        public iRacingSDK.SessionFlags SessionFlags { get { return (iRacingSDK.SessionFlags)(System.Int32)this["SessionFlags"]; } }
+		public iRacingSDK.SessionFlags 	SessionFlags				{ get { return (iRacingSDK.SessionFlags)		this["SessionFlags"]; 			} }
 
 		public System.Double 	SessionTimeRemain				{ get { return (System.Double)		this["SessionTimeRemain"]; 			} }
 
@@ -51,6 +51,10 @@ namespace iRacingSDK
 		public System.Int32 	ReplayFrameNum				{ get { return (System.Int32)		this["ReplayFrameNum"]; 			} }
 
 		public System.Int32 	ReplayFrameNumEnd				{ get { return (System.Int32)		this["ReplayFrameNumEnd"]; 			} }
+
+		public System.Boolean 	IsDiskLoggingEnabled				{ get { return (System.Boolean)		this["IsDiskLoggingEnabled"]; 			} }
+
+		public System.Boolean 	IsDiskLoggingActive				{ get { return (System.Boolean)		this["IsDiskLoggingActive"]; 			} }
 
 		public System.Single 	FrameRate				{ get { return (System.Single)		this["FrameRate"]; 			} }
 
@@ -208,7 +212,13 @@ namespace iRacingSDK
 
 		public System.Int32 	ReplaySessionNum				{ get { return (System.Int32)		this["ReplaySessionNum"]; 			} }
 
+		public System.Boolean 	dcTractionControlToggle				{ get { return (System.Boolean)		this["dcTractionControlToggle"]; 			} }
+
 		public System.Single 	dcBrakeBias				{ get { return (System.Single)		this["dcBrakeBias"]; 			} }
+
+		public System.Single 	dcTractionControl				{ get { return (System.Single)		this["dcTractionControl"]; 			} }
+
+		public System.Single 	dcABS				{ get { return (System.Single)		this["dcABS"]; 			} }
 
 		public System.Single 	WaterTemp				{ get { return (System.Single)		this["WaterTemp"]; 			} }
 

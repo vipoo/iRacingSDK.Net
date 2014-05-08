@@ -1,4 +1,4 @@
-﻿
+
 
 // This file is part of iRacingSDK.
 //
@@ -89,6 +89,13 @@ namespace iRacingSDK
             }
 
             public _WeekendOptions WeekendOptions { get; set; }
+
+            public partial class _TelemetryOptions
+            {
+                public string TelemetryDiskFile { get; set; }
+            }
+
+            public _TelemetryOptions TelemetryOptions { get; set; }
         }
 
         public _WeekendInfo WeekendInfo { get; set; }
