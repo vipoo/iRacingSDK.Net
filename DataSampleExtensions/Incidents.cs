@@ -48,8 +48,7 @@ namespace iRacingSDK
 		static int GetSessionNumber(IEnumerable<DataSample> samples)
 		{
 			var data = samples.First();
-			var sessionNumber = data.Telemetry.SessionNum;
-			return sessionNumber;
+			return data.Telemetry.SessionNum;
 		}
 
 		static List<DataSample> GetIncidentsForward(IEnumerable<DataSample> samples)
