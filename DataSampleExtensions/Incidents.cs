@@ -40,7 +40,7 @@ namespace iRacingSDK
 				.ToList();
 
 			foreach( var incident in incidents)
-				Trace.WriteLine(string.Format("Found new incident at frame {0}", incident.Telemetry.SessionTimeSpan));
+				Trace.WriteLine(string.Format("Found new incident at frame {0}", incident.Telemetry.SessionTimeSpan), "DEBUG");
 
 			return incidents;
         }

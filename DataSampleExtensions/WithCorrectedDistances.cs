@@ -43,26 +43,33 @@ namespace iRacingSDK
             foreach (var data in samples)
             {
                 for (int i = 0; i < data.SessionData.DriverInfo.Drivers.Length; i++)
-                {
-                    var distance = data.Telemetry.CarIdxLap[i] + data.Telemetry.CarIdxLapDistPct[i];
-                    var distanceToNearest1000 = (int)(distance * 1000.0);
-                    var maxDistanceToNearest1000 = (int)(maxDistance[i] * 1000.0);
+					CorrectDistance(data.SessionData.DriverInfo.Drivers[i].UserName,
+						ref data.Telemetry.CarIdxLap[i],
+						ref data.Telemetry.CarIdxLapDistPct[i],
+						ref maxDistance[i],
+						ref lastAdjustment[i]);
 
-                    if (distanceToNearest1000 > maxDistanceToNearest1000 && distanceToNearest1000 > 0)
-                        maxDistance[i] = distance;
-
-                    if( distanceToNearest1000 < maxDistanceToNearest1000)
-                    {
-                        Trace.WriteLineIf(lastAdjustment[i] != distanceToNearest1000, string.Format("Adjusting distance for {0} back to {1} from {2}", data.SessionData.DriverInfo.Drivers[i].UserName, maxDistance[i], distance), "DEBUG");
-
-                        lastAdjustment[i] = distanceToNearest1000;
-                        data.Telemetry.CarIdxLap[i] = (int)maxDistance[i];
-                        data.Telemetry.CarIdxLapDistPct[i] = maxDistance[i] - (int)maxDistance[i];
-                    }
-                }
 
                 yield return data;
             }
         }
+
+		static void CorrectDistance(string driverName, ref int lap, ref float distance, ref float maxDistance, ref int lastAdjustment)
+		{
+			var totalDistance = lap + distance;
+			var roundedDistance = (int)(totalDistance * 1000.0);
+			var roundedMaxDistance = (int)(maxDistance * 1000.0);
+
+			if(roundedDistance > roundedMaxDistance && roundedDistance > 0)
+				maxDistance = totalDistance;
+
+			if(roundedDistance < roundedMaxDistance)
+			{
+				Trace.WriteLineIf(lastAdjustment != roundedDistance, string.Format("Adjusting distance for {0} back to {1} from {2}", driverName, maxDistance, distance), "DEBUG");
+				lastAdjustment = roundedDistance;
+				lap = (int)maxDistance;
+				distance = maxDistance - (int)maxDistance;
+			}
+		}
     }
 }
