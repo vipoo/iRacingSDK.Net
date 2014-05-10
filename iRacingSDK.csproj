@@ -59,7 +59,6 @@
     <Compile Include="DataSampleExtensions\Incidents.cs" />
     <Compile Include="DataSampleExtensions\WithFinishingStatus.cs" />
     <Compile Include="DataSampleExtensions\WithCorrectedDistances.cs" />
-    <Compile Include="DataSampleExtensions\WithDriverSectors.cs" />
     <Compile Include="DataSampleExtensions\WithCorrectedPercentages.cs" />
     <Compile Include="DataSampleExtensions\RaceOnly.cs" />
     <Compile Include="DataSampleExtensions\AtSpeed.cs" />
@@ -78,7 +77,6 @@
     <Compile Include="iRacingConnection.cs" />
     <Compile Include="MemoryMappedViewAccessorExtensions.cs" />
     <Compile Include="DataFeed\SessionData.cs" />
-    <Compile Include="DataFeed\Telemetry.cs" />
     <Compile Include="DataFeed\Session.cs" />
     <Compile Include="Replay.cs" />
     <Compile Include="Win32\Synchronization\Event.cs" />
@@ -90,6 +88,13 @@
     <Compile Include="DataFeed\SessionFlags.cs" />
     <Compile Include="DataFeed\Car.cs" />
     <Compile Include="DataSampleExtensions\ForwardOnly.cs" />
+    <Compile Include="DataFeed\LapSector.cs" />
+    <Compile Include="DataFeed\Telemetry\Telemetry.cs" />
+    <Compile Include="DataFeed\Telemetry\RaceLapSector.cs" />
+    <Compile Include="DataFeed\Telemetry\CarSectorIdx.cs" />
+    <Compile Include="DataFeed\Telemetry\SessionTimeSpan.cs" />
+    <Compile Include="DataFeed\Telemetry\CarIdxDistance.cs" />
+    <Compile Include="DataFeed\Telemetry\Positions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -108,4 +113,7 @@
   </ProjectExtensions>
   <ItemGroup />
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="DataFeed\Telemetry\" />
+  </ItemGroup>
 </Project>

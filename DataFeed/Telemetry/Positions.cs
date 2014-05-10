@@ -24,34 +24,6 @@ namespace iRacingSDK
 {
 	public partial class Telemetry : Dictionary<string, object>
 	{
-		TimeSpan? sessionTimeSpan;
-		public TimeSpan SessionTimeSpan 
-		{
-			get
-			{ 
-				if( sessionTimeSpan == null)
-					sessionTimeSpan = TimeSpan.FromSeconds(SessionTime);
-
-				return sessionTimeSpan.Value;
-			}
-		}
-
-        public Car CamCar { get { return Cars[CamCarIdx]; } }
-
-        float[] carIdxDistance;
-        public float[] CarIdxDistance
-        {
-            get
-            {
-                if (carIdxDistance == null)
-                    carIdxDistance = Enumerable.Range(0, this.SessionData.DriverInfo.Drivers.Length)
-                        .Select(CarIdx => this.CarIdxLap[CarIdx] + this.CarIdxLapDistPct[CarIdx] )
-                        .ToArray();
-
-                return carIdxDistance;
-            }
-        }
-
         int[] positions;
         public int[] Positions
         {
@@ -75,17 +47,5 @@ namespace iRacingSDK
                 return positions;
             }
         }
-
-		Car[] cars;
-		public Car[] Cars
-		{
-			get
-			{
-				if(cars != null)
-					return cars;
-
-                return cars = Enumerable.Range(0, this.SessionData.DriverInfo.Drivers.Length).Select(i => new Car(this, i)).ToArray();
-			}
-		}
 	}
 }

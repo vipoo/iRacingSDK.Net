@@ -1,4 +1,4 @@
-﻿// This file is part of iRacingSDK.
+// This file is part of iRacingSDK.
 //
 // Copyright 2014 Dean Netherton
 // https://github.com/vipoo/iRacingSDK.Net
@@ -15,12 +15,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace iRacingSDK
 {
@@ -79,53 +74,6 @@ namespace iRacingSDK
         public override string ToString()
         {
             return string.Format("Lap: {0}, Sector: {1}", LapNumber, Sector);
-        }
-    }
-
-	public partial class Telemetry : Dictionary<string, object>
-    {
-        public LapSector RaceLapSector
-        {
-            get
-            {
-                var firstSector = this.CarIdxLap
-                    .Select((lap, idx) => new { Lap = lap, Idx = idx, Pct = this.CarIdxLapDistPct[idx] })
-                    .Where(l => l.Lap == this.RaceLaps)
-                    .OrderByDescending(l => l.Pct)
-                    .FirstOrDefault();
-
-                if( firstSector == null)
-                    return new LapSector(this.RaceLaps, 2);
-                
-                return new LapSector(this.RaceLaps, ToSectorFromPercentage(firstSector.Pct));
-            }
-        }
-
-        static int ToSectorFromPercentage(float percentage)
-        {
-            if (percentage > 0.66)
-                return 2;
-            
-            else if (percentage > 0.33)
-                return 1;
-
-            return 0;
-        }
-
-        LapSector[] carSectorIdx;
-        public LapSector[] CarSectorIdx //0 -> Start/Finish, 1 -> 33%, 2-> 66%
-        {
-            get
-            {
-                if (carSectorIdx != null)
-                    return carSectorIdx;
-
-                carSectorIdx = new LapSector[64];
-                for(int i = 0; i < 64; i++)
-                    carSectorIdx[i] = new LapSector(this.CarIdxLap[i], ToSectorFromPercentage(CarIdxLapDistPct[i]));
-
-                return carSectorIdx;
-            }
         }
     }
 }
