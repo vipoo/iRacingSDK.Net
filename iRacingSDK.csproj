@@ -88,6 +88,7 @@
     <Compile Include="DataFeed\SessionState.cs" />
     <Compile Include="DataFeed\TrackLocation.cs" />
     <Compile Include="DataFeed\SessionFlags.cs" />
+    <Compile Include="DataFeed\Car.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -18,11 +18,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
+using System.Diagnostics;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace iRacingSDK
 {
@@ -30,69 +28,70 @@ namespace iRacingSDK
     {
         public static IEnumerable<DataSample> RaceIncidents(this IEnumerable<DataSample> samples)
         {
-            iRacing.Replay.SetSpeed(0);
-            iRacing.Replay.Wait();
+			var sessionNumber = GetSessionNumber(samples);
 
-            var sessionNumber = -1;
+			var incidentsOnForward = GetIncidentsForward(samples);
 
-            var capturedIncidents = new List<DataSample>();
+			var incidentsOnReverse = GetIncidentsReverse(samples, sessionNumber);
+		
+			var incidents =  incidentsOnForward
+				.Concat(incidentsOnReverse)
+				.OrderBy( d => d.Telemetry.ReplayFrameNum)
+				.ToList();
 
-            DataSample data = null;
-            while( data == null || data.Telemetry.SessionState != SessionState.CoolDown)
-            {
-                var frameNumber = data == null ? 0 : data.Telemetry.ReplayFrameNum;
-                iRacing.Replay.MoveToNextIncident();
-                data = samples.First();
+			foreach( var incident in incidents)
+				Trace.WriteLine(string.Format("Found new incident at frame {0}", incident.Telemetry.SessionTimeSpan));
 
-                
-                var retryCount = 4;
-                while (data.Telemetry.ReplayFrameNum == frameNumber && retryCount >= 0)
-                {
-                    retryCount++;
-                    Thread.Sleep(600); //Wait a bit more to ensure iRacing has moved to the incident
-                    data = samples.First();
-                }
-
-                if (retryCount < 0)
-                    break;
-
-                if (sessionNumber == -1)
-                    sessionNumber = data.Telemetry.SessionNum;
-
-                capturedIncidents.Add(data);
-            }
-
-            iRacing.Replay.SetSpeed(0);
-            iRacing.Replay.MoveToEnd();
-
-            while (data.Telemetry.SessionNum == sessionNumber && data.Telemetry.RaceLaps > 0)
-            {
-                var frameNumber = data == null ? 0 : data.Telemetry.ReplayFrameNum;
-                iRacing.Replay.MoveToPrevIncident();
-                data = samples.First();
-
-                var retryCount = 4;
-                while (data.Telemetry.ReplayFrameNum == frameNumber && retryCount >= 0)
-                {
-                    retryCount++;
-                    Thread.Sleep(600); //Wait a bit more to ensure iRacing has moved to the incident
-                    data = samples.First();
-                }
-
-                if (retryCount < 0)
-                    break;
-
-                if (!capturedIncidents.Any(d => d.Telemetry.ReplayFrameNum == data.Telemetry.ReplayFrameNum))
-                {
-                    Trace.WriteLine(string.Format("Found new incident in reverse {0}", data.Telemetry.ReplayFrameNum));
-                    capturedIncidents.Add(data);
-                }
-                else
-                    Trace.WriteLine(string.Format("Found previously found incident {0}", data.Telemetry.ReplayFrameNum));
-            }
-
-            return capturedIncidents.OrderBy( d => d.Telemetry.ReplayFrameNum).ToList();
+			return incidents;
         }
-    }
+
+		static int GetSessionNumber(IEnumerable<DataSample> samples)
+		{
+			var data = samples.First();
+			var sessionNumber = data.Telemetry.SessionNum;
+			return sessionNumber;
+		}
+
+		static List<DataSample> GetIncidentsForward(IEnumerable<DataSample> samples)
+		{
+			return FindIncidents(samples, iRacing.Replay.MoveToNextIncident, data => data.Telemetry.SessionState == SessionState.CoolDown);
+		}
+
+		static List<DataSample> GetIncidentsReverse(IEnumerable<DataSample> samples, int sessionNumber)
+		{
+			return FindIncidents(samples, iRacing.Replay.MoveToPrevIncident, data => data.Telemetry.SessionNum != sessionNumber || data.Telemetry.RaceLaps <= 0);
+		}
+
+		static List<DataSample> FindIncidents(IEnumerable<DataSample> samples, Action toNext, Func<DataSample, bool> isFinished)
+		{
+			var capturedIncidents = new List<DataSample>();
+
+			iRacing.Replay.SetSpeed(0);
+			iRacing.Replay.Wait();
+
+			var data = samples.First();
+
+			while(!isFinished(data))
+			{
+				var frameNumber = data.Telemetry.ReplayFrameNum;
+				toNext();
+				data = samples.First();
+				var retryCount = 4;
+				while(data.Telemetry.ReplayFrameNum == frameNumber && retryCount >= 0)
+				{
+					retryCount++;
+					Thread.Sleep(600);
+					//Wait a bit more to ensure iRacing has moved to the incident
+					data = samples.First();
+				}
+				if(retryCount < 0)
+					break;
+
+				capturedIncidents.Add(data);
+			}
+
+			return capturedIncidents;
+		}
+	}
 }
 

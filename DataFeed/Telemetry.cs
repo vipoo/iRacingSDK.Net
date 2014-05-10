@@ -24,9 +24,21 @@ namespace iRacingSDK
 {
 	public partial class Telemetry : Dictionary<string, object>
 	{
+		TimeSpan? sessionTimeSpan;
+		public TimeSpan SessionTimeSpan 
+		{
+			get
+			{ 
+				if( sessionTimeSpan == null)
+					sessionTimeSpan = TimeSpan.FromSeconds(SessionTime);
+
+				return sessionTimeSpan.Value;
+			}
+		}
+
         public Car CamCar { get { return Cars[CamCarIdx]; } }
 
-        private float[] carIdxDistance;
+        float[] carIdxDistance;
         public float[] CarIdxDistance
         {
             get
@@ -76,35 +88,4 @@ namespace iRacingSDK
 			}
 		}
 	}
-
-    public class Car
-    {
-        readonly int carIdx;
-        readonly Telemetry telemetry;
-        readonly SessionData._DriverInfo._Drivers driver;
-      
-        public Car(Telemetry telemetry, int carIdx)
-        {
-            this.telemetry = telemetry;
-            this.carIdx = carIdx;
-            this.driver = telemetry.SessionData.DriverInfo.Drivers[carIdx];
-        }
-
-        public int Index { get { return carIdx; } }
-        public int CarIdx { get { return carIdx; } }
-
-        public int Lap { get { return telemetry.CarIdxLap[carIdx]; } }
-        public float DistancePercentage { get { return telemetry.CarIdxLapDistPct[carIdx]; } }
-        public float TotalDistance { get { return this.Lap + this.DistancePercentage; } }
-        public SessionData._DriverInfo._Drivers Driver { get { return driver; } }
-        public LapSector LapSector { get { return telemetry.CarSectorIdx[carIdx]; } }
-        public int Position { get { return telemetry.Positions[carIdx]; } }
-        public short CarNumber { get { return (short)driver.CarNumber; } }
-        public string UserName { get { return driver.UserName; } }
-        public bool HasSeenCheckeredFlag { get { return telemetry.HasSeenCheckeredFlag[carIdx]; } }
-        public bool IsPaceCar { get { return carIdx == 0; } }
-        public bool HasData { get { return telemetry.HasData(carIdx); } }
-        public bool HasRetired { get { return telemetry.HasRetired[carIdx]; } }
-        public TrackLocation TrackSurface { get { return telemetry.CarIdxTrackSurface[carIdx]; } }
-    }
 }

@@ -74,9 +74,11 @@ namespace iRacingSDK
                         lastDataSample.LastSample = null;
                     lastDataSample = data;
 
-                    if (data.IsConnected && data.Telemetry.TickCount != nextTickCount && nextTickCount != 0)
-                        Debug.WriteLine(string.Format("Warning tick count glitch - {0}, {1}", data.Telemetry.TickCount, nextTickCount), "WARN");
-                    nextTickCount = data.Telemetry.TickCount+1;
+					if(data.IsConnected && data.Telemetry.TickCount != nextTickCount && nextTickCount != 0)
+					{
+						Debug.WriteLine(string.Format("Warning tick count glitch - {0}, {1}", data.Telemetry.TickCount, nextTickCount), "WARN");
+						nextTickCount = data.Telemetry.TickCount + 1;
+					}
                     yield return data;
                 }
 			}

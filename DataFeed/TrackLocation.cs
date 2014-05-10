@@ -28,5 +28,4 @@ namespace iRacingSDK
         AproachingPits,
         OnTrack
     }
-	
 }

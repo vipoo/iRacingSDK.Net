@@ -53,5 +53,4 @@ namespace iRacingSDK
         startSet = 0x40000000,
         startGo = 0x80000000,
     };
-	
 }
