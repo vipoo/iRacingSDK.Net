@@ -20,6 +20,7 @@ using System;
 
 namespace iRacingSDK
 {
+	[Serializable]
     public class DataSample
     {
         public static readonly DataSample YetToConnected = new DataSample { IsConnected = false };

@@ -51,6 +51,7 @@
     <Reference Include="YamlDotNet">
       <HintPath>..\iRacingReplayOverlay.net\packages\YamlDotNet.3.1.1\lib\net35\YamlDotNet.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataFeed\GeneratedTelemetry.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="DataFeed\Telemetry\CarIdxDistance.cs" />
     <Compile Include="DataFeed\Telemetry\Positions.cs" />
     <Compile Include="DataFeed\Telemetry\FinishingStatuses.cs" />
+    <Compile Include="SerialisationSupport.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

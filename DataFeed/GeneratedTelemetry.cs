@@ -25,7 +25,7 @@ namespace iRacingSDK
 {
 	public partial class Telemetry : Dictionary<string, object>
 	{
-		internal SessionData SessionData { get; set; }
+		public SessionData SessionData { get; set; }
 
 
 		public System.Double 	SessionTime				{ get { return (System.Double)		this["SessionTime"]; 			} }
