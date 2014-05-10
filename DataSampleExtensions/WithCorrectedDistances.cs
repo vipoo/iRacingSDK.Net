@@ -40,7 +40,7 @@ namespace iRacingSDK
             var maxDistance = new float[64];
             var lastAdjustment = new int[64];
 
-            foreach (var data in samples)
+			foreach (var data in samples.ForwardOnly())
             {
                 for (int i = 0; i < data.SessionData.DriverInfo.Drivers.Length; i++)
 					CorrectDistance(data.SessionData.DriverInfo.Drivers[i].UserName,

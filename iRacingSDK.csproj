@@ -89,6 +89,7 @@
     <Compile Include="DataFeed\TrackLocation.cs" />
     <Compile Include="DataFeed\SessionFlags.cs" />
     <Compile Include="DataFeed\Car.cs" />
+    <Compile Include="DataSampleExtensions\ForwardOnly.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

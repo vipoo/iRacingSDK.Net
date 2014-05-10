@@ -1,7 +1,7 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Linq;
 using iRacingSDK;
+using NUnit.Framework;
 
 namespace iRacingSDK.Net.Tests
 {
@@ -55,4 +55,3 @@ namespace iRacingSDK.Net.Tests
 		}
 	}
 }
-
