@@ -95,6 +95,7 @@
     <Compile Include="DataFeed\Telemetry\SessionTimeSpan.cs" />
     <Compile Include="DataFeed\Telemetry\CarIdxDistance.cs" />
     <Compile Include="DataFeed\Telemetry\Positions.cs" />
+    <Compile Include="DataFeed\Telemetry\FinishingStatuses.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

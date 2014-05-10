@@ -18,66 +18,51 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace iRacingSDK
 {
-    public partial class Telemetry : Dictionary<string, object>
-    {
-        public bool[] HasSeenCheckeredFlag;
-        public bool IsFinalLap;
-        public bool LeaderHasFinished;
-        public bool[] HasRetired;
-
-        public bool HasData(int carIdx)
-        {
-            return this.CarIdxTrackSurface[carIdx] != TrackLocation.NotInWorld;
-        }
-    }
-
     public static partial class DataSampleExtensions
     {
         /// <summary>
-        /// Assignes the telemetry fields HasSeenCheckeredFlag and IsFinalLap
+		/// Assignes the telemetry fields HasSeenCheckeredFlag, IsFinalLap and LeaderHasFinished
         /// </summary>
         /// <param name="samples"></param>
         /// <returns></returns>
         public static IEnumerable<DataSample> WithFinishingStatus(this IEnumerable<DataSample> samples)
-        {
-            var hasSeenCheckeredFlag = new bool[64];
-            var timeWhenDataStopped = new double[64];
+		{
+			var hasSeenCheckeredFlag = new bool[64];
 
-            foreach (var data in samples)
-            {
-                data.Telemetry.IsFinalLap = data.Telemetry.RaceLaps >= data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum].ResultsLapsComplete;
+			foreach(var data in samples)
+			{
+				ApplyIsFinalLap(data);
 
-                if (data.Telemetry.RaceLaps > data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum].ResultsLapsComplete)
-                    data.Telemetry.LeaderHasFinished = true;
+				ApplyLeaderHasFinished(data);
+					
+				ApplyHasSeenCheckeredFlag(data, hasSeenCheckeredFlag);
 
-                /*
-                for (int i = 0; i < data.SessionData.DriverInfo.Drivers.Length; i++)
-                {
-                    if (data.Telemetry.HasData(i))
-                        timeWhenDataStopped[i] = data.Telemetry.SessionTime;
-                    else
-                    {
-                        if( timeWhenDataStopped[i])
-                    }
+				yield return data;
+			}
+		}
 
-                }*/
+		static void ApplyIsFinalLap(DataSample data)
+		{
+			data.Telemetry.IsFinalLap = data.Telemetry.RaceLaps >= data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum].ResultsLapsComplete;
+		}
 
-                    if (data.LastSample != null && data.Telemetry.LeaderHasFinished)
-                        for (int i = 1; i < data.SessionData.DriverInfo.Drivers.Length; i++)
-                            if (data.LastSample.Telemetry.CarIdxLapDistPct[i] > 0.90 && data.Telemetry.CarIdxLapDistPct[i] < 0.10)
-                                hasSeenCheckeredFlag[i] = true;
+		static void ApplyLeaderHasFinished(DataSample data)
+		{
+			if(data.Telemetry.RaceLaps > data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum].ResultsLapsComplete)
+				data.Telemetry.LeaderHasFinished = true;
+		}
 
-                data.Telemetry.HasSeenCheckeredFlag = hasSeenCheckeredFlag;
-                
-                yield return data;
-            }
-        }
+		static void ApplyHasSeenCheckeredFlag(DataSample data, bool[] hasSeenCheckeredFlag)
+		{
+			if(data.LastSample != null && data.Telemetry.LeaderHasFinished)
+				for(int i = 1; i < data.SessionData.DriverInfo.Drivers.Length; i++)
+					if(data.LastSample.Telemetry.CarIdxLapDistPct[i] > 0.90 && data.Telemetry.CarIdxLapDistPct[i] < 0.10)
+						hasSeenCheckeredFlag[i] = true;
+
+			data.Telemetry.HasSeenCheckeredFlag = hasSeenCheckeredFlag;
+		}
     }
 }
