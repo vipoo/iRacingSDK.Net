@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5422AE20-F220-4BE1-9E61-5296981ABB5C}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -86,6 +86,8 @@
     <Compile Include="DataFeed\BroadcastMessage.cs" />
     <Compile Include="DataFeed\ReplaySearchMode.cs" />
     <Compile Include="DataFeed\SessionState.cs" />
+    <Compile Include="DataFeed\TrackLocation.cs" />
+    <Compile Include="DataFeed\SessionFlags.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
