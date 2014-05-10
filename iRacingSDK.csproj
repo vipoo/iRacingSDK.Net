@@ -35,17 +35,6 @@
     <AssemblyName>SpikeIRacing</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <Optimize>false</Optimize>
-    <OutputPath>bin\x86\Debug</OutputPath>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
-    <AssemblyName>iRacingDataFeed</AssemblyName>
-    <DebugSymbols>true</DebugSymbols>
-    <LangVersion>5</LangVersion>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefineConstants>DEBUG;TRACE;</DefineConstants>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="YamlDotNet">
