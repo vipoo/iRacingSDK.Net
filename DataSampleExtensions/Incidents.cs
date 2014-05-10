@@ -73,23 +73,29 @@ namespace iRacingSDK
 			while(!isFinished(data))
 			{
 				var frameNumber = data.Telemetry.ReplayFrameNum;
+			
 				toNext();
-				data = samples.First();
-				var retryCount = 4;
-				while(data.Telemetry.ReplayFrameNum == frameNumber && retryCount >= 0)
-				{
-					retryCount++;
-					Thread.Sleep(600);
-					//Wait a bit more to ensure iRacing has moved to the incident
-					data = samples.First();
-				}
-				if(retryCount < 0)
+
+				if(!HasMovedToNewFrame(samples, ref data, frameNumber))
 					break;
 
 				capturedIncidents.Add(data);
 			}
 
 			return capturedIncidents;
+		}
+
+		static bool HasMovedToNewFrame(IEnumerable<DataSample> samples, ref DataSample data, int frameNumber)
+		{
+			var retryCount = 4;
+			while(data.Telemetry.ReplayFrameNum == frameNumber && retryCount >= 0)
+			{
+				retryCount++;
+				Thread.Sleep(600);
+				//Wait a bit more to ensure iRacing has moved to the incident
+				data = samples.First();
+			}
+			return retryCount >= 0;
 		}
 	}
 }
