@@ -24,10 +24,10 @@ namespace iRacingSDK
     public class DataSample
     {
         public static readonly DataSample YetToConnected = new DataSample { IsConnected = false };
-        public DataSample LastSample { get; internal set; }
+        public DataSample LastSample { get; /*internal*/ set; }
 
         public bool IsConnected { get; internal set; }
-        public SessionData SessionData { get; internal set; }
-        public Telemetry Telemetry { get; internal set; }
+        public SessionData SessionData { get; /*internal*/ set; }
+        public Telemetry Telemetry { get; /*internal */ set; }
     }
 }

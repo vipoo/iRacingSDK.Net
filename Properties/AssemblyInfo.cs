@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 // Information about this assembly is defined by the following attributes.
 // Change them to the values specific to your project.
-[assembly: AssemblyTitle("iRacing Data Feed")]
+[assembly: AssemblyTitle("iRacingSDK")]
 [assembly: AssemblyDescription("Accesses iRacing's published data feed for use in dot.net based applications.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]

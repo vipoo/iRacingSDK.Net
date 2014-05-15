@@ -122,6 +122,18 @@ namespace iRacingSDK
             WaitAndVerify(d => d.Telemetry.SessionNum != session.SessionNum, () => MoveToNextSession());
         }
 
+        public void MoveToQualifying()
+        {
+            MoveToStart();
+            var data = iRacing.GetDataFeed().First();
+
+            var session = data.SessionData.SessionInfo.Sessions.FirstOrDefault(s => s.SessionType.ToLower().Contains("qualify"));
+            if (session == null)
+                throw new Exception("No qualifying session found in this replay");
+
+            WaitAndVerify(d => d.Telemetry.SessionNum != session.SessionNum, () => MoveToNextSession());
+        }
+
         public void MoveToParadeLap()
         {
             MoveToStartOfRace();

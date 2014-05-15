@@ -22,6 +22,6 @@ namespace iRacingSDK
 {
 	public partial class SessionData
 	{
-        public string Raw { get; internal set; }
+        public string Raw { get; /*internal*/ set; }
 	}
 }

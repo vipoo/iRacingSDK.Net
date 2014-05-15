@@ -21,8 +21,9 @@
     <PlatformTarget>x64</PlatformTarget>
     <Externalconsole>true</Externalconsole>
     <LangVersion>5</LangVersion>
-    <AssemblyName>SpikeIRacing</AssemblyName>
+    <AssemblyName>iRacingSDK</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <Optimize>true</Optimize>
@@ -32,7 +33,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <Externalconsole>true</Externalconsole>
     <LangVersion>5</LangVersion>
-    <AssemblyName>SpikeIRacing</AssemblyName>
+    <AssemblyName>iRacingSDK</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
@@ -105,7 +106,5 @@
   </ProjectExtensions>
   <ItemGroup />
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="DataFeed\Telemetry\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
