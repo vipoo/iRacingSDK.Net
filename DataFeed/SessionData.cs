@@ -17,6 +17,7 @@
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Linq;
 
 namespace iRacingSDK
 {
@@ -24,4 +25,12 @@ namespace iRacingSDK
 	{
         public string Raw { get; /*internal*/ set; }
 	}
+
+    public static class _SessionExtensions
+    {
+        public static SessionData._SessionInfo._Sessions Qualifying(this SessionData._SessionInfo._Sessions[] sessions)
+        {
+            return sessions.FirstOrDefault(s => s.SessionType.ToLower().Contains("qualif"));
+        }
+    }
 }

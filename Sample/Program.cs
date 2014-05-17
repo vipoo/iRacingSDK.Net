@@ -62,7 +62,7 @@ namespace iRacingSDKSample
                     Console.WriteLine("{0} at {1}", c.UserName, c.TotalDistance);
                 }
 
-                Thread.Sleep(1000);
+                Thread.Sleep(100);
 
             }
         }

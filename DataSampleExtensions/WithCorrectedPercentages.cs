@@ -54,10 +54,10 @@ namespace iRacingSDK
 
 		static void FixPercentagesOnLapChange(ref int lastLap, ref float carIdxLapDistPct, int carIdxLap)
 		{
-			if (carIdxLap == lastLap + 1 && carIdxLapDistPct > 0.90f)
-				carIdxLapDistPct = 0;
-			else
-				lastLap = carIdxLap;
+            if (carIdxLap > lastLap && carIdxLapDistPct > 0.90f)
+                carIdxLapDistPct = 0;
+            else
+                lastLap = carIdxLap;
 		}
 
 		static int[] InitArray()

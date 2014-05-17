@@ -65,7 +65,6 @@ namespace iRacingSDK
 
 			if(roundedDistance < roundedMaxDistance)
 			{
-				Trace.WriteLineIf(lastAdjustment != roundedDistance, string.Format("Adjusting distance for {0} back to {1} from {2}", driverName, maxDistance, distance), "DEBUG");
 				lastAdjustment = roundedDistance;
 				lap = (int)maxDistance;
 				distance = maxDistance - (int)maxDistance;
