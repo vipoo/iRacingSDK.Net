@@ -26,19 +26,32 @@ using System.Diagnostics;
 
 namespace iRacingSDK
 {
-	public class iRacing
+	public partial class iRacing
 	{
         public static readonly Replay Replay = new Replay();
         static DataFeed dataFeed = null;
 
-		public static IEnumerable<DataSample> GetDataFeed()
-		{
-			foreach(var notConnectedSample in WaitForInitialConnection())
-				yield return notConnectedSample;
+        static bool isRunning = false;
 
-            foreach (var sample in AllSamples())
-                yield return sample;
-		}
+        public static IEnumerable<DataSample> GetDataFeed()
+        {
+            if (isRunning)
+                throw new Exception("Can not call GetDataFeed concurrently.");
+
+            isRunning = true;
+            try
+            {
+                foreach (var notConnectedSample in WaitForInitialConnection())
+                    yield return notConnectedSample;
+
+                foreach (var sample in AllSamples())
+                    yield return sample;
+            }
+            finally
+            {
+                isRunning = false;
+            }
+        }
 
 		static IEnumerable<DataSample> WaitForInitialConnection()
 		{
@@ -77,8 +90,9 @@ namespace iRacingSDK
 					if(data.IsConnected && data.Telemetry.TickCount != nextTickCount && nextTickCount != 0)
 					{
 						Debug.WriteLine(string.Format("Warning tick count glitch - {0}, {1}", data.Telemetry.TickCount, nextTickCount), "WARN");
-						nextTickCount = data.Telemetry.TickCount + 1;
 					}
+                    nextTickCount = data.Telemetry.TickCount + 1;
+                    
                     yield return data;
                 }
 			}

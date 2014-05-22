@@ -26,11 +26,15 @@ using YamlDotNet.RepresentationModel;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows.Forms;
+using Sample;
 
 namespace iRacingSDKSample
 {
     class MainClass
-    {        
+    {
+        [STAThread]
+
         public static void Main(string[] args)
         {
             foreach (var data in iRacing.GetDataFeed().TakeWhile(d => !d.IsConnected))
@@ -38,6 +42,9 @@ namespace iRacingSDKSample
                 Console.WriteLine("Waiting to connect ...");
                 continue;
             }
+
+            GuiSamples();
+            //EventDataExample();
 
             //View_FinihsingStatus();
 
@@ -47,9 +54,21 @@ namespace iRacingSDKSample
 
             //VerifyLapSectors();
 
-            VerifyDriverDistances();
+            //VerifyDriverDistances();
 
             //Recorder();
+        }
+
+        static void GuiSamples()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new MainForm());
+        }
+
+        static void iRacing_NewData(DataSample data)
+        {
+            Console.WriteLine("Received Data {0}", data.Telemetry.TickCount);
         }
 
         private static void VerifyDriverDistances()
@@ -63,7 +82,6 @@ namespace iRacingSDKSample
                 }
 
                 Thread.Sleep(100);
-
             }
         }
 
