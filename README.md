@@ -87,3 +87,34 @@ The Telemetry type is a dictionary keyed by a string name, and an object value (
 The type also exposes the known key values in handy accessors.  The GenerateDataModels project can be used to update the known key value pairs.
 
 Most of the keys of the Telemetry type should generally be self-explanatory.
+
+In addition to the dictionary of key values provided by the game's data stream, there are other composite and aggregrate mixins to the Telemetry type
+
+**Telemetry - float[] CarIdxDistance** 
+
+`CarIdxLap[index] + CarIdxDistancePct[index]`
+
+An array of floats for each car (as per SessionData.DriverInfo.Drivers array), representing the sum of the car's lap counter and its lap percentage completion value 
+
+**Telemetry - int[] Positions**
+
+An array of integers representing each car's running order as per the CarIdxDistance figure.
+
+**Telemetry - TimeSpan SessionTimeSpan**
+
+`TimeSpan.FromSeconds(SessionTime)`
+
+Return the a TimeSpan of the current duration of the active session.
+
+**Telemetry - Car[] Cars**
+
+Returns an array of Car objects for each of the active drivers.
+
+The Car type contains fields such as:  Lap, DistancePercentage, TotalDistance, Driver, Postiton, UserName, CarNumber, HasSeenCheckeredFlag, IsPaceCar, HasData, TrackSurface.
+
+**Telementry - Car CamCar**
+
+`Cars[CamCarIdx]`
+
+Returns a Car instance, representing the car currently being viewed by the active camera.
+
