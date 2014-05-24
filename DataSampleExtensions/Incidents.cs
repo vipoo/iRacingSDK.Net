@@ -26,13 +26,13 @@ namespace iRacingSDK
 {
     public static partial class DataSampleExtensions
     {
-        public static IEnumerable<DataSample> RaceIncidents(this IEnumerable<DataSample> samples)
+        public static IEnumerable<DataSample> RaceIncidents(this IEnumerable<DataSample> samples, int maxTotalIncidents = int.MaxValue)
         {
 			var sessionNumber = GetSessionNumber(samples);
 
-			var incidentsOnForward = GetIncidentsForward(samples);
+            var incidentsOnForward = GetIncidentsForward(samples, maxTotalIncidents);
 
-			var incidentsOnReverse = GetIncidentsReverse(samples, sessionNumber);
+			var incidentsOnReverse = GetIncidentsReverse(samples, sessionNumber, maxTotalIncidents - incidentsOnForward.Count);
 		
 			var incidents =  incidentsOnForward
 				.Concat(incidentsOnReverse)
@@ -51,19 +51,22 @@ namespace iRacingSDK
 			return data.Telemetry.SessionNum;
 		}
 
-		static List<DataSample> GetIncidentsForward(IEnumerable<DataSample> samples)
+        static List<DataSample> GetIncidentsForward(IEnumerable<DataSample> samples, int maxTotalIncidents)
 		{
-			return FindIncidents(samples, iRacing.Replay.MoveToNextIncident, data => data.Telemetry.SessionState == SessionState.CoolDown);
+            return FindIncidents(samples, iRacing.Replay.MoveToNextIncident, data => data.Telemetry.SessionState == SessionState.CoolDown, maxTotalIncidents);
 		}
 
-		static List<DataSample> GetIncidentsReverse(IEnumerable<DataSample> samples, int sessionNumber)
+        static List<DataSample> GetIncidentsReverse(IEnumerable<DataSample> samples, int sessionNumber, int maxTotalIncidents)
 		{
-			return FindIncidents(samples, iRacing.Replay.MoveToPrevIncident, data => data.Telemetry.SessionNum != sessionNumber || data.Telemetry.RaceLaps <= 0);
+            return FindIncidents(samples, iRacing.Replay.MoveToPrevIncident, data => data.Telemetry.SessionNum != sessionNumber || data.Telemetry.RaceLaps <= 0, maxTotalIncidents);
 		}
 
-		static List<DataSample> FindIncidents(IEnumerable<DataSample> samples, Action toNext, Func<DataSample, bool> isFinished)
+        static List<DataSample> FindIncidents(IEnumerable<DataSample> samples, Action toNext, Func<DataSample, bool> isFinished, int maxTotalIncidents)
 		{
 			var capturedIncidents = new List<DataSample>();
+
+            if (maxTotalIncidents <= 0)
+                return capturedIncidents;
 
 			iRacing.Replay.SetSpeed(0);
 			iRacing.Replay.Wait();
@@ -80,6 +83,9 @@ namespace iRacingSDK
 					break;
 
 				capturedIncidents.Add(data);
+
+                if (capturedIncidents.Count >= maxTotalIncidents)
+                    break;
 			}
 
 			return capturedIncidents;

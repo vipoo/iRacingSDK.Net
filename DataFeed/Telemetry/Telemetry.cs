@@ -24,6 +24,8 @@ namespace iRacingSDK
 {
 	public partial class Telemetry : Dictionary<string, object>
 	{
+        public SessionData._SessionInfo._Sessions Session { get { return SessionData.SessionInfo.Sessions[SessionNum]; } }
+
         public Car CamCar { get { return Cars[CamCarIdx]; } }
 
 		Car[] cars;

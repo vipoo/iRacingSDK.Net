@@ -66,6 +66,9 @@ namespace iRacingSDK
 
         void WaitAndVerify(Func<DataSample, bool> verifyFn, Action action, int wait = 5000)
         {
+            if (iRacing.IsRunning)
+                return;
+
             var timeout = DateTime.Now + TimeSpan.FromMilliseconds(wait);
             var data = iRacing.GetDataFeed().First();
             while (verifyFn(data) && DateTime.Now < timeout)
@@ -75,7 +78,6 @@ namespace iRacingSDK
                 Thread.Sleep(10);
             }
             System.Diagnostics.Debug.Assert(!verifyFn(data));
-
         }
         public void MoveToNextSession()
         {

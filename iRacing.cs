@@ -33,6 +33,8 @@ namespace iRacingSDK
 
         static bool isRunning = false;
 
+        public static bool IsRunning { get { return isRunning; } }
+
         public static IEnumerable<DataSample> GetDataFeed()
         {
             if (isRunning)
@@ -73,6 +75,7 @@ namespace iRacingSDK
 			    dataFeed = new DataFeed(iRacingConnection.Accessor);
 
             var nextTickCount = 0;
+            var lastTickTime = DateTime.Now;
             DataSample lastDataSample = null;
 			while(true)
 			{
@@ -90,9 +93,11 @@ namespace iRacingSDK
                     if (data.IsConnected)
                     {
                         if (data.Telemetry.TickCount != nextTickCount && nextTickCount != 0)
-                            Debug.WriteLine(string.Format("Warning tick count glitch - {0}, {1}", data.Telemetry.TickCount, nextTickCount), "WARN");
+                            Debug.WriteLine(string.Format("Warning tick count glitch - {0}, {1} - {2}",
+                                data.Telemetry.TickCount, nextTickCount, (DateTime.Now - lastTickTime).ToString(@"s\.fff")), "WARN");
                      
                         nextTickCount = data.Telemetry.TickCount + 1;
+                        lastTickTime = DateTime.Now;
                     }
                     yield return data;
                 }
