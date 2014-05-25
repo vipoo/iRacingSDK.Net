@@ -18,46 +18,53 @@
 
 using iRacingSDK;
 using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Sample
 {
     public partial class MainForm : Form
     {
+        LogMessages logMessages;
         public MainForm()
         {
             InitializeComponent();
 
-            iRacing.NewData += iRacing_NewData;
-        }
-
-        void iRacing_NewData(DataSample data)
-        {
-            TickCountLabel.Text = data.Telemetry.TickCount.ToString();
-
-            foreach( var d in data.Telemetry)
-            {
-                var item = TelemetryList.Items.OfType<ListViewItem>().FirstOrDefault( f => f.Text == d.Key);
-                if (item == null)
-                {
-                    item = TelemetryList.Items.Add(d.Key);
-                    item.SubItems.Add(d.Value.ToString());
-                }
-                else if (item.SubItems[1].Text != d.Value.ToString())
-                    item.SubItems[1].Text = d.Value.ToString();
-            }
-
+            logMessages = new LogMessages();
+            Trace.Listeners.Add(new MyListener(logMessages.TraceMessage));
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            iRacing.StartListening();
+            new EventSample().Show();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void button1_Click_1(object sender, EventArgs e)
         {
-            iRacing.StopListening();
+            logMessages.StartOperation( () => {
+
+                FastLap lastFastestLap = null;
+
+                Trace.WriteLine("Moving to start of race");
+                iRacing.Replay.MoveToStartOfRace();
+                Trace.WriteLine("Watching for fastest laps");
+
+                foreach (var data in iRacing.GetDataFeed().AtSpeed(16).WithFastestLaps())
+                {
+                    if (lastFastestLap != data.Telemetry.FastestLap)
+                        Trace.WriteLine(string.Format("{0} - {1}", data.Telemetry.FastestLap.Driver.UserName, data.Telemetry.FastestLap.Time));
+
+                    lastFastestLap = data.Telemetry.FastestLap;
+                }
+            });
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            logMessages.Close();
         }
     }
 }
