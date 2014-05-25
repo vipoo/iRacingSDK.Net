@@ -9,7 +9,7 @@ The filters can be chained together.
 ###WithCorrectedPercentages
 
 Work around what appears to be a bug in the iRacing data stream, where cars' lap percentage is reported slightly behind - 
-so that as the cars cross the start/finish line, their percentage still is in the 99% range a frame later there percentage drops to near 0%.
+so that as the cars cross the start/finish line, their percentage still is in the 99% range, a frame later, their percentage drops to near 0%.
 
 This makes it look as if the car has instantly jump to the end of the next lap, then jump back to start of lap.
 
