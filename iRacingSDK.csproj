@@ -93,9 +93,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <None Include="Docs\DataSample.md" />
     <None Include="LICENSE.txt" />
     <None Include="packages.config" />
     <None Include="packages\repositories.config" />
+    <None Include="README.md" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
