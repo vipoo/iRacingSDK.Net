@@ -75,4 +75,4 @@ This type is the container for all data retrieved from iRacing.  [More details h
 ##Data Feed Filters
 
 There are a set of extension methods to the `IEnumerable<DataSample>` set to enhance and refine some of the game's data stream.
-[More details here](Docs/DataFeedFilters.ms)
+[More details here](Docs/DataFeedFilters.md)
