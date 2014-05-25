@@ -93,6 +93,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <None Include="Docs\DataFeedFilters_WithCorrectedDistances.md" />
+    <None Include="Docs\DataFeedFilters_WithCorrectedPercentages.md" />
+    <None Include="Docs\DataFeedFilters.md" />
     <None Include="Docs\DataSample.md" />
     <None Include="LICENSE.txt" />
     <None Include="packages.config" />
