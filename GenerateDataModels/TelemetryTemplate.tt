@@ -30,17 +30,19 @@ using System.Linq;
 
 namespace iRacingSDK
 {
-	public partial class Telemetry : Dictionary<string, object>
-	{
-		internal SessionData SessionData { get; set; }
+    public partial class Telemetry : Dictionary<string, object>
+    {
+        public SessionData SessionData { get; set; }
 
 <# foreach(var kv in data.Telemetry) 
 {
-	var type =  GenerateDataModels.Program.GetTypeFor(kv.Key, kv.Value);
+    var type =  GenerateDataModels.Program.GetTypeFor(kv.Key, kv.Value);
  #>
+        /// <summary>
+        /// <#= data.TelemetryDescription.ContainsKey(kv.Key) ? data.TelemetryDescription[kv.Key] : "" #>
+        /// </summary>
+        public <#= type #> 	<#= kv.Key #>				{ get { return (<#= type #>)		this["<#= kv.Key #>"]; 			} }
 
-		public <#= type #> 	<#= kv.Key #>				{ get { return (<#= type #>)		this["<#= kv.Key #>"]; 			} }
 <#} #>
-
-	}
+    }
 }

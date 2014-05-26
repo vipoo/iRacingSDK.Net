@@ -43,6 +43,9 @@ namespace GenerateDataModels
                 case "SessionFlags":
                     return "iRacingSDK.SessionFlags";
 
+                case "CarIdxTrackSurface":
+                    return "iRacingSDK.TrackLocation[]";
+
                 default:
                     return sampleValue.GetType().ToString();         
             }

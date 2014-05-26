@@ -17,6 +17,7 @@
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -52,6 +53,7 @@ namespace iRacingSDK
 
 			var sessionData = ReadSessionInfo(headers.Header);
 			var variables = ReadVariables(headers.Header, headers.VarHeaders);
+            var variableDescriptions = headers.VarHeaders.ToDictionary(vh => vh.name, vh => vh.desc);
 
 			if(sessionData == null)
 				return DataSample.YetToConnected;
@@ -60,7 +62,7 @@ namespace iRacingSDK
 				return null;
 
             variables.SessionData = sessionData;
-            return new DataSample { Telemetry = variables, SessionData = sessionData, IsConnected = true };
+            return new DataSample { Telemetry = variables, SessionData = sessionData, TelemetryDescription = variableDescriptions, IsConnected = true };
 		}
 
 		unsafe iRSDKHeader ReadHeader(byte *ptr)

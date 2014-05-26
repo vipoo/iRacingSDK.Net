@@ -17,6 +17,7 @@
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 
 namespace iRacingSDK
 {
@@ -24,10 +25,11 @@ namespace iRacingSDK
     public class DataSample
     {
         public static readonly DataSample YetToConnected = new DataSample { IsConnected = false };
-        public DataSample LastSample { get; /*internal*/ set; }
+        public DataSample LastSample { get; set; }
 
         public bool IsConnected { get; internal set; }
-        public SessionData SessionData { get; /*internal*/ set; }
-        public Telemetry Telemetry { get; /*internal */ set; }
+        public SessionData SessionData { get; set; }
+        public Telemetry Telemetry { get; set; }
+        public Dictionary<string, string> TelemetryDescription { get; internal set; }
     }
 }

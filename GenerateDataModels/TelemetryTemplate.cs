@@ -60,56 +60,63 @@ using System.Linq;
 
 namespace iRacingSDK
 {
-	public partial class Telemetry : Dictionary<string, object>
-	{
-		internal SessionData SessionData { get; set; }
+    public partial class Telemetry : Dictionary<string, object>
+    {
+        public SessionData SessionData { get; set; }
 
 ");
             
             #line 37 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\TelemetryTemplate.tt"
  foreach(var kv in data.Telemetry) 
 {
-	var type =  GenerateDataModels.Program.GetTypeFor(kv.Key, kv.Value);
+    var type =  GenerateDataModels.Program.GetTypeFor(kv.Key, kv.Value);
  
             
             #line default
             #line hidden
-            this.Write("\r\n\t\tpublic ");
+            this.Write("        /// <summary>\r\n        /// ");
             
             #line 42 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\TelemetryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(data.TelemetryDescription.ContainsKey(kv.Key) ? data.TelemetryDescription[kv.Key] : ""));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n        /// </summary>\r\n        public ");
+            
+            #line 44 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\TelemetryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(type));
             
             #line default
             #line hidden
             this.Write(" \t");
             
-            #line 42 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\TelemetryTemplate.tt"
+            #line 44 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\TelemetryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(kv.Key));
             
             #line default
             #line hidden
             this.Write("\t\t\t\t{ get { return (");
             
-            #line 42 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\TelemetryTemplate.tt"
+            #line 44 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\TelemetryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(type));
             
             #line default
             #line hidden
             this.Write(")\t\tthis[\"");
             
-            #line 42 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\TelemetryTemplate.tt"
+            #line 44 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\TelemetryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(kv.Key));
             
             #line default
             #line hidden
-            this.Write("\"]; \t\t\t} }\r\n");
+            this.Write("\"]; \t\t\t} }\r\n\r\n");
             
-            #line 43 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\TelemetryTemplate.tt"
+            #line 46 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\TelemetryTemplate.tt"
 } 
             
             #line default
             #line hidden
-            this.Write("\r\n\t}\r\n}\r\n");
+            this.Write("    }\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }
