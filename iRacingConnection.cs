@@ -22,6 +22,7 @@ using System.Threading;
 using Win32.Synchronization;
 using System.Runtime.InteropServices;
 using System.IO.MemoryMappedFiles;
+using System.Diagnostics;
 
 namespace iRacingSDK
 {
@@ -37,16 +38,23 @@ namespace iRacingSDK
 				return true;
 
 			var dataValidEvent =  Event.OpenEvent(Event.EVENT_ALL_ACCESS | Event.EVENT_MODIFY_STATE, false, "Local\\IRSDKDataValidEvent");
-			if(dataValidEvent == IntPtr.Zero)
-				return false;
+            if (dataValidEvent == IntPtr.Zero)
+            {
+                var lastError = Marshal.GetLastWin32Error();
+                Trace.WriteLine(string.Format("Unable to open event Local\\IRSDKDataValidEvent - Error Code {0}", lastError), "DEBUG");
+                return false;
+            }
 
             MemoryMappedFile irsdkMappedMemory = null;
             try
             {
                 irsdkMappedMemory = MemoryMappedFile.OpenExisting("Local\\IRSDKMemMapFileName");
             }
-            catch(Exception)
-            { }
+            catch(Exception e)
+            {
+                Trace.WriteLine("Error accessing shared memory", "DEBUG");
+                Trace.WriteLine(e.Message, "DEBUG");
+            }
 
 			if(irsdkMappedMemory == null)
 				return false;
@@ -55,6 +63,7 @@ namespace iRacingSDK
 			if(accessor == null)
 			{
 				irsdkMappedMemory.Dispose();
+                Trace.WriteLine("Unable to Create View into shared memory", "DEBUG");
 				return false;
 			}
 
@@ -66,7 +75,9 @@ namespace iRacingSDK
 
 		public static bool WaitForData()
 		{
-            return Event.WaitForSingleObject(dataValidEvent, 100) == 0;
+            var result = Event.WaitForSingleObject(dataValidEvent, 100) == 0;
+            Trace.WriteLineIf(!result, "Failed to get signal from iRacing for new Data Sample within 100 milliseconds", "DEBUG");
+            return result;
 		}
     }
 }

@@ -47,7 +47,7 @@ namespace iRacingSDK
 
             if ((headers.Header.status & 1) == 0)
             {
-                Trace.WriteLine("iRacing Application appears to have been closed", "INFO");
+                Trace.WriteLine("No data from the iRacing Application yet", "DEBUG");
                 return DataSample.YetToConnected;
             }
 
@@ -98,7 +98,11 @@ namespace iRacingSDK
 			var sessionInfoData = new byte[header.sessionInfoLen];
 			accessor.ReadArray<byte>(header.sessionInfoOffset, sessionInfoData, 0, header.sessionInfoLen);
 			var sessionInfoString = System.Text.Encoding.Default.GetString(sessionInfoData);
-            
+
+            var length = sessionInfoString.IndexOf('\0');
+            if (length == -1)
+                return null;
+
             sessionInfoString = sessionInfoString.Substring(0, sessionInfoString.IndexOf('\0'));
 
             Trace.WriteLine("New Session data retrieved from iRacing", "INFO");

@@ -33,7 +33,9 @@ namespace iRacingSDK
 
         static bool isRunning = false;
 
-        public static bool IsRunning { get { return isRunning; } }
+        internal static bool IsRunning { get { return isRunning; } }
+
+        public static bool IsConnected { get; private set; }
 
         public static IEnumerable<DataSample> GetDataFeed()
         {
@@ -44,10 +46,16 @@ namespace iRacingSDK
             try
             {
                 foreach (var notConnectedSample in WaitForInitialConnection())
+                {
+                    IsConnected = false;
                     yield return notConnectedSample;
+                }
 
                 foreach (var sample in AllSamples())
+                {
+                    IsConnected = sample.IsConnected;
                     yield return sample;
+                }
             }
             finally
             {
@@ -81,25 +89,27 @@ namespace iRacingSDK
 			{
                 if (!iRacingConnection.WaitForData())
                     yield return DataSample.YetToConnected;
-
-				var data = dataFeed.GetNextDataSample();
-                if (data != null)
+                else
                 {
-                    data.LastSample = lastDataSample;
-                    if (lastDataSample != null)
-                        lastDataSample.LastSample = null;
-                    lastDataSample = data;
-
-                    if (data.IsConnected)
+                    var data = dataFeed.GetNextDataSample();
+                    if (data != null)
                     {
-                        if (data.Telemetry.TickCount != nextTickCount && nextTickCount != 0)
-                            Debug.WriteLine(string.Format("Warning tick count glitch - {0}, {1} - {2}",
-                                data.Telemetry.TickCount, nextTickCount, (DateTime.Now - lastTickTime).ToString(@"s\.fff")), "WARN");
-                     
-                        nextTickCount = data.Telemetry.TickCount + 1;
-                        lastTickTime = DateTime.Now;
+                        data.LastSample = lastDataSample;
+                        if (lastDataSample != null)
+                            lastDataSample.LastSample = null;
+                        lastDataSample = data;
+
+                        if (data.IsConnected)
+                        {
+                            if (data.Telemetry.TickCount != nextTickCount && nextTickCount != 0)
+                                Debug.WriteLine(string.Format("Warning tick count glitch - {0}, {1} - {2}",
+                                    data.Telemetry.TickCount, nextTickCount, (DateTime.Now - lastTickTime).ToString(@"s\.fff")), "WARN");
+
+                            nextTickCount = data.Telemetry.TickCount + 1;
+                            lastTickTime = DateTime.Now;
+                        }
+                        yield return data;
                     }
-                    yield return data;
                 }
 			}
 		}
