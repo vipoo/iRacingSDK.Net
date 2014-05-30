@@ -75,7 +75,7 @@ namespace iRacingSDK
             {
                 action();
                 data = iRacing.GetDataFeed().First();
-                Thread.Sleep(10);
+                Thread.Sleep(100);
             }
             System.Diagnostics.Debug.Assert(!verifyFn(data));
         }
