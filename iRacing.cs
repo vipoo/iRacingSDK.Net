@@ -87,29 +87,29 @@ namespace iRacingSDK
             DataSample lastDataSample = null;
 			while(true)
 			{
-                if (!iRacingConnection.WaitForData())
-                    yield return DataSample.YetToConnected;
-                else
+                iRacingConnection.WaitForData();
+
+                var data = dataFeed.GetNextDataSample();
+                if (data != null)
                 {
-                    var data = dataFeed.GetNextDataSample();
-                    if (data != null)
+                    data.LastSample = lastDataSample;
+                    if (lastDataSample != null)
+                        lastDataSample.LastSample = null;
+                    lastDataSample = data;
+
+                    if (data.IsConnected)
                     {
-                        data.LastSample = lastDataSample;
-                        if (lastDataSample != null)
-                            lastDataSample.LastSample = null;
-                        lastDataSample = data;
+                        if (data.Telemetry.TickCount == nextTickCount - 1)
+                            continue; //Got the same sample - try again.
 
-                        if (data.IsConnected)
-                        {
-                            if (data.Telemetry.TickCount != nextTickCount && nextTickCount != 0)
-                                Debug.WriteLine(string.Format("Warning tick count glitch - {0}, {1} - {2}",
-                                    data.Telemetry.TickCount, nextTickCount, (DateTime.Now - lastTickTime).ToString(@"s\.fff")), "WARN");
+                        if (data.Telemetry.TickCount != nextTickCount && nextTickCount != 0)
+                            Debug.WriteLine(string.Format("Warning dropped DataSample from {0} to {1}. Over time of {2}",
+                                nextTickCount, data.Telemetry.TickCount-1, (DateTime.Now - lastTickTime).ToString(@"s\.fff")), "WARN");
 
-                            nextTickCount = data.Telemetry.TickCount + 1;
-                            lastTickTime = DateTime.Now;
-                        }
-                        yield return data;
+                        nextTickCount = data.Telemetry.TickCount + 1;
+                        lastTickTime = DateTime.Now;
                     }
+                    yield return data;
                 }
 			}
 		}

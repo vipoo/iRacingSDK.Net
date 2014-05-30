@@ -17,12 +17,10 @@
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
-using System.Threading;
-using Win32.Synchronization;
-using System.Runtime.InteropServices;
-using System.IO.MemoryMappedFiles;
 using System.Diagnostics;
+using System.IO.MemoryMappedFiles;
+using System.Runtime.InteropServices;
+using Win32.Synchronization;
 
 namespace iRacingSDK
 {
@@ -75,8 +73,8 @@ namespace iRacingSDK
 
 		public static bool WaitForData()
 		{
-            var result = Event.WaitForSingleObject(dataValidEvent, 100) == 0;
-            Trace.WriteLineIf(!result, "Failed to get signal from iRacing for new Data Sample within 100 milliseconds", "DEBUG");
+            var result = Event.WaitForSingleObject(dataValidEvent, 30) == 0;
+            Trace.WriteLineIf(!result, "Failed to get signal from iRacing for new Data Sample within 30 milliseconds", "DEBUG");
             return result;
 		}
     }
