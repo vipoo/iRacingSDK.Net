@@ -97,7 +97,7 @@ namespace iRacingSDK
         {
             currentMessageTask.Wait();
 
-            Trace.WriteLine(string.Format("Moving to frame {0}", frameNumber), "INFO");
+            Trace.WriteLine(string.Format("Moving to frame {0} with mode {1}", frameNumber, mode), "INFO");
 
             SendMessage(BroadcastMessage.ReplaySetPlayPosition, (short)mode, frameNumber);
 
