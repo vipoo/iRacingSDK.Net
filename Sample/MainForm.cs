@@ -29,6 +29,7 @@ namespace Sample
     public partial class MainForm : Form
     {
         LogMessages logMessages;
+
         public MainForm()
         {
             InitializeComponent();
@@ -65,6 +66,40 @@ namespace Sample
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             logMessages.Close();
+        }
+
+        System.Collections.Concurrent.ConcurrentQueue<string> traceMessages = new System.Collections.Concurrent.ConcurrentQueue<string>();
+
+        private void iRacingInstance_Click(object sender, EventArgs e)
+        {
+            logMessages.StartOperation(() =>
+            {
+                //Can use both event and enumerable accesses with instance types.
+                var instance1 = new iRacingInstance();
+                instance1.NewData += instance1_NewData;
+                instance1.StartListening();
+
+                var iracingInstance = new iRacingInstance();
+
+                var start = DateTime.Now;
+                foreach (var data in iracingInstance.GetDataFeed())
+                {
+                    if (DateTime.Now - start > TimeSpan.FromSeconds(1))
+                        break;
+
+                    traceMessages.Enqueue(string.Format("Enumerable Data Tick {0}", data.Telemetry.TickCount));
+                }
+
+                instance1.StopListening();
+
+                foreach( var m in traceMessages)
+                    Trace.WriteLine(m);
+            });
+        }
+
+        void instance1_NewData(DataSample data)
+        {
+            traceMessages.Enqueue(string.Format("Event Data Tick {0}", data.Telemetry.TickCount));
         }
     }
 }

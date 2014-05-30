@@ -47,7 +47,6 @@ namespace Sample
                 else if (item.SubItems[1].Text != d.Value.ToString())
                     item.SubItems[1].Text = d.Value.ToString();
             }
-
         }
 
         private void button1_Click(object sender, EventArgs e)

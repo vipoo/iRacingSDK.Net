@@ -30,9 +30,12 @@ namespace iRacingSDK
         DateTime lastMessagePostedTime = DateTime.Now;
         Task currentMessageTask;
         const double MessageThrottleTime = 1000;
+        iRacingSDK.iRacingInstance iRacingInstance;
 
-		public Replay()
+        public Replay(iRacingInstance iRacingInstance)
 		{
+            this.iRacingInstance = iRacingInstance;
+
 			messageId = Win32.Messages.RegisterWindowMessage("IRSDK_BROADCASTMSG");
             currentMessageTask = new Task(() =>{});
             currentMessageTask.Start();
@@ -69,7 +72,7 @@ namespace iRacingSDK
 
         void WaitAndVerify(Func<DataSample, bool> verifyFn, Action action, int wait = 5000)
         {
-            if (iRacing.IsRunning)
+            if (iRacingInstance.IsRunning)
                 return;
 
             var timeout = DateTime.Now + TimeSpan.FromMilliseconds(wait);

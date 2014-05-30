@@ -26,12 +26,12 @@ namespace iRacingSDK
 {
     public delegate void DataSampleEventHandler(DataSample data);
 
-    public partial class iRacing
+    public partial class iRacingInstance : IDisposable
     {
         static DataSampleEventHandler newData;
         static Dictionary<DataSampleEventHandler, DataSampleEventHandler> newDataDelegates = new Dictionary<DataSampleEventHandler, DataSampleEventHandler>();
 
-        public static event DataSampleEventHandler NewData
+        public event DataSampleEventHandler NewData
         {
             add
             {
@@ -60,7 +60,7 @@ namespace iRacingSDK
         static Task backListener;
         static bool requestCancel;
 
-        public static void StartListening()
+        public void StartListening()
         {
             if( backListener != null )
                 throw new Exception("Already listening to iRacing data");
@@ -71,7 +71,7 @@ namespace iRacingSDK
             backListener.Start();
         }
 
-        public static void StopListening()
+        public void StopListening()
         {
             var bl = backListener;
 
@@ -105,6 +105,11 @@ namespace iRacingSDK
             {
                 backListener = null;
             }
+        }
+
+        public void Dispose()
+        {
+            StopListening();
         }
     }
 }

@@ -26,18 +26,64 @@ using System.Diagnostics;
 
 namespace iRacingSDK
 {
-	public partial class iRacing
-	{
-        public static readonly Replay Replay = new Replay();
-        static DataFeed dataFeed = null;
+    public static class iRacing
+    {
+        static iRacingInstance instance;
 
-        static bool isRunning = false;
+        static iRacing()
+        {
+            instance = new iRacingInstance();
+        }
 
-        internal static bool IsRunning { get { return isRunning; } }
+        public static Replay Replay { get { return instance.Replay; } }
 
-        public static bool IsConnected { get; private set; }
+        public static bool IsConnected { get { return instance.IsConnected; } }
 
         public static IEnumerable<DataSample> GetDataFeed()
+        {
+            return instance.GetDataFeed();
+        }
+
+        public static void StartListening()
+        {
+            instance.StartListening();
+        }
+
+        public static void StopListening()
+        {
+            instance.StopListening();
+        }
+
+        public static event DataSampleEventHandler NewData
+        {
+            add
+            {
+                instance.NewData += value;
+            }
+            remove
+            {
+                instance.NewData -= value;
+            }
+        }
+    }
+
+	public partial class iRacingInstance : IDisposable
+	{
+        public readonly Replay Replay;
+        public bool IsConnected { get; private set; }
+        
+        DataFeed dataFeed = null;
+        bool isRunning = false;
+        iRacingConnection iRacingConnection;
+        internal bool IsRunning { get { return isRunning; } }
+        
+        public iRacingInstance()
+        {
+            this.Replay = new Replay(this);
+            this.iRacingConnection = new iRacingConnection();
+        }
+
+        public IEnumerable<DataSample> GetDataFeed()
         {
             if (isRunning)
                 throw new Exception("Can not call GetDataFeed concurrently.");
@@ -63,7 +109,7 @@ namespace iRacingSDK
             }
         }
 
-		static IEnumerable<DataSample> WaitForInitialConnection()
+		IEnumerable<DataSample> WaitForInitialConnection()
 		{
             bool wasConnected = iRacingConnection.Accessor != null;
             Trace.WriteLineIf(!wasConnected, "Waiting to connect to iRacing application", "INFO");
@@ -77,7 +123,7 @@ namespace iRacingSDK
             Trace.WriteLineIf(!wasConnected, "Connected to iRacing application", "INFO");
 		}
 
-		static IEnumerable<DataSample> AllSamples()
+		IEnumerable<DataSample> AllSamples()
 		{
             if( dataFeed == null )
 			    dataFeed = new DataFeed(iRacingConnection.Accessor);

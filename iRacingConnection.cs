@@ -24,13 +24,13 @@ using Win32.Synchronization;
 
 namespace iRacingSDK
 {
-	static class iRacingConnection
+	class iRacingConnection
 	{
-		public static MemoryMappedViewAccessor Accessor {get; private set; }
-		static IntPtr dataValidEvent;
-		static MemoryMappedFile irsdkMappedMemory;
+		public MemoryMappedViewAccessor Accessor {get; private set; }
+		IntPtr dataValidEvent;
+		MemoryMappedFile irsdkMappedMemory;
 
-		public static bool IsConnected()
+		public bool IsConnected()
 		{
 			if(Accessor != null)
 				return true;
@@ -65,13 +65,13 @@ namespace iRacingSDK
 				return false;
 			}
 
-			iRacingConnection.irsdkMappedMemory = irsdkMappedMemory;
-			iRacingConnection.dataValidEvent = dataValidEvent;
+			this.irsdkMappedMemory = irsdkMappedMemory;
+			this.dataValidEvent = dataValidEvent;
 			Accessor = accessor;
 			return true;
 		}
 
-		public static bool WaitForData()
+		public bool WaitForData()
 		{
             var result = Event.WaitForSingleObject(dataValidEvent, 30) == 0;
             Trace.WriteLineIf(!result, "Failed to get signal from iRacing for new Data Sample within 30 milliseconds", "DEBUG");
