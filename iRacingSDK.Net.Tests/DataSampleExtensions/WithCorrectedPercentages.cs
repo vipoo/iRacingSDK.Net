@@ -8,8 +8,11 @@ namespace iRacingSDK.Net.Tests
 	[TestFixture]
 	public class WithCorrectedPercentages
 	{
-		static DataSample[] CreatesSamples(int[] laps, float[] distPcts)
+		static DataSample[] CreatesSamplesForDistancesOf(params float[] distances)
 		{
+            var laps = distances.Select( d => (int)d).ToArray();
+            var distPcts = distances.Select( d => d-(float)(int)d).ToArray();
+
 			var s = new SessionData { DriverInfo = new SessionData._DriverInfo { Drivers = new [] { new SessionData._DriverInfo._Drivers { UserName = "Test" } } } };
 
 			var result = new List<DataSample>();
@@ -29,28 +32,33 @@ namespace iRacingSDK.Net.Tests
 			return result.ToArray();
 		}
 
-		[Test]
-		public void Corrects_samples_that_are_less_than_previous_samples()
+        private float[] GetDistancesFromSamples(DataSample[] correctedSamples)
+        {
+            return correctedSamples.Select(s => s.Telemetry.CarIdxLap[0] + s.Telemetry.CarIdxLapDistPct[0]).ToArray();
+        }
+
+        [Test]
+		public void should_correct_samples_until_we_get_back_to_low_percentages()
 		{
-			var samples = CreatesSamples(new [] { 1, 2 }, new [] { 0.95f, 0.95f });
+            var expected = new[] { 4.5f, 4.95f, 5.00f, 5.00f, 5.23f };
+            var samples = CreatesSamplesForDistancesOf(4.5f, 4.95f, 5.95f, 5.98f, 5.23f);
 
 			var correctedSamples = samples.WithCorrectedPercentages().ToArray();
 
-			Assert.That( correctedSamples.Last().Telemetry.CarIdxLapDistPct[0], Is.EqualTo(0f));
+            var actual = GetDistancesFromSamples(correctedSamples);
+			Assert.That( actual, Is.EqualTo(expected).Within(0.01f));
 		}
 
-		[Test]
-		public void Correct_samples_until_we_get_back_to_low_percentages()
-		{
-			var samples = CreatesSamples(
-				laps: new []     { 4, 4,     5,      5,     5 },
-				distPcts: new [] { 0.50f, 0.95f, 0.95f , 0.98f, 0.23f}
-			);
+        [Test]
+        public void should_correct_for_pre_race_starting_percentages()
+        {
+            var expected = new[] { 0.00f, 1.00f, 1.02f, 1.05f };
+            var samples = CreatesSamplesForDistancesOf(0.95f, 1.95f, 1.02f, 1.05f);
 
-			var correctedSamples = samples.WithCorrectedPercentages().ToArray();
+            var correctedSamples = samples.WithCorrectedPercentages().ToArray();
 
-			var actual = correctedSamples.Select(s => s.Telemetry.CarIdxLapDistPct[0]).ToArray();
-			Assert.That( actual, Is.EqualTo(new [] {0.5f, 0.95f, 0f, 0f, 0.23f}));
-		}
+            var actual = GetDistancesFromSamples(correctedSamples);
+            Assert.That(actual, Is.EqualTo(expected).Within(0.01f));
+        }
 	}
 }
