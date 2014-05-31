@@ -49,6 +49,7 @@
     <Compile Include="DataFeed\ReplayPositionMode.cs" />
     <Compile Include="DataFeed\Telemetry\FastestLap.cs" />
     <Compile Include="DataFeed\Telemetry\RaceDistance.cs" />
+    <Compile Include="DataSampleExtensions\TakeUntilEndOfReplay.cs" />
     <Compile Include="DataSampleExtensions\Incidents.cs" />
     <Compile Include="DataSampleExtensions\IncidentsSupport.cs" />
     <Compile Include="DataSampleExtensions\WithFastestLaps.cs" />

@@ -50,7 +50,7 @@ namespace iRacingSDK
 
 			ReplaySearch(ReplaySearchMode.ToStart);
 
-            WaitAndVerify(data => data.Telemetry.ReplayFrameNum != 0);
+            WaitAndVerify(data => data.Telemetry.ReplayFrameNum > 100 );
         }
 
         public void MoveToEnd()
