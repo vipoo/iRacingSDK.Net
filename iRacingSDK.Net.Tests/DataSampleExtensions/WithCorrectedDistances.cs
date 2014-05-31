@@ -14,6 +14,7 @@ namespace iRacingSDK.Net.Tests
 
 			var sample1 = new DataSample 
 			{
+                IsConnected = true,
 				SessionData = s,
 				Telemetry = new Telemetry {	
 					{ "CarIdxLap",	new[] { 1 }	}, 
@@ -24,6 +25,7 @@ namespace iRacingSDK.Net.Tests
 
 			var sample2 = new DataSample 
 			{
+                IsConnected = true,
 				SessionData = s,
 				Telemetry = new Telemetry {	
 					{ "CarIdxLap",	new[] { 1 }	}, 

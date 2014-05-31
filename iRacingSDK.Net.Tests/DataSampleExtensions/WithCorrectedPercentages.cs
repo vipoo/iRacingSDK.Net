@@ -16,6 +16,7 @@ namespace iRacingSDK.Net.Tests
 
 			for(int i = 0; i < laps.Length; i++)
 				result.Add(new DataSample {
+                    IsConnected = true,
 					SessionData = s,
 					Telemetry = new Telemetry {	
 						{ "CarIdxLap",	new[] { laps[i] }	}, 
@@ -42,14 +43,14 @@ namespace iRacingSDK.Net.Tests
 		public void Correct_samples_until_we_get_back_to_low_percentages()
 		{
 			var samples = CreatesSamples(
-				laps: new [] { 1, 2, 2, 2 },
-				distPcts: new [] { 0.95f, 0.95f , 0.98f, 0.23f}
+				laps: new []     { 4, 4,     5,      5,     5 },
+				distPcts: new [] { 0.50f, 0.95f, 0.95f , 0.98f, 0.23f}
 			);
 
 			var correctedSamples = samples.WithCorrectedPercentages().ToArray();
 
 			var actual = correctedSamples.Select(s => s.Telemetry.CarIdxLapDistPct[0]).ToArray();
-			Assert.That( actual, Is.EqualTo(new [] {0.95f, 0f, 0f, 0.23f}));
+			Assert.That( actual, Is.EqualTo(new [] {0.5f, 0.95f, 0f, 0f, 0.23f}));
 		}
 	}
 }
