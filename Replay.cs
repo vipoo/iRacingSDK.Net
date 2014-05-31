@@ -27,6 +27,9 @@ namespace iRacingSDK
 	public class Replay
     {
 		int messageId;
+        DateTime lastMessagePostedTime = DateTime.Now;
+        Task currentMessageTask;
+        const double MessageThrottleTime = 1000;
 
 		public Replay()
 		{
@@ -217,9 +220,6 @@ namespace iRacingSDK
 			SendMessage(BroadcastMessage.ReplaySearch, (short)mode);
 		}
 
-        DateTime lastMessagePostedTime = DateTime.Now;
-        Task currentMessageTask;
-
         void SendMessage(BroadcastMessage message, short var1 = 0, int var2 = 0)
         {
             var msgVar1 = FromShorts((short)message, var1);
@@ -232,7 +232,7 @@ namespace iRacingSDK
                 lastTask = null;
 
                 var timeSinceLastMsg = DateTime.Now - lastMessagePostedTime;
-                var throttleTime = (int)(500d - timeSinceLastMsg.TotalMilliseconds);
+                var throttleTime = (int)(MessageThrottleTime - timeSinceLastMsg.TotalMilliseconds);
                 if (throttleTime > 0)
                 {
                     Trace.WriteLine(string.Format("Throttle message {0} delivery to iRacing by {1} millisecond", message, throttleTime), "DEBUG");

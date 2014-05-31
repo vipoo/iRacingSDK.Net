@@ -16,16 +16,22 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Diagnostics;
-using System.Threading;
+using System.Linq;
 
 namespace iRacingSDK
 {
     public static partial class DataSampleExtensions
     {
+        /// <summary>
+        /// Move to start of Race.
+        /// Then advances the game through each incident until the end of race, or until NextIncident fails to advance
+        /// Then does the same in reverse order (from race end to race start) - to ensure we get all incidents.
+        /// </summary>
+        /// <param name="samples"></param>
+        /// <param name="maxTotalIncidents"></param>
+        /// <returns>Return a DataSample of each frame that an identified incident occured on.</returns>
         public static IEnumerable<DataSample> RaceIncidents(this IEnumerable<DataSample> samples, int maxTotalIncidents = int.MaxValue)
         {
 			var sessionNumber = GetSessionNumber(samples);
@@ -53,55 +59,18 @@ namespace iRacingSDK
 
         static List<DataSample> GetIncidentsForward(IEnumerable<DataSample> samples, int maxTotalIncidents)
 		{
-            return FindIncidents(samples, iRacing.Replay.MoveToNextIncident, data => data.Telemetry.SessionState == SessionState.CoolDown, maxTotalIncidents);
+            return IncidentsSupport.FindIncidents(
+                samples.TakeWhile(data => data.Telemetry.SessionState != SessionState.CoolDown), 
+                d => iRacing.Replay.MoveToNextIncident(), 
+                maxTotalIncidents);
 		}
 
         static List<DataSample> GetIncidentsReverse(IEnumerable<DataSample> samples, int sessionNumber, int maxTotalIncidents)
 		{
-            return FindIncidents(samples, iRacing.Replay.MoveToPrevIncident, data => data.Telemetry.SessionNum != sessionNumber || data.Telemetry.RaceLaps <= 0, maxTotalIncidents);
-		}
-
-        static List<DataSample> FindIncidents(IEnumerable<DataSample> samples, Action toNext, Func<DataSample, bool> isFinished, int maxTotalIncidents)
-		{
-			var capturedIncidents = new List<DataSample>();
-
-            if (maxTotalIncidents <= 0)
-                return capturedIncidents;
-
-			iRacing.Replay.SetSpeed(0);
-			iRacing.Replay.Wait();
-
-			var data = samples.First();
-
-			while(!isFinished(data))
-			{
-				var frameNumber = data.Telemetry.ReplayFrameNum;
-			
-				toNext();
-
-				if(!HasMovedToNewFrame(samples, ref data, frameNumber))
-					break;
-
-				capturedIncidents.Add(data);
-
-                if (capturedIncidents.Count >= maxTotalIncidents)
-                    break;
-			}
-
-			return capturedIncidents;
-		}
-
-		static bool HasMovedToNewFrame(IEnumerable<DataSample> samples, ref DataSample data, int frameNumber)
-		{
-			var retryCount = 4;
-			while(data.Telemetry.ReplayFrameNum == frameNumber && retryCount >= 0)
-			{
-				retryCount++;
-				Thread.Sleep(600);
-				//Wait a bit more to ensure iRacing has moved to the incident
-				data = samples.First();
-			}
-			return retryCount >= 0;
+            return IncidentsSupport.FindIncidents(
+                samples.TakeWhile(data => data.Telemetry.SessionNum == sessionNumber && data.Telemetry.RaceLaps > 0),
+                d => iRacing.Replay.MoveToPrevIncident(), 
+                maxTotalIncidents);
 		}
 	}
 }

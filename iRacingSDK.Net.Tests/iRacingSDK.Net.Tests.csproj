@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataSampleExtensions\WithCorrectedDistances.cs" />
+    <Compile Include="DataSampleExtensions\IncidentsSupport.cs" />
     <Compile Include="DataSampleExtensions\WithCorrectedPercentages.cs" />
     <Compile Include="main.cs" />
   </ItemGroup>
