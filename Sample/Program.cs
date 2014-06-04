@@ -71,36 +71,6 @@ namespace iRacingSDKSample
             Console.WriteLine("Received Data {0}", data.Telemetry.TickCount);
         }
 
-        private static void VerifyDriverDistances()
-        {
-            foreach (var data in iRacing.GetDataFeed().WithCorrectedPercentages().WithCorrectedDistances().WithFinishingStatus())
-            {
-                Console.Clear();
-                foreach( var c in data.Telemetry.Cars)
-                {
-                    Console.WriteLine("{0} at {1}", c.UserName, c.TotalDistance);
-                }
-
-                Thread.Sleep(100);
-            }
-        }
-
-        private static void VerifyLapSectors()
-        {
-            LapSector lastSector = new LapSector();
-
-            foreach( var data in iRacing.GetDataFeed().WithCorrectedPercentages().WithCorrectedDistances().WithFinishingStatus() )
-            {
-                if( data.Telemetry.RaceLapSector != lastSector)
-                {
-                    Console.WriteLine("{0} {1}", data.Telemetry.RaceLapSector.LapNumber, data.Telemetry.RaceLapSector.Sector);
-                }
-
-                lastSector = data.Telemetry.RaceLapSector;
-             
-            }
-        }
-
         static void Recorder()
         {
             var writer = new BinaryFormatter();

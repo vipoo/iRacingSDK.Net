@@ -1,11 +1,7 @@
 ﻿using iRacingSDK;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Sample
 {
@@ -24,9 +20,7 @@ namespace Sample
                 Trace.WriteLine("================");
 
                 foreach (var c in data.Telemetry.Cars.OrderBy(d => d.TotalDistance))
-                {
                     Trace.WriteLine(string.Format("{0} at {1}", c.UserName, c.TotalDistance));
-                }
 
                 Thread.Sleep(4000);
             }

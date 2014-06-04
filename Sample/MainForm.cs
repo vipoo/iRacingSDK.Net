@@ -62,5 +62,10 @@ namespace Sample
         {
             logMessages.StartOperation(SampleTotalDistane.Sample);
         }
+
+        private void LapSectors_click(object sender, EventArgs e)
+        {
+            logMessages.StartOperation(SampleLapSector.Sample);
+        }
     }
 }
