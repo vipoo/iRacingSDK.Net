@@ -28,11 +28,11 @@ namespace iRacingSDK
 {
     public static class iRacing
     {
-        static iRacingInstance instance;
+        static iRacingConnection instance;
 
         static iRacing()
         {
-            instance = new iRacingInstance();
+            instance = new iRacingConnection();
         }
 
         public static Replay Replay { get { return instance.Replay; } }
@@ -65,99 +65,5 @@ namespace iRacingSDK
                 instance.NewData -= value;
             }
         }
-    }
-
-	public partial class iRacingInstance : IDisposable
-	{
-        public readonly Replay Replay;
-        public bool IsConnected { get; private set; }
-        
-        DataFeed dataFeed = null;
-        bool isRunning = false;
-        iRacingConnection iRacingConnection;
-        internal bool IsRunning { get { return isRunning; } }
-        
-        public iRacingInstance()
-        {
-            this.Replay = new Replay(this);
-            this.iRacingConnection = new iRacingConnection();
-        }
-
-        public IEnumerable<DataSample> GetDataFeed()
-        {
-            if (isRunning)
-                throw new Exception("Can not call GetDataFeed concurrently.");
-
-            isRunning = true;
-            try
-            {
-                foreach (var notConnectedSample in WaitForInitialConnection())
-                {
-                    IsConnected = false;
-                    yield return notConnectedSample;
-                }
-
-                foreach (var sample in AllSamples())
-                {
-                    IsConnected = sample.IsConnected;
-                    yield return sample;
-                }
-            }
-            finally
-            {
-                isRunning = false;
-            }
-        }
-
-		IEnumerable<DataSample> WaitForInitialConnection()
-		{
-            bool wasConnected = iRacingConnection.Accessor != null;
-            Trace.WriteLineIf(!wasConnected, "Waiting to connect to iRacing application", "INFO");
-			
-            while(!iRacingConnection.IsConnected())
-			{
-				yield return DataSample.YetToConnected;
-				Thread.Sleep(10);
-			}
-            
-            Trace.WriteLineIf(!wasConnected, "Connected to iRacing application", "INFO");
-		}
-
-		IEnumerable<DataSample> AllSamples()
-		{
-            if( dataFeed == null )
-			    dataFeed = new DataFeed(iRacingConnection.Accessor);
-
-            var nextTickCount = 0;
-            var lastTickTime = DateTime.Now;
-            DataSample lastDataSample = null;
-			while(true)
-			{
-                iRacingConnection.WaitForData();
-
-                var data = dataFeed.GetNextDataSample();
-                if (data != null)
-                {
-                    data.LastSample = lastDataSample;
-                    if (lastDataSample != null)
-                        lastDataSample.LastSample = null;
-                    lastDataSample = data;
-
-                    if (data.IsConnected)
-                    {
-                        if (data.Telemetry.TickCount == nextTickCount - 1)
-                            continue; //Got the same sample - try again.
-
-                        if (data.Telemetry.TickCount != nextTickCount && nextTickCount != 0)
-                            Debug.WriteLine(string.Format("Warning dropped DataSample from {0} to {1}. Over time of {2}",
-                                nextTickCount, data.Telemetry.TickCount-1, (DateTime.Now - lastTickTime).ToString(@"s\.fff")), "WARN");
-
-                        nextTickCount = data.Telemetry.TickCount + 1;
-                        lastTickTime = DateTime.Now;
-                    }
-                    yield return data;
-                }
-			}
-		}
 	}
 }

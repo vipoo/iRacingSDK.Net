@@ -30,9 +30,9 @@ namespace iRacingSDK
         DateTime lastMessagePostedTime = DateTime.Now;
         Task currentMessageTask;
         const double MessageThrottleTime = 1000;
-        iRacingSDK.iRacingInstance iRacingInstance;
+        iRacingConnection iRacingInstance;
 
-        public Replay(iRacingInstance iRacingInstance)
+        public Replay(iRacingConnection iRacingInstance)
 		{
             this.iRacingInstance = iRacingInstance;
 

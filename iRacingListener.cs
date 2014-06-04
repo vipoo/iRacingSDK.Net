@@ -26,7 +26,7 @@ namespace iRacingSDK
 {
     public delegate void DataSampleEventHandler(DataSample data);
 
-    public partial class iRacingInstance : IDisposable
+    public partial class iRacingConnection : IDisposable
     {
         static DataSampleEventHandler newData;
         static Dictionary<DataSampleEventHandler, DataSampleEventHandler> newDataDelegates = new Dictionary<DataSampleEventHandler, DataSampleEventHandler>();
@@ -82,11 +82,11 @@ namespace iRacingSDK
             bl.Wait(500);
         }
 
-        static void Listen()
+        void Listen()
         {
             try
             {
-                foreach (var d in iRacing.GetDataFeed())
+                foreach (var d in GetDataFeed())
                 {
                     if (requestCancel)
                         return;

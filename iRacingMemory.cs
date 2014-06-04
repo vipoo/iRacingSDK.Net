@@ -24,7 +24,7 @@ using Win32.Synchronization;
 
 namespace iRacingSDK
 {
-	class iRacingConnection
+	class iRacingMemory
 	{
 		public MemoryMappedViewAccessor Accessor {get; private set; }
 		IntPtr dataValidEvent;

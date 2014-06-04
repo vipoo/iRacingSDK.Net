@@ -58,6 +58,7 @@
     <Compile Include="DataSampleExtensions\WithCorrectedPercentages.cs" />
     <Compile Include="DataSampleExtensions\RaceOnly.cs" />
     <Compile Include="DataSampleExtensions\AtSpeed.cs" />
+    <Compile Include="iRacingInstance.cs" />
     <Compile Include="iRacingListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="iRSDKHeader.cs" />
@@ -71,7 +72,7 @@
     <Compile Include="DataFeed.cs" />
     <Compile Include="DataFeed\DataSample.cs" />
     <Compile Include="iRacing.cs" />
-    <Compile Include="iRacingConnection.cs" />
+    <Compile Include="iRacingMemory.cs" />
     <Compile Include="MemoryMappedViewAccessorExtensions.cs" />
     <Compile Include="DataFeed\SessionData.cs" />
     <Compile Include="DataFeed\Session.cs" />

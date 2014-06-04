@@ -43,24 +43,9 @@ namespace Sample
             new EventSample().Show();
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void fastestLapButton_Click(object sender, EventArgs e)
         {
-            logMessages.StartOperation( () => {
-
-                FastLap lastFastestLap = null;
-
-                Trace.WriteLine("Moving to start of race");
-                iRacing.Replay.MoveToStartOfRace();
-                Trace.WriteLine("Watching for fastest laps");
-
-                foreach (var data in iRacing.GetDataFeed().AtSpeed(16).WithFastestLaps())
-                {
-                    if (lastFastestLap != data.Telemetry.FastestLap)
-                        Trace.WriteLine(string.Format("{0} - {1}", data.Telemetry.FastestLap.Driver.UserName, data.Telemetry.FastestLap.Time));
-
-                    lastFastestLap = data.Telemetry.FastestLap;
-                }
-            });
+            logMessages.StartOperation( SampleFastestLap.Sample );
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -68,38 +53,14 @@ namespace Sample
             logMessages.Close();
         }
 
-        System.Collections.Concurrent.ConcurrentQueue<string> traceMessages = new System.Collections.Concurrent.ConcurrentQueue<string>();
-
         private void iRacingInstance_Click(object sender, EventArgs e)
         {
-            logMessages.StartOperation(() =>
-            {
-                //Can use both event and enumerable accesses with instance types.
-                var instance1 = new iRacingInstance();
-                instance1.NewData += instance1_NewData;
-                instance1.StartListening();
-
-                var iracingInstance = new iRacingInstance();
-
-                var start = DateTime.Now;
-                foreach (var data in iracingInstance.GetDataFeed())
-                {
-                    if (DateTime.Now - start > TimeSpan.FromSeconds(1))
-                        break;
-
-                    traceMessages.Enqueue(string.Format("Enumerable Data Tick {0}", data.Telemetry.TickCount));
-                }
-
-                instance1.StopListening();
-
-                foreach( var m in traceMessages)
-                    Trace.WriteLine(m);
-            });
+            logMessages.StartOperation(SampleEnumerableAndEventAccess.Sample);
         }
 
-        void instance1_NewData(DataSample data)
+        private void TotalDistances_click(object sender, EventArgs e)
         {
-            traceMessages.Enqueue(string.Format("Event Data Tick {0}", data.Telemetry.TickCount));
+            logMessages.StartOperation(SampleTotalDistane.Sample);
         }
     }
 }
