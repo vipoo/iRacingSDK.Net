@@ -16,29 +16,16 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
-using iRacingSDK;
-using System.Diagnostics;
+using System;
+using System.Collections.Generic;
 
-namespace Sample
+namespace iRacingSDK
 {
-    public static class SampleLapSector
+    public static partial class DataSampleExtensions
     {
-        public static void Sample()
+        public static AfterEnumeration TakeUntil(this IEnumerable<DataSample> samples, TimeSpan period)
         {
-            var iracing = new iRacingConnection();
-
-            iracing.Replay.MoveToStartOfRace();
-            iracing.Replay.SetSpeed(16);
-            
-            var lastSector = new LapSector();
-
-            foreach (var data in iRacing.GetDataFeed().AtSpeed(16))
-            {
-                if (data.Telemetry.RaceLapSector != lastSector)
-                    Trace.WriteLine(string.Format("Lap: {0} Sector: {1}", data.Telemetry.RaceLapSector.LapNumber, data.Telemetry.RaceLapSector.Sector));
-
-                lastSector = data.Telemetry.RaceLapSector;
-            }
+            return new AfterEnumeration(samples, period);
         }
     }
 }

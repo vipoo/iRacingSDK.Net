@@ -67,5 +67,10 @@ namespace Sample
         {
             logMessages.StartOperation(SampleLapSector.Sample);
         }
+
+        private void TakeUntilAfter_click(object sender, EventArgs e)
+        {
+            logMessages.StartOperation(SampleTakeUntilAfter.Sample);
+        }
     }
 }
