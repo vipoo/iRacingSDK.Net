@@ -109,9 +109,10 @@ namespace iRacingSDK
 
             currentMessageTask.Wait();
 
-            WaitAndVerify(data => data.Telemetry.ReplayFrameNum != frameNumber, 
-                () => SendMessage(BroadcastMessage.ReplaySetPlayPosition, (short)mode, frameNumber),
-                2000);
+            if( mode == ReplayPositionMode.Begin)
+                WaitAndVerify(data => data.Telemetry.ReplayFrameNum != frameNumber, 
+                    () => SendMessage(BroadcastMessage.ReplaySetPlayPosition, (short)mode, frameNumber),
+                    2000);
 
             currentMessageTask.Wait();
 

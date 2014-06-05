@@ -53,5 +53,28 @@ namespace iRacingSDK
                 yield return data;
             }
         }
+
+        public IEnumerable<DataSample> AfterReplayPaused()
+        {
+            var MaxRetryCount = (int)(period.TotalSeconds / 60.0);
+            var retryCount = MaxRetryCount;
+            var lastFrameNumber = -1;
+
+            foreach (var data in samples)
+            {
+                if (lastFrameNumber == data.Telemetry.ReplayFrameNum)
+                {
+                    if (retryCount-- <= 0)
+                        break;
+                }
+                else
+                {
+                    retryCount = MaxRetryCount;
+                    lastFrameNumber = data.Telemetry.ReplayFrameNum;
+                }
+
+                yield return data;
+            }
+        }
     }
 }

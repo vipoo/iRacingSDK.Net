@@ -20,30 +20,40 @@ using System.Linq;
 using iRacingSDK;
 using iRacingSDK.Support;
 using System.Diagnostics;
+using System.Threading;
 
 namespace Sample
 {
-    public class SampleTakeUntilAfter
+    public class SampleRaceEnd
     {
         public static void Sample()
         {
             var iracing = new iRacingConnection();
 
-            Trace.WriteLine("Moving to start of race");
-            iracing.Replay.MoveToStartOfRace();
-            Trace.WriteLine("Watching first 2 laps + plus 5 seconds");
+            Trace.WriteLine("Moving to 4 minutes before end of replay");
 
-            int lastLap = -1;
+            iracing.Replay.MoveToFrame(4 * 60 * 60, ReplayPositionMode.End);
+            iracing.Replay.SetSpeed(2);
+            Thread.Sleep(3000);
+
+            int lastCount = 0;
 
             foreach (var data in iracing.GetDataFeed().AtSpeed(8)
-                .TakeUntil(20.Seconds()).After(data => data.Telemetry.RaceLaps == 3)
-                .TakeUntil(20.Seconds()).AfterReplayPaused()
+                .WithFinishingStatus()
+                .TakeUntil(5.Seconds()).After(data => data.Telemetry.RaceCars.All( c => c.HasSeenCheckeredFlag || !c.HasData ))
+                .TakeUntil(2.Seconds()).AfterReplayPaused()
                 )
             {
-                if (lastLap != data.Telemetry.RaceLaps)
-                    Trace.WriteLine(string.Format("Lap: {0}", data.Telemetry.RaceLaps));
-            
-                lastLap = data.Telemetry.RaceLaps;
+                var count = data.Telemetry.RaceCars.Count(c => c.HasSeenCheckeredFlag || !c.HasData);
+
+                if (lastCount != count)
+                {
+                    foreach( var x in data.Telemetry.RaceCars)
+                        Trace.WriteLine(string.Format("Name: {0} - HasSeenCheckedFlag: {1} - HasData: {2}", x.UserName, x.HasSeenCheckeredFlag, x.HasData));
+
+                    Trace.WriteLine(string.Format("{0} finishers", count));
+                }
+                lastCount = count;
             }
 
             iracing.Replay.SetSpeed(0);

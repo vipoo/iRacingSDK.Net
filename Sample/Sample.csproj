@@ -51,6 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SampleRaceEnd.cs" />
     <Compile Include="SampleEnumerableAndEventAccess.cs" />
     <Compile Include="EventSample.cs">
       <SubType>Form</SubType>

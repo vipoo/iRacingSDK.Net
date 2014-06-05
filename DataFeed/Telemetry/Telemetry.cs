@@ -39,5 +39,13 @@ namespace iRacingSDK
                 return cars = Enumerable.Range(0, this.SessionData.DriverInfo.Drivers.Length).Select(i => new Car(this, i)).ToArray();
 			}
 		}
+
+        public IEnumerable<Car> RaceCars
+        {
+            get
+            {
+                return Cars.Where(c => !c.IsPaceCar);
+            }
+        }
 	}
 }
