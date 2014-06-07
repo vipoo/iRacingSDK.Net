@@ -17,20 +17,23 @@
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
+using iRacingSDK.Support;
 
 namespace iRacingSDK
 {
     public static partial class DataSampleExtensions
     {
         /// <summary>
-		/// Assignes the telemetry fields HasSeenCheckeredFlag, IsFinalLap and LeaderHasFinished
+		/// Assignes the telemetry fields HasSeenCheckeredFlag, IsFinalLap, LeaderHasFinished, HasRetired
         /// </summary>
         /// <param name="samples"></param>
         /// <returns></returns>
         public static IEnumerable<DataSample> WithFinishingStatus(this IEnumerable<DataSample> samples)
 		{
 			var hasSeenCheckeredFlag = new bool[64];
+            var lastTimeForData = new TimeSpan[64];
 
 			foreach(var data in samples)
 			{
@@ -39,6 +42,8 @@ namespace iRacingSDK
 				ApplyLeaderHasFinished(data);
 					
 				ApplyHasSeenCheckeredFlag(data, hasSeenCheckeredFlag);
+
+                ApplyHasRetired(data, lastTimeForData);
 
 				yield return data;
 			}
@@ -64,5 +69,28 @@ namespace iRacingSDK
 
 			data.Telemetry.HasSeenCheckeredFlag = hasSeenCheckeredFlag;
 		}
+
+        static void ApplyHasRetired(DataSample data, TimeSpan[] lastTimeOfData)
+        {
+            data.Telemetry.HasRetired = new bool[64];
+
+            if (!(new[] { SessionState.Racing, SessionState.Checkered, SessionState.CoolDown }).Contains(data.Telemetry.SessionState))
+                return;
+
+			for(int i = 1; i < data.SessionData.DriverInfo.Drivers.Length; i++)
+            {
+                if (data.Telemetry.HasSeenCheckeredFlag[i])
+                    continue;
+
+                if (data.Telemetry.HasData(i))
+                {
+                    lastTimeOfData[i] = data.Telemetry.SessionTimeSpan;
+                    continue;
+                }
+
+                if( lastTimeOfData[i] + 30.Seconds() < data.Telemetry.SessionTimeSpan)
+                    data.Telemetry.HasRetired[i] = true;
+            }
+        }
     }
 }

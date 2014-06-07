@@ -77,5 +77,10 @@ namespace Sample
         {
             logMessages.StartOperation(SampleRaceEnd.Sample);
         }
+
+        private void WithFinishingStatuses_Click(object sender, EventArgs e)
+        {
+            logMessages.StartOperation(SampleWithFinishingStatuses.Sample);
+        }
     }
 }

@@ -40,16 +40,16 @@ namespace Sample
 
             foreach (var data in iracing.GetDataFeed().AtSpeed(8)
                 .WithFinishingStatus()
-                .TakeUntil(5.Seconds()).After(data => data.Telemetry.RaceCars.All( c => c.HasSeenCheckeredFlag || !c.HasData ))
+                .TakeUntil(5.Seconds()).After(data => data.Telemetry.RaceCars.All( c => c.HasSeenCheckeredFlag || c.HasRetired ))
                 .TakeUntil(2.Seconds()).AfterReplayPaused()
                 )
             {
-                var count = data.Telemetry.RaceCars.Count(c => c.HasSeenCheckeredFlag || !c.HasData);
+                var count = data.Telemetry.RaceCars.Count(c => c.HasSeenCheckeredFlag || c.HasRetired);
 
                 if (lastCount != count)
                 {
                     foreach( var x in data.Telemetry.RaceCars)
-                        Trace.WriteLine(string.Format("Name: {0} - HasSeenCheckedFlag: {1} - HasData: {2}", x.UserName, x.HasSeenCheckeredFlag, x.HasData));
+                        Trace.WriteLine(string.Format("{0,20}\tHasSeenCheckedFlag: {1}\tHasRetired: {2}", x.UserName, x.HasSeenCheckeredFlag, x.HasRetired));
 
                     Trace.WriteLine(string.Format("{0} finishers", count));
                 }

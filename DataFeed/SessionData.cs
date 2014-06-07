@@ -21,10 +21,24 @@ using System.Linq;
 
 namespace iRacingSDK
 {
-	public partial class SessionData
-	{
+    public partial class SessionData
+    {
         public string Raw { get; /*internal*/ set; }
-	}
+
+        public partial class _SessionInfo
+        {
+            public partial class _Sessions
+            {
+                public bool IsRace
+                {
+                    get
+                    {
+                        return this.SessionType.ToLower().Contains("race");
+                    }
+                }
+            }
+        }
+    }
 
     public static class _SessionExtensions
     {
