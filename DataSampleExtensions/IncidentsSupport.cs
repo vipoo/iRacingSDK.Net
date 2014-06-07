@@ -54,16 +54,21 @@ namespace iRacingSDK
         /// <returns></returns>
         static IEnumerable<DataSample> PositionsOf(this IEnumerable<DataSample> samples, Action<DataSample> moveReplay)
         {
-            const int MaxRetryAttempt = 100;
+            const int MaxRetryAttempt = 50;
             int frameNumber = -1;
             var retryCount = MaxRetryAttempt;
-
+            
             foreach( var data in samples)
             {
-                if (frameNumber != data.Telemetry.ReplayFrameNum && retryCount != MaxRetryAttempt)
+                if (retryCount <= 0)
                 {
-                    yield return data;
-                    retryCount = MaxRetryAttempt;
+                    if (frameNumber != data.Telemetry.ReplayFrameNum)
+                    {
+                        yield return data;
+                        retryCount = MaxRetryAttempt;
+                    }
+                    else
+                        break;
                 }
 
                 if (retryCount-- == MaxRetryAttempt)
@@ -72,9 +77,6 @@ namespace iRacingSDK
                     moveReplay(data);
                     continue;
                 }
-             
-                if (retryCount < 0)
-                    break;
             }
         }
     }
