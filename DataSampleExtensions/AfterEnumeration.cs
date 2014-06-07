@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -56,20 +57,22 @@ namespace iRacingSDK
 
         public IEnumerable<DataSample> AfterReplayPaused()
         {
-            var MaxRetryCount = (int)(period.TotalSeconds / 60.0);
-            var retryCount = MaxRetryCount;
+            var timeoutAt = DateTime.Now + period;
             var lastFrameNumber = -1;
 
             foreach (var data in samples)
             {
                 if (lastFrameNumber == data.Telemetry.ReplayFrameNum)
                 {
-                    if (retryCount-- <= 0)
+                    if (timeoutAt < DateTime.Now)
+                    {
+                        Trace.WriteLine(string.Format("{0} Replay paused for {1}.  Assuming end of replay", data.Telemetry.SessionTimeSpan, period), "INFO");
                         break;
+                    }
                 }
                 else
                 {
-                    retryCount = MaxRetryCount;
+                    timeoutAt = DateTime.Now + period;
                     lastFrameNumber = data.Telemetry.ReplayFrameNum;
                 }
 
