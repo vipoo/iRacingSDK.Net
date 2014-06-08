@@ -82,5 +82,10 @@ namespace Sample
         {
             logMessages.StartOperation(SampleWithFinishingStatuses.Sample);
         }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            logMessages.StartOperation(SampleQueuedDataFeed.Sample);
+        }
     }
 }
