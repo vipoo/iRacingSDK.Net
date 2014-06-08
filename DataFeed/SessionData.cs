@@ -38,6 +38,14 @@ namespace iRacingSDK
                 }
             }
         }
+
+        public partial class _DriverInfo
+        {
+            public partial class _Drivers
+            {
+                public bool IsPaceCar { get { return this.CarIdx == 0; } }
+            }
+        }
     }
 
     public static class _SessionExtensions
