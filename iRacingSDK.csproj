@@ -50,6 +50,7 @@
     <Compile Include="DataFeed\Telemetry\FastestLap.cs" />
     <Compile Include="DataFeed\Telemetry\RaceDistance.cs" />
     <Compile Include="DataSampleExtensions\AfterEnumeration.cs" />
+    <Compile Include="DataSampleExtensions\WithLastSample.cs" />
     <Compile Include="DataSampleExtensions\GetBufferedDataFeed.cs" />
     <Compile Include="DataSampleExtensions\TakeUntil.cs" />
     <Compile Include="DataSampleExtensions\TakeUntilEndOfReplay.cs" />

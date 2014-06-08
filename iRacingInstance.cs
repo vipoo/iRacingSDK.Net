@@ -45,6 +45,11 @@ namespace iRacingSDK
 
         public IEnumerable<DataSample> GetDataFeed()
         {
+            return GetRawDataFeed().WithLastSample();
+        }
+
+        internal IEnumerable<DataSample> GetRawDataFeed()
+        {
             if (isRunning)
                 throw new Exception("Can not call GetDataFeed concurrently.");
 
@@ -90,19 +95,14 @@ namespace iRacingSDK
 
             var nextTickCount = 0;
             var lastTickTime = DateTime.Now;
-            DataSample lastDataSample = null;
-			while(true)
+
+            while(true)
 			{
                 iRacingMemory.WaitForData();
 
                 var data = dataFeed.GetNextDataSample(nextTickCount);
                 if (data != null)
                 {
-                    data.LastSample = lastDataSample;
-                    if (lastDataSample != null)
-                        lastDataSample.LastSample = null;
-                    lastDataSample = data;
-
                     if (data.IsConnected)
                     {
                         if (data.Telemetry.TickCount == nextTickCount - 1)

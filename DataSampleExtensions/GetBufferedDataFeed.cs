@@ -29,22 +29,27 @@ namespace iRacingSDK
         /// Similiar to GetDataFeed, except DataSample can be buffered upto maxBufferLength to asist in reducing loss of data packets
         /// Therefore, DataSamples yield from this enumeration may have a higher latency of values.
         /// </summary>
-        /// <param name="samples"></param>
+        /// <param name="iRacingConnection"></param>
         /// <param name="maxBufferLength"></param>
         /// <returns></returns>
-        public static IEnumerable<DataSample> GetBufferedDataFeed(this iRacingConnection samples, int maxBufferLength = 10)
+        public static IEnumerable<DataSample> GetBufferedDataFeed(this iRacingConnection iRacingConnection, int maxBufferLength = 10)
+        {
+            return _GetBufferedDataFeed(iRacingConnection, maxBufferLength).WithLastSample();
+        }
+
+        static IEnumerable<DataSample> _GetBufferedDataFeed(iRacingConnection iRacingConnection, int maxBufferLength)
         {
             var que = new ConcurrentQueue<DataSample>();
             bool cancelRequest = false;
 
-            var t = new Task(() => EnqueueSamples(que, samples, maxBufferLength, ref cancelRequest));
+            var t = new Task(() => EnqueueSamples(que, iRacingConnection, maxBufferLength, ref cancelRequest));
             t.Start();
-            
+
             try
             {
                 DataSample data;
 
-                while(true)
+                while (true)
                 {
                     if (que.TryDequeue(out data))
                         yield return data;
@@ -60,7 +65,7 @@ namespace iRacingSDK
 
         static void EnqueueSamples(ConcurrentQueue<DataSample> que, iRacingConnection samples, int maxBufferLength, ref bool cancelRequest)
         {
-            foreach (var data in samples.GetDataFeed())
+            foreach (var data in samples.GetRawDataFeed())
             {
                 if (cancelRequest)
                     return;

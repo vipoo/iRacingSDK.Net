@@ -45,6 +45,9 @@ namespace Sample
                 if (data.Telemetry.RaceLapSector != lastSector)
                     Trace.WriteLine(string.Format("Lap: {0} Sector: {1}", data.Telemetry.RaceLapSector.LapNumber, data.Telemetry.RaceLapSector.Sector));
 
+                if (i > 1)
+                    Debug.Assert(data.LastSample != null, "LastSample should not be null");
+
                 lastSector = data.Telemetry.RaceLapSector;
 
                 if (i++ % 10 == 1)
