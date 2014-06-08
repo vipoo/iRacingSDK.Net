@@ -37,7 +37,7 @@ namespace iRacingSDK
 			this.accessor = accessor;
 		}
 
-		public unsafe DataSample GetNextDataSample()
+		public unsafe DataSample GetNextDataSample(int requestedTickCount)
 		{
 			var headers = accessor.AcquirePointer( ptr => {
 				var a = ReadHeader(ptr);
@@ -52,7 +52,7 @@ namespace iRacingSDK
             }
 
 			var sessionData = ReadSessionInfo(headers.Header);
-			var variables = ReadVariables(headers.Header, headers.VarHeaders);
+			var variables = ReadVariables(headers.Header, headers.VarHeaders, requestedTickCount);
             var variableDescriptions = headers.VarHeaders.ToDictionary(vh => vh.name, vh => vh.desc);
 
 			if(sessionData == null)
@@ -130,9 +130,9 @@ namespace iRacingSDK
             }
 		}
 
-		unsafe Telemetry ReadVariables( iRSDKHeader header, VarHeader[] varHeaders)
+        unsafe Telemetry ReadVariables(iRSDKHeader header, VarHeader[] varHeaders, int requestedTickCount)
 		{
-			var buf = header.FindLatestBuf();
+			var buf = header.FindLatestBuf(requestedTickCount);
 
 			var values = ReadAllValues(accessor, buf.bufOffset, varHeaders);
 			var latestHeader = accessor.AcquirePointer( ptr => ReadHeader(ptr) );

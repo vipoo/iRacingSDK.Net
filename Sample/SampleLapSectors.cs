@@ -18,6 +18,7 @@
 
 using iRacingSDK;
 using System.Diagnostics;
+using System.Threading;
 
 namespace Sample
 {
@@ -38,6 +39,8 @@ namespace Sample
                     Trace.WriteLine(string.Format("Lap: {0} Sector: {1}", data.Telemetry.RaceLapSector.LapNumber, data.Telemetry.RaceLapSector.Sector));
 
                 lastSector = data.Telemetry.RaceLapSector;
+
+                Thread.Sleep(2);
             }
         }
     }

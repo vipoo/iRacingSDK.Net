@@ -73,9 +73,7 @@ namespace iRacingSDK
 
 		public bool WaitForData()
 		{
-            var result = Event.WaitForSingleObject(dataValidEvent, 30) == 0;
-            Trace.WriteLineIf(!result, "Failed to get signal from iRacing for new Data Sample within 30 milliseconds", "DEBUG");
-            return result;
+            return Event.WaitForSingleObject(dataValidEvent, 17) == 0;
 		}
     }
 }

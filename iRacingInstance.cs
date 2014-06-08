@@ -95,7 +95,7 @@ namespace iRacingSDK
 			{
                 iRacingMemory.WaitForData();
 
-                var data = dataFeed.GetNextDataSample();
+                var data = dataFeed.GetNextDataSample(nextTickCount);
                 if (data != null)
                 {
                     data.LastSample = lastDataSample;
