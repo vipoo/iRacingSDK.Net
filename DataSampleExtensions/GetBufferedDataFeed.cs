@@ -32,7 +32,7 @@ namespace iRacingSDK
         /// <param name="samples"></param>
         /// <param name="maxBufferLength"></param>
         /// <returns></returns>
-        public static IEnumerable<DataSample> GetBufferedDataFeed(this iRacingConnection samples, int maxBufferLength)
+        public static IEnumerable<DataSample> GetBufferedDataFeed(this iRacingConnection samples, int maxBufferLength = 10)
         {
             var que = new ConcurrentQueue<DataSample>();
             bool cancelRequest = false;
