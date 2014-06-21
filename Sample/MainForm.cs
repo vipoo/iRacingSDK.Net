@@ -87,5 +87,10 @@ namespace Sample
         {
             logMessages.StartOperation(SampleQueuedDataFeed.Sample);
         }
+
+        private void ReplayMove_Click(object sender, EventArgs e)
+        {
+            logMessages.StartOperation(ReplayMove.Sample);
+        }
     }
 }

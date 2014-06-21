@@ -65,15 +65,20 @@ namespace iRacingSDK
             currentMessageTask.Wait();
         }
 
-        void WaitAndVerify(Func<DataSample, bool> verifyFn)
+        DataSample WaitAndVerify(Func<DataSample, bool> verifyFn, int wait = 5000)
         {
-            WaitAndVerify(verifyFn, () => { });
+            return WaitAndVerify(verifyFn, () => { }, wait);
         }
 
-        void WaitAndVerify(Func<DataSample, bool> verifyFn, Action action, int wait = 5000)
+        DataSample WaitAndVerify(Func<DataSample, bool> verifyFn)
+        {
+            return WaitAndVerify(verifyFn, () => { });
+        }
+
+        DataSample WaitAndVerify(Func<DataSample, bool> verifyFn, Action action, int wait = 5000)
         {
             if (iRacingInstance.IsRunning)
-                return;
+                return null;
 
             var timeout = DateTime.Now + TimeSpan.FromMilliseconds(wait);
             var data = iRacing.GetDataFeed().First();
@@ -84,7 +89,10 @@ namespace iRacingSDK
                 Thread.Sleep(100);
             }
             System.Diagnostics.Debug.Assert(!verifyFn(data));
+
+            return data;
         }
+
         public void MoveToNextSession()
         {
             currentMessageTask.Wait();
@@ -101,6 +109,8 @@ namespace iRacingSDK
 
         public void MoveToFrame(int frameNumber, ReplayPositionMode mode = ReplayPositionMode.Begin)
         {
+            DataSample data = null;
+
             currentMessageTask.Wait();
 
             Trace.WriteLine(string.Format("Moving to frame {0} with mode {1}", frameNumber, mode), "INFO");
@@ -110,11 +120,12 @@ namespace iRacingSDK
             currentMessageTask.Wait();
 
             if( mode == ReplayPositionMode.Begin)
-                WaitAndVerify(data => data.Telemetry.ReplayFrameNum != frameNumber, 
-                    () => SendMessage(BroadcastMessage.ReplaySetPlayPosition, (short)mode, frameNumber),
-                    2000);
+                data = WaitAndVerify(d => Math.Abs(d.Telemetry.ReplayFrameNum -  frameNumber) > 32, 6000);
 
             currentMessageTask.Wait();
+
+            if (data != null)
+                frameNumber = data.Telemetry.ReplayFrameNum;
 
             Trace.WriteLine(string.Format("Moved to frame {0}", frameNumber), "INFO");
         }
