@@ -18,23 +18,28 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace iRacingSDK
 {
 	public partial class Telemetry : Dictionary<string, object>
     {
+        float? raceDistance;
+
         public float RaceDistance
         {
             get
             {
-                var firstSector = this.CarIdxLap
-                    .Select((lap, idx) => new { Lap = lap, Idx = idx, Pct = this.CarIdxLapDistPct[idx] })
-                    .Where(l => l.Lap == this.RaceLaps)
-                    .OrderByDescending(l => l.Pct)
-                    .FirstOrDefault();
+                if (raceDistance != null)
+                    return raceDistance.Value;
 
-                return firstSector.Lap + firstSector.Pct;
+                raceDistance = this.CarIdxLap
+                    .Select((lap, idx) => new { Lap = lap, Distance = lap + this.CarIdxLapDistPct[idx] })
+                    .Where(l => l.Lap == this.RaceLaps)
+                    .Max(l => l.Distance);
+
+                return raceDistance.Value;
             }
         }
 	}
