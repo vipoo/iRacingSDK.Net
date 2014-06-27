@@ -92,5 +92,15 @@ namespace Sample
         {
             logMessages.StartOperation(ReplayMove.Sample);
         }
+
+        private void FindIncidents_Click(object sender, EventArgs e)
+        {
+            logMessages.StartOperation(SampleFindIncidents.Sample);
+        }
+
+        private void InspectDataSamples_Click(object sender, EventArgs e)
+        {
+            logMessages.StartOperation(SampleTelemetryAccess.Sample);
+        }
     }
 }

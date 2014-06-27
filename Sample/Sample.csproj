@@ -51,6 +51,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SampleFindIncidents.cs" />
+    <Compile Include="SampleTelemetryAccess.cs" />
     <Compile Include="SampleReplayMove.cs" />
     <Compile Include="SampleRaceEnd.cs" />
     <Compile Include="SampleEnumerableAndEventAccess.cs" />

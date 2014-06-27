@@ -75,6 +75,7 @@ namespace iRacingSDK
                 {
                     frameNumber = data.Telemetry.ReplayFrameNum;
                     moveReplay(data);
+                    Thread.Sleep(5000);
                     continue;
                 }
             }
