@@ -53,11 +53,17 @@ namespace iRacingSDK.Net.Tests
             var start = 10;
             var incidentFrame = 30;
 
-            var inputSamples = CreateSamplesFromFrameNumbers(start, start, incidentFrame, incidentFrame);
+            var frameNumbers = new List<int>();
+            for (var i = 0; i < 2; i++)
+                frameNumbers.Add(start);
+            for (var i = 0; i < 100; i++)
+                frameNumbers.Add(incidentFrame);
+
+            var inputSamples = CreateSamplesFromFrameNumbers(frameNumbers.ToArray());
 
             var receivedSamples = new List<DataSample>();
 
-            var samples = iRacingSDK.IncidentsSupport.FindIncidents(inputSamples, d => { receivedSamples.Add(d); });
+            var samples = iRacingSDK.IncidentsSupport.FindIncidents(inputSamples, d => { receivedSamples.Add(d); }).ToList();
 
             Assert.That(FrameNumbersFromSamples(samples), Is.EqualTo(new[] { incidentFrame }));
 
@@ -71,7 +77,16 @@ namespace iRacingSDK.Net.Tests
             var incidentFrame1 = 30;
             var incidentFrame2 = 60;
 
-            var inputSamples = CreateSamplesFromFrameNumbers(start, incidentFrame1, incidentFrame2);
+            var frameNumbers = new List<int>();
+            for (var i = 0; i < 2; i++)
+                frameNumbers.Add(start);
+            for (var i = 0; i < 50; i++)
+                frameNumbers.Add(incidentFrame1);
+            for (var i = 0; i < 100; i++)
+                frameNumbers.Add(incidentFrame2);
+
+
+            var inputSamples = CreateSamplesFromFrameNumbers(frameNumbers.ToArray());
 
             var samples = iRacingSDK.IncidentsSupport.FindIncidents(inputSamples, d => { });
 

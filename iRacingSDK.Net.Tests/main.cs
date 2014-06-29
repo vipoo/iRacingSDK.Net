@@ -6,7 +6,7 @@ namespace iRacingSDK.Net.Tests
 	{
 		public static void Main()
 		{
-            new TakeUntilEndOfReplay().should_stop_enumerating_when_frame_number_does_not_advance();
+            new IncidentsSupport().should_find_two_incidents();
 		}
 	}
 }
