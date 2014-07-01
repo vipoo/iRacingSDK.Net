@@ -20,4 +20,5 @@ using System.Runtime.CompilerServices;
 //[assembly: AssemblyDelaySign(false)]
 //[assembly: AssemblyKeyFile("")]
 
-[assembly:InternalsVisibleTo("iRacingSDK.Net.Tests")]
+[assembly: InternalsVisibleTo("iRacingSDK.Net.Tests")]
+[assembly: InternalsVisibleTo("iRacingReplayOverlay.net.Tests")]

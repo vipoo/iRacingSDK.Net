@@ -36,6 +36,10 @@ namespace iRacingSDK
 
                 return carIdxDistance;
             }
+            internal set
+            {
+                carIdxDistance = value;
+            }
         }
 	}
 }
