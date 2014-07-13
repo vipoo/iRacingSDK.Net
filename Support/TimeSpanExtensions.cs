@@ -31,5 +31,10 @@ namespace iRacingSDK.Support
         {
             return TimeSpan.FromSeconds(seconds);
         }
+
+        public static TimeSpan Minutes(this int minutes)
+        {
+            return TimeSpan.FromMinutes(minutes);
+        }
     }
 }
