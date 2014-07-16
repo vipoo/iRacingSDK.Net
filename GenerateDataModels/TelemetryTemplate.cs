@@ -31,7 +31,7 @@ namespace GenerateDataModels
         {
             
             #line 7 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\TelemetryTemplate.tt"
- var data = iRacing.GetDataFeed().First(d => d.IsConnected); 
+ var data = iRacing.GetDataFeed().First(); 
             
             #line default
             #line hidden

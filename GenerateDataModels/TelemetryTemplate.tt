@@ -4,7 +4,7 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="iRacingSDK" #>
-<# var data = iRacing.GetDataFeed().First(d => d.IsConnected); #>
+<# var data = iRacing.GetDataFeed().First(); #>
 
 // This file is part of iRacingSDK.
 //

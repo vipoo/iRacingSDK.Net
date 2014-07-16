@@ -35,7 +35,7 @@ namespace GenerateDataModels
             
             #line 10 "C:\Users\dean\Documents\iRacingSDK.Net\GenerateDataModels\SessionInfoTemplate.tt"
  
-	var data = iRacing.GetDataFeed().First(d => d.IsConnected);
+	var data = iRacing.GetDataFeed().First();
 
 	var yaml = new YamlStream();
 	yaml.Load(new StringReader(data.SessionData.Raw));
