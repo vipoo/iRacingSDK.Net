@@ -1,4 +1,4 @@
-// This file is part of iRacingSDK.
+﻿// This file is part of iRacingSDK.
 //
 // Copyright 2014 Dean Netherton
 // https://github.com/vipoo/iRacingSDK.Net
@@ -16,29 +16,30 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
+using iRacingSDK;
+using System.Diagnostics;
+using System.Threading;
 
-namespace iRacingSDK
+namespace Sample
 {
-	/// <summary>
-	/// Search replay tape for events
-	/// </summary>
-	public enum ReplaySearchMode
-	{
-		ToStart = 0,
-		ToEnd,
-		PrevSession,
-		NextSession,
-		PrevLap,
-		NextLap,
-		PrevFrame,
-		NextFrame,
-		PrevIncident,
-		
-        /// <summary>
-        /// Camera select car and move to 4 seconds before incident
-        /// </summary>
-        NextIncident
-	};
-	
+    public static class SamplePitCommands
+    {
+        public static void Sample()
+        {
+            var iracing = new iRacingConnection();
+
+            Trace.WriteLine("Clearing tire change", "INFO");
+            iracing.PitCommand.ClearTireChange();
+            Thread.Sleep(2000);
+
+            Trace.WriteLine("Changing left front", "INFO");
+            iracing.PitCommand.ChangeLeftFrontTire(120);
+            Thread.Sleep(2000);
+
+
+            Trace.WriteLine("Setting fueld to 20", "INFO");
+            iracing.PitCommand.SetFuel(20);
+            Thread.Sleep(2000);
+        }
+    }
 }

@@ -44,9 +44,13 @@
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messaging\iRacingMessaging.cs" />
+    <Compile Include="Messaging\TelemetryCommandMode.cs" />
+    <Compile Include="Messaging\PitCommandMode.cs" />
     <Compile Include="DataFeed\GeneratedTelemetry.cs" />
     <Compile Include="DataFeed\GeneratedSessionData.cs" />
-    <Compile Include="DataFeed\ReplayPositionMode.cs" />
+    <Compile Include="Messaging\ReplayPositionMode.cs" />
+    <Compile Include="Messaging\ChatCommandMode.cs" />
     <Compile Include="DataFeed\Telemetry\FastestLap.cs" />
     <Compile Include="DataFeed\Telemetry\RaceDistance.cs" />
     <Compile Include="DataSampleExtensions\AfterEnumeration.cs" />
@@ -64,6 +68,7 @@
     <Compile Include="DataSampleExtensions\AtSpeed.cs" />
     <Compile Include="iRacingInstance.cs" />
     <Compile Include="iRacingListener.cs" />
+    <Compile Include="Messaging\PitCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="iRSDKHeader.cs" />
     <Compile Include="Support\TimeSpanExtensions.cs" />
@@ -72,7 +77,6 @@
     <Compile Include="Defines.cs" />
     <Compile Include="VarHeader.cs" />
     <Compile Include="VarType.cs" />
-    <Compile Include="SyncObjectAccess.cs" />
     <Compile Include="iRSDKHeaderExtensions.cs" />
     <Compile Include="DataFeed.cs" />
     <Compile Include="DataFeed\DataSample.cs" />
@@ -81,13 +85,13 @@
     <Compile Include="MemoryMappedViewAccessorExtensions.cs" />
     <Compile Include="DataFeed\SessionData.cs" />
     <Compile Include="DataFeed\Session.cs" />
-    <Compile Include="Replay.cs" />
+    <Compile Include="Messaging\Replay.cs" />
     <Compile Include="Win32\Synchronization\Event.cs" />
     <Compile Include="Win32\Messages.cs" />
-    <Compile Include="DataFeed\BroadcastMessage.cs" />
-    <Compile Include="DataFeed\ReplaySearchMode.cs" />
+    <Compile Include="Messaging\BroadcastMessage.cs" />
+    <Compile Include="Messaging\ReplaySearchMode.cs" />
     <Compile Include="DataFeed\SessionState.cs" />
-    <Compile Include="DataFeed\TrackLocation.cs" />
+    <Compile Include="Messaging\TrackLocation.cs" />
     <Compile Include="DataFeed\SessionFlags.cs" />
     <Compile Include="DataFeed\Car.cs" />
     <Compile Include="DataSampleExtensions\ForwardOnly.cs" />

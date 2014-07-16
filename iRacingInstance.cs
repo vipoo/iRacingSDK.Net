@@ -27,19 +27,23 @@ using iRacingSDK;
 
 namespace iRacingSDK
 {
-	public partial class iRacingConnection : IDisposable
-	{
+    public partial class iRacingConnection : IDisposable
+    {
         public readonly Replay Replay;
+        public readonly PitCommand PitCommand;
+
         public bool IsConnected { get; private set; }
-        
+
         DataFeed dataFeed = null;
         bool isRunning = false;
         iRacingMemory iRacingMemory;
         internal bool IsRunning { get { return isRunning; } }
-        
+
         public iRacingConnection()
         {
             this.Replay = new Replay(this);
+            this.PitCommand = new PitCommand();
+
             this.iRacingMemory = new iRacingMemory();
         }
 
@@ -74,30 +78,30 @@ namespace iRacingSDK
             }
         }
 
-		IEnumerable<DataSample> WaitForInitialConnection()
-		{
+        IEnumerable<DataSample> WaitForInitialConnection()
+        {
             bool wasConnected = iRacingMemory.Accessor != null;
             Trace.WriteLineIf(!wasConnected, "Waiting to connect to iRacing application", "INFO");
 
             while (!iRacingMemory.IsConnected())
-			{
-				yield return DataSample.YetToConnected;
-				Thread.Sleep(10);
-			}
-            
-            Trace.WriteLineIf(!wasConnected, "Connected to iRacing application", "INFO");
-		}
+            {
+                yield return DataSample.YetToConnected;
+                Thread.Sleep(10);
+            }
 
-		IEnumerable<DataSample> AllSamples()
-		{
-            if( dataFeed == null )
+            Trace.WriteLineIf(!wasConnected, "Connected to iRacing application", "INFO");
+        }
+
+        IEnumerable<DataSample> AllSamples()
+        {
+            if (dataFeed == null)
                 dataFeed = new DataFeed(iRacingMemory.Accessor);
 
             var nextTickCount = 0;
             var lastTickTime = DateTime.Now;
 
-            while(true)
-			{
+            while (true)
+            {
                 iRacingMemory.WaitForData();
 
                 var data = dataFeed.GetNextDataSample(nextTickCount);
@@ -110,14 +114,14 @@ namespace iRacingSDK
 
                         if (data.Telemetry.TickCount != nextTickCount && nextTickCount != 0)
                             Debug.WriteLine(string.Format("Warning dropped DataSample from {0} to {1}. Over time of {2}",
-                                nextTickCount, data.Telemetry.TickCount-1, (DateTime.Now - lastTickTime).ToString(@"s\.fff")), "WARN");
+                                nextTickCount, data.Telemetry.TickCount - 1, (DateTime.Now - lastTickTime).ToString(@"s\.fff")), "WARN");
 
                         nextTickCount = data.Telemetry.TickCount + 1;
                         lastTickTime = DateTime.Now;
                     }
                     yield return data;
                 }
-			}
-		}
-	}
+            }
+        }
+    }
 }

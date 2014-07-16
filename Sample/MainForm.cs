@@ -102,5 +102,15 @@ namespace Sample
         {
             logMessages.StartOperation(SampleTelemetryAccess.Sample);
         }
+
+        private void PitCommands_Click(object sender, EventArgs e)
+        {
+            logMessages.StartOperation(SamplePitCommands.Sample);
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

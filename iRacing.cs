@@ -36,6 +36,7 @@ namespace iRacingSDK
         }
 
         public static Replay Replay { get { return instance.Replay; } }
+        public static PitCommand PitCommand { get { return instance.PitCommand; } }
 
         public static bool IsConnected { get { return instance.IsConnected; } }
 
@@ -65,5 +66,5 @@ namespace iRacingSDK
                 instance.NewData -= value;
             }
         }
-	}
+    }
 }

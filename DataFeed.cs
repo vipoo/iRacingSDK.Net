@@ -28,22 +28,23 @@ using YamlDotNet.Serialization;
 
 namespace iRacingSDK
 {
-	public class DataFeed
-	{
-		MemoryMappedViewAccessor accessor;
+    public class DataFeed
+    {
+        MemoryMappedViewAccessor accessor;
 
-		public DataFeed(MemoryMappedViewAccessor accessor)
-		{
-			this.accessor = accessor;
-		}
+        public DataFeed(MemoryMappedViewAccessor accessor)
+        {
+            this.accessor = accessor;
+        }
 
-		public unsafe DataSample GetNextDataSample(int requestedTickCount)
-		{
-			var headers = accessor.AcquirePointer( ptr => {
-				var a = ReadHeader(ptr);
-				var b = ReadVariableHeaders(a, ptr);
-				return new {Header = a, VarHeaders = b};
-			});
+        public unsafe DataSample GetNextDataSample(int requestedTickCount)
+        {
+            var headers = accessor.AcquirePointer(ptr =>
+            {
+                var a = ReadHeader(ptr);
+                var b = ReadVariableHeaders(a, ptr);
+                return new { Header = a, VarHeaders = b };
+            });
 
             if ((headers.Header.status & 1) == 0)
             {
@@ -51,53 +52,53 @@ namespace iRacingSDK
                 return DataSample.YetToConnected;
             }
 
-			var sessionData = ReadSessionInfo(headers.Header);
-			var variables = ReadVariables(headers.Header, headers.VarHeaders, requestedTickCount);
+            var sessionData = ReadSessionInfo(headers.Header);
+            var variables = ReadVariables(headers.Header, headers.VarHeaders, requestedTickCount);
             var variableDescriptions = headers.VarHeaders.ToDictionary(vh => vh.name, vh => vh.desc);
 
-			if(sessionData == null)
-				return DataSample.YetToConnected;
+            if (sessionData == null)
+                return DataSample.YetToConnected;
 
-			if(variables == null)
-				return null;
+            if (variables == null)
+                return null;
 
             variables.SessionData = sessionData;
             return new DataSample { Telemetry = variables, SessionData = sessionData, TelemetryDescription = variableDescriptions, IsConnected = true };
-		}
+        }
 
-		unsafe iRSDKHeader ReadHeader(byte *ptr)
-		{
-			return (iRSDKHeader)System.Runtime.InteropServices.Marshal.PtrToStructure(new IntPtr(ptr), typeof(iRSDKHeader));
-		}
+        unsafe iRSDKHeader ReadHeader(byte* ptr)
+        {
+            return (iRSDKHeader)System.Runtime.InteropServices.Marshal.PtrToStructure(new IntPtr(ptr), typeof(iRSDKHeader));
+        }
 
-		static readonly int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(VarHeader));
+        static readonly int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(VarHeader));
 
-		unsafe VarHeader[] ReadVariableHeaders(iRSDKHeader header, byte* ptr)
-		{
-			var varHeaders = new VarHeader[header.numVars];
-			ptr += header.varHeaderOffset;
+        unsafe VarHeader[] ReadVariableHeaders(iRSDKHeader header, byte* ptr)
+        {
+            var varHeaders = new VarHeader[header.numVars];
+            ptr += header.varHeaderOffset;
 
-			for(var i = 0; i < header.numVars; i++)
-			{
-				varHeaders[i] = (VarHeader)Marshal.PtrToStructure(new IntPtr(ptr), typeof(VarHeader));
-				ptr += size;
-			}
+            for (var i = 0; i < header.numVars; i++)
+            {
+                varHeaders[i] = (VarHeader)Marshal.PtrToStructure(new IntPtr(ptr), typeof(VarHeader));
+                ptr += size;
+            }
 
-			return varHeaders;
-		}
+            return varHeaders;
+        }
 
-		int sessionLastInfoUpdate = -2;
+        int sessionLastInfoUpdate = -2;
         SessionData lastSessionInfo;
         SessionData ReadSessionInfo(iRSDKHeader header)
-		{
-			if(header.sessionInfoUpdate == sessionLastInfoUpdate)
-				return lastSessionInfo;
+        {
+            if (header.sessionInfoUpdate == sessionLastInfoUpdate)
+                return lastSessionInfo;
 
-			sessionLastInfoUpdate = header.sessionInfoUpdate;
+            sessionLastInfoUpdate = header.sessionInfoUpdate;
 
-			var sessionInfoData = new byte[header.sessionInfoLen];
-			accessor.ReadArray<byte>(header.sessionInfoOffset, sessionInfoData, 0, header.sessionInfoLen);
-			var sessionInfoString = System.Text.Encoding.Default.GetString(sessionInfoData);
+            var sessionInfoData = new byte[header.sessionInfoLen];
+            accessor.ReadArray<byte>(header.sessionInfoOffset, sessionInfoData, 0, header.sessionInfoLen);
+            var sessionInfoString = System.Text.Encoding.Default.GetString(sessionInfoData);
 
             var length = sessionInfoString.IndexOf('\0');
             if (length == -1)
@@ -106,13 +107,13 @@ namespace iRacingSDK
             sessionInfoString = sessionInfoString.Substring(0, sessionInfoString.IndexOf('\0'));
 
             Trace.WriteLine("New Session data retrieved from iRacing", "INFO");
-			return lastSessionInfo = DeserialiseSessionInfo(sessionInfoString);
-		}
+            return lastSessionInfo = DeserialiseSessionInfo(sessionInfoString);
+        }
 
-		static SessionData DeserialiseSessionInfo(string sessionInfoString)
-		{
-			if(sessionInfoString.Length == 0)
-				return null;
+        static SessionData DeserialiseSessionInfo(string sessionInfoString)
+        {
+            if (sessionInfoString.Length == 0)
+                return null;
 
             try
             {
@@ -124,74 +125,77 @@ namespace iRacingSDK
                 result.Raw = sessionInfoString.Replace("\n", "\r\n");
                 return result;
             }
-            catch(Exception)
+            catch (Exception e)
             {
+                Trace.WriteLine(string.Format("Error decoding session yml data {0}", e.Message), "DEBUG");
+
                 return null;
+                //return new SessionData { Raw = sessionInfoString.Replace("\n", "\r\n") };
             }
-		}
+        }
 
         unsafe Telemetry ReadVariables(iRSDKHeader header, VarHeader[] varHeaders, int requestedTickCount)
-		{
-			var buf = header.FindLatestBuf(requestedTickCount);
+        {
+            var buf = header.FindLatestBuf(requestedTickCount);
 
-			var values = ReadAllValues(accessor, buf.bufOffset, varHeaders);
-			var latestHeader = accessor.AcquirePointer( ptr => ReadHeader(ptr) );
+            var values = ReadAllValues(accessor, buf.bufOffset, varHeaders);
+            var latestHeader = accessor.AcquirePointer(ptr => ReadHeader(ptr));
 
-			if(latestHeader.HasChangedSinceReading(buf))
-			{
-				Trace.WriteLine("Failed to read data before iRacing overwrote new sample!", "DEBUG");
-				return null;
-			}
+            if (latestHeader.HasChangedSinceReading(buf))
+            {
+                Trace.WriteLine("Failed to read data before iRacing overwrote new sample!", "DEBUG");
+                return null;
+            }
 
-			values.Add("TickCount", buf.tickCount);
-			return values;
-		}
+            values.Add("TickCount", buf.tickCount);
+            return values;
+        }
 
-		static Telemetry ReadAllValues(MemoryMappedViewAccessor accessor, int buffOffset, VarHeader[] varHeaders)
-		{
-			var result = new Telemetry();
+        static Telemetry ReadAllValues(MemoryMappedViewAccessor accessor, int buffOffset, VarHeader[] varHeaders)
+        {
+            var result = new Telemetry();
 
-			var maps = new Dictionary<VarType, Func<int, object>>() {
-				{ VarType.irInt, (offset) => accessor.ReadInt32(offset) },
-				{ VarType.irBitField, (offset) => accessor.ReadInt32(offset) },
-				{ VarType.irDouble, (offset) => accessor.ReadDouble(offset) },
-				{ VarType.irBool, (offset) => accessor.ReadBoolean(offset) },
-				{ VarType.irFloat, (offset) => accessor.ReadSingle(offset) }
-			};
+            var maps = new Dictionary<VarType, Func<int, object>>() {
+                { VarType.irInt, (offset) => accessor.ReadInt32(offset) },
+                { VarType.irBitField, (offset) => accessor.ReadInt32(offset) },
+                { VarType.irDouble, (offset) => accessor.ReadDouble(offset) },
+                { VarType.irBool, (offset) => accessor.ReadBoolean(offset) },
+                { VarType.irFloat, (offset) => accessor.ReadSingle(offset) }
+            };
 
-			var arryMaps = new Dictionary<VarType, Func<int, int, object>>() {
-				{ VarType.irInt, (size, offset) => GetArrayData<int>(accessor, size, offset) },
-				{ VarType.irBitField, (size, offset) => GetArrayData<int>(accessor, size, offset) },
-				{ VarType.irDouble, (size, offset) => GetArrayData<double>(accessor, size, offset) },
-				{ VarType.irFloat, (size, offset) => GetArrayData<float>(accessor, size, offset) },
-				{ VarType.irBool, (size, offset) => GetArrayData<bool>(accessor, size, offset) }
-			};
+            var arryMaps = new Dictionary<VarType, Func<int, int, object>>() {
+                { VarType.irInt, (size, offset) => GetArrayData<int>(accessor, size, offset) },
+                { VarType.irBitField, (size, offset) => GetArrayData<int>(accessor, size, offset) },
+                { VarType.irDouble, (size, offset) => GetArrayData<double>(accessor, size, offset) },
+                { VarType.irFloat, (size, offset) => GetArrayData<float>(accessor, size, offset) },
+                { VarType.irBool, (size, offset) => GetArrayData<bool>(accessor, size, offset) }
+            };
 
-			for(var i = 0; i < varHeaders.Length; i++)
-			{
-				var varHeader = varHeaders[i];
-				var offset = buffOffset + varHeader.offset;
+            for (var i = 0; i < varHeaders.Length; i++)
+            {
+                var varHeader = varHeaders[i];
+                var offset = buffOffset + varHeader.offset;
 
-				if(varHeader.type == VarType.irChar)
-					throw new NotSupportedException();
+                if (varHeader.type == VarType.irChar)
+                    throw new NotSupportedException();
 
-				object value;
-				if(varHeader.count != 1)
-					value = arryMaps[varHeader.type](varHeader.count, offset);
-				else
-					value = maps[varHeader.type](offset);
+                object value;
+                if (varHeader.count != 1)
+                    value = arryMaps[varHeader.type](varHeader.count, offset);
+                else
+                    value = maps[varHeader.type](offset);
 
-				result.Add(varHeader.name, value);
-			}
+                result.Add(varHeader.name, value);
+            }
 
-			return result;
-		}
+            return result;
+        }
 
-		static T[] GetArrayData<T>(MemoryMappedViewAccessor accessor, int size, int offset) where T:struct
-		{
-			var data = new T[size];
-			accessor.ReadArray<T>(offset, data, 0, size);
-			return data;
-		}
-	}
+        static T[] GetArrayData<T>(MemoryMappedViewAccessor accessor, int size, int offset) where T : struct
+        {
+            var data = new T[size];
+            accessor.ReadArray<T>(offset, data, 0, size);
+            return data;
+        }
+    }
 }

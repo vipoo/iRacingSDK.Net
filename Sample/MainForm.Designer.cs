@@ -40,6 +40,7 @@
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
+            this.button12 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // EventSampleButton
@@ -154,7 +155,7 @@
             // 
             // button11
             // 
-            this.button11.Location = new System.Drawing.Point(12, 397);
+            this.button11.Location = new System.Drawing.Point(324, 75);
             this.button11.Name = "button11";
             this.button11.Size = new System.Drawing.Size(136, 46);
             this.button11.TabIndex = 11;
@@ -162,11 +163,22 @@
             this.button11.UseVisualStyleBackColor = true;
             this.button11.Click += new System.EventHandler(this.InspectDataSamples_Click);
             // 
+            // button12
+            // 
+            this.button12.Location = new System.Drawing.Point(324, 138);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(136, 46);
+            this.button12.TabIndex = 12;
+            this.button12.Text = "Pit Commands";
+            this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.PitCommands_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(339, 445);
+            this.ClientSize = new System.Drawing.Size(503, 445);
+            this.Controls.Add(this.button12);
             this.Controls.Add(this.button11);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.button9);
@@ -182,6 +194,7 @@
             this.Name = "MainForm";
             this.Text = "Main";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.ResumeLayout(false);
 
         }
@@ -200,5 +213,6 @@
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button10;
         private System.Windows.Forms.Button button11;
+        private System.Windows.Forms.Button button12;
     }
 }
