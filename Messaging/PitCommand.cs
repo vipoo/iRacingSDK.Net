@@ -66,5 +66,13 @@ namespace iRacingSDK
         {
             SendMessage(PitCommandMode.ClearTires);
         }
+
+        public void ChangeAllTyres()
+        {
+            ChangeLeftFrontTire();
+            ChangeRightFrontTire();
+            ChangeLeftRearTire();
+            ChangeRightRearTire();
+        }
     }
 }
