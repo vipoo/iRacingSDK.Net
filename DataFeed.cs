@@ -47,10 +47,7 @@ namespace iRacingSDK
             });
 
             if ((headers.Header.status & 1) == 0)
-            {
-                Trace.WriteLine("No data from the iRacing Application yet", "DEBUG");
                 return DataSample.YetToConnected;
-            }
 
             var sessionData = ReadSessionInfo(headers.Header);
             var variables = ReadVariables(headers.Header, headers.VarHeaders, requestedTickCount);
@@ -137,6 +134,12 @@ namespace iRacingSDK
         unsafe Telemetry ReadVariables(iRSDKHeader header, VarHeader[] varHeaders, int requestedTickCount)
         {
             var buf = header.FindLatestBuf(requestedTickCount);
+
+            if (buf.index == -1)
+            {
+                Trace.WriteLine("No data in iRacing buffers", "DEBUG");
+                return null;
+            }
 
             var values = ReadAllValues(accessor, buf.bufOffset, varHeaders);
             var latestHeader = accessor.AcquirePointer(ptr => ReadHeader(ptr));

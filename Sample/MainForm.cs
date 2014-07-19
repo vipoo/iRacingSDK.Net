@@ -112,5 +112,10 @@ namespace Sample
         {
 
         }
+
+        private void IRacingDataStreamConnection_Click(object sender, EventArgs e)
+        {
+            logMessages.StartOperation(SampleIRacingDataStreamConnection.Sample);
+        }
     }
 }

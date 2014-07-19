@@ -26,15 +26,15 @@ using Win32.Synchronization;
 
 namespace iRacingSDK
 {
-	public static class iRSDKHeaderExtensions
-	{
-		public static bool HasChangedSinceReading(this iRSDKHeader header, VarBufWithIndex buf)
-		{
-			return header.varBuf[buf.index].tickCount != buf.tickCount;
-		}
+    public static class iRSDKHeaderExtensions
+    {
+        public static bool HasChangedSinceReading(this iRSDKHeader header, VarBufWithIndex buf)
+        {
+            return header.varBuf[buf.index].tickCount != buf.tickCount;
+        }
 
         public static VarBufWithIndex FindLatestBuf(this iRSDKHeader header, int requestedTickCount)
-		{
+        {
             VarBuf maxBuf = new VarBuf();
             int maxIndex = -1;
 
@@ -53,6 +53,6 @@ namespace iRacingSDK
             }
 
             return new VarBufWithIndex() { tickCount = maxBuf.tickCount, bufOffset = maxBuf.bufOffset, index = maxIndex };
-		}
-	}
+        }
+    }
 }

@@ -37,12 +37,7 @@ namespace iRacingSDKSample
 
         public static void Main(string[] args)
         {
-            foreach (var data in iRacing.GetDataFeed().TakeWhile(d => !d.IsConnected))
-            {
-                Console.WriteLine("Waiting to connect ...");
-                continue;
-            }
-
+            
             GuiSamples();
             //EventDataExample();
 

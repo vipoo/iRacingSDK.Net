@@ -28,7 +28,7 @@ namespace Sample
 
         public static void Sample()
         {
-            var instance1 = new iRacingConnection();
+            var instance1 = new iRacingEvents();
             instance1.NewData += instance1_NewData;
             instance1.StartListening();
 

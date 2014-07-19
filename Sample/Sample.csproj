@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SampleFindIncidents.cs" />
+    <Compile Include="SampleIRacingDataStreamConnection.cs" />
     <Compile Include="SamplePitCommands.cs" />
     <Compile Include="SampleTelemetryAccess.cs" />
     <Compile Include="SampleReplayMove.cs" />

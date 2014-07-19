@@ -27,7 +27,7 @@ using iRacingSDK;
 
 namespace iRacingSDK
 {
-    public partial class iRacingConnection : IDisposable
+    public partial class iRacingConnection
     {
         public readonly Replay Replay;
         public readonly PitCommand PitCommand;

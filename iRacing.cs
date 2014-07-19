@@ -29,10 +29,12 @@ namespace iRacingSDK
     public static class iRacing
     {
         static iRacingConnection instance;
+        static iRacingEvents eventInstance;
 
         static iRacing()
         {
             instance = new iRacingConnection();
+            eventInstance = new iRacingEvents();
         }
 
         public static Replay Replay { get { return instance.Replay; } }
@@ -47,23 +49,23 @@ namespace iRacingSDK
 
         public static void StartListening()
         {
-            instance.StartListening();
+            eventInstance.StartListening();
         }
 
         public static void StopListening()
         {
-            instance.StopListening();
+            eventInstance.StopListening();
         }
 
         public static event DataSampleEventHandler NewData
         {
             add
             {
-                instance.NewData += value;
+                eventInstance.NewData += value;
             }
             remove
             {
-                instance.NewData -= value;
+                eventInstance.NewData -= value;
             }
         }
     }

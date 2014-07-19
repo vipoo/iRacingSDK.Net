@@ -63,6 +63,7 @@ namespace Sample
                 operation.Abort();
 
             operation = null;
+            this.Close();
         }
 
         private void LogMessages_FormClosed(object sender, FormClosedEventArgs e)

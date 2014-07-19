@@ -26,10 +26,13 @@ namespace iRacingSDK
 {
     public delegate void DataSampleEventHandler(DataSample data);
 
-    public partial class iRacingConnection : IDisposable
+    public class iRacingEvents : IDisposable
     {
         static DataSampleEventHandler newData;
         static Dictionary<DataSampleEventHandler, DataSampleEventHandler> newDataDelegates = new Dictionary<DataSampleEventHandler, DataSampleEventHandler>();
+
+        public event Action Connected;
+        public event Action Disconnected;
 
         public event DataSampleEventHandler NewData
         {
@@ -59,6 +62,12 @@ namespace iRacingSDK
 
         static Task backListener;
         static bool requestCancel;
+        private iRacingConnection instance;
+
+        public iRacingEvents()
+        {
+            this.instance = new iRacingConnection();
+        }
 
         public void StartListening()
         {
@@ -84,12 +93,31 @@ namespace iRacingSDK
 
         void Listen()
         {
+            var isConnected = false;
+            var isDisconnected = true;
+
             try
             {
-                foreach (var d in GetDataFeed())
+                foreach (var d in instance.GetDataFeed())
                 {
                     if (requestCancel)
                         return;
+
+                    if (!isConnected && d.IsConnected)
+                    {
+                        isConnected = true;
+                        isDisconnected = false;
+                        if( Connected != null )
+                            Connected();
+                    }
+
+                    if (!isDisconnected && !d.IsConnected)
+                    {
+                        isConnected = false;
+                        isDisconnected = true;
+                        if (Disconnected != null)
+                            Disconnected();
+                    }
 
                     if (newData != null)
                         newData(d);
