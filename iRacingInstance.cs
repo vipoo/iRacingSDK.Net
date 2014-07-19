@@ -27,29 +27,45 @@ using iRacingSDK;
 
 namespace iRacingSDK
 {
-    public partial class iRacingConnection
+    public class iRacingConnection
     {
-        public readonly Replay Replay;
-        public readonly PitCommand PitCommand;
-
-        public bool IsConnected { get; private set; }
-
+        readonly CrossThreadEvents connected = new CrossThreadEvents();
+        readonly CrossThreadEvents disconnected = new CrossThreadEvents();
+        
         DataFeed dataFeed = null;
         bool isRunning = false;
         iRacingMemory iRacingMemory;
         internal bool IsRunning { get { return isRunning; } }
 
+        
+        public readonly Replay Replay;
+        public readonly PitCommand PitCommand;
+
+        public bool IsConnected { get; private set; }
+
+
+        public event Action Connected
+        {
+            add { connected.Event += value; }
+            remove { connected.Event -= value; }
+        }
+
+        public event Action Disconnected
+        {
+            add { disconnected.Event += value; }
+            remove { disconnected.Event -= value; }
+        }
+
         public iRacingConnection()
         {
             this.Replay = new Replay(this);
             this.PitCommand = new PitCommand();
-
             this.iRacingMemory = new iRacingMemory();
         }
 
         public IEnumerable<DataSample> GetDataFeed()
         {
-            return GetRawDataFeed().WithLastSample();
+            return GetRawDataFeed().WithLastSample().WithEvents(connected, disconnected);
         }
 
         internal IEnumerable<DataSample> GetRawDataFeed()

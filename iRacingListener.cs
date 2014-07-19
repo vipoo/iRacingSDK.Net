@@ -24,49 +24,31 @@ using System.Threading.Tasks;
 
 namespace iRacingSDK
 {
-    public delegate void DataSampleEventHandler(DataSample data);
-
     public class iRacingEvents : IDisposable
     {
-        static DataSampleEventHandler newData;
-        static Dictionary<DataSampleEventHandler, DataSampleEventHandler> newDataDelegates = new Dictionary<DataSampleEventHandler, DataSampleEventHandler>();
+        readonly iRacingConnection instance = new iRacingConnection();
+        readonly CrossThreadEvents<DataSample> newData = new CrossThreadEvents<DataSample>();
+        readonly CrossThreadEvents connected = new CrossThreadEvents();
+        readonly CrossThreadEvents disconnected = new CrossThreadEvents();
+        Task backListener;
+        bool requestCancel;
 
-        public event Action Connected;
-        public event Action Disconnected;
-
-        public event DataSampleEventHandler NewData
+        public event Action Connected
         {
-            add
-            {
-                var context = SynchronizationContext.Current;
-                DataSampleEventHandler newDelgate;
-
-                if (context != null)
-                    newDelgate = (d) => context.Send(i => value(d), null);
-                else
-                    newDelgate = value;
-
-                newDataDelegates.Add(value, newDelgate);
-                newData += newDelgate;
-            }
-            remove
-            {
-                var context = SynchronizationContext.Current;
-
-                var delgate = newDataDelegates[value];
-                newDataDelegates.Remove(value);
-
-                newData -= delgate;
-            }
+            add { connected.Event += value; }
+            remove { connected.Event -= value; }
         }
 
-        static Task backListener;
-        static bool requestCancel;
-        private iRacingConnection instance;
-
-        public iRacingEvents()
+        public event Action Disconnected
         {
-            this.instance = new iRacingConnection();
+            add { disconnected.Event += value; }
+            remove { disconnected.Event -= value; }
+        }
+
+        public event Action<DataSample> NewData
+        {
+            add { newData.Event += value; }
+            remove { newData.Event -= value; }
         }
 
         public void StartListening()
@@ -107,20 +89,17 @@ namespace iRacingSDK
                     {
                         isConnected = true;
                         isDisconnected = false;
-                        if( Connected != null )
-                            Connected();
+                        connected.Invoke();
                     }
 
                     if (!isDisconnected && !d.IsConnected)
                     {
                         isConnected = false;
                         isDisconnected = true;
-                        if (Disconnected != null)
-                            Disconnected();
+                        disconnected.Invoke();
                     }
 
-                    if (newData != null)
-                        newData(d);
+                   newData.Invoke(d);
                 }
             }
             catch(Exception e)

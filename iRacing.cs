@@ -57,7 +57,7 @@ namespace iRacingSDK
             eventInstance.StopListening();
         }
 
-        public static event DataSampleEventHandler NewData
+        public static event Action<DataSample> NewData
         {
             add
             {

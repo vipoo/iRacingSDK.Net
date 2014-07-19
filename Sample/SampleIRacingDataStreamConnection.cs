@@ -33,41 +33,17 @@ namespace Sample
             ieventRacing.Disconnected += ieventRacing_Disconnected;
             ieventRacing.StartListening();
 
+            iracing.Connected += iracing_Connected;
+            iracing.Disconnected += iracing_Disconnected;
+
             try
             {
-                var isStarted = false;
-                var isConnected = false;
-                var isDisconnected = true;
                 var i = 0;
 
                 foreach (var d in iracing.GetDataFeed())
                 {
-                    if (!isStarted)
-                    {
-                        Trace.WriteLine(string.Format("Starting data steam - IsConnected = {0}", d.IsConnected));
-                        isStarted = true;
-                        isConnected = d.IsConnected;
-                        isDisconnected = !isConnected;
-                    }
-
-                    if (!isConnected && d.IsConnected)
-                    {
-                        Trace.WriteLine("Connected to iRacing data stream");
-                        isConnected = true;
-                        isDisconnected = false;
-                    }
-
-                    if (!isDisconnected && !d.IsConnected)
-                    {
-                        Trace.WriteLine("Application is disconnected");
-                        isConnected = false;
-                        isDisconnected = true;
-                    }
-
                     if (i++ % 600 == 0)
-                    {
                         Trace.WriteLine(string.Format("Data Stream IsConnected = {0}", d.IsConnected));
-                    }
                 }
             }
             finally
@@ -76,14 +52,24 @@ namespace Sample
             }
         }
 
+        static void iracing_Disconnected()
+        {
+            Trace.WriteLine("Notified by iRacingConnection of application data disconnection from event handler");
+        }
+
+        static void iracing_Connected()
+        {
+            Trace.WriteLine("Notified by iRacingConnection of application data connection from event handler");
+        }
+
         static void ieventRacing_Disconnected()
         {
-            Trace.WriteLine("Notified of application data disconnection from event handler");
+            Trace.WriteLine("Notified by iRacingEvents of application data disconnection from event handler");
         }
 
         static void ieventRacing_Connected()
         {
-            Trace.WriteLine("Notified of application data connection from event handler");
+            Trace.WriteLine("Notified by iRacingEvents of application data connection from event handler");
         }
     }
 }
