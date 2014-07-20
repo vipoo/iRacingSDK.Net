@@ -16,14 +16,15 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
+using iRacingSDK.Support;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.MemoryMappedFiles;
+using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading;
+using System.Threading.Tasks;
 using YamlDotNet.Serialization;
 
 namespace iRacingSDK
@@ -92,19 +93,29 @@ namespace iRacingSDK
                 return lastSessionInfo;
 
             sessionLastInfoUpdate = header.sessionInfoUpdate;
+            Trace.WriteLine("New Session data retrieved from iRacing. {0}".F(sessionLastInfoUpdate), "INFO");
 
-            var sessionInfoData = new byte[header.sessionInfoLen];
-            accessor.ReadArray<byte>(header.sessionInfoOffset, sessionInfoData, 0, header.sessionInfoLen);
-            var sessionInfoString = System.Text.Encoding.Default.GetString(sessionInfoData);
+            var t = Task.Factory.StartNew(() => {
 
-            var length = sessionInfoString.IndexOf('\0');
-            if (length == -1)
-                return null;
+                var sessionInfoData = new byte[header.sessionInfoLen];
+                accessor.ReadArray<byte>(header.sessionInfoOffset, sessionInfoData, 0, header.sessionInfoLen);
+                var sessionInfoString = System.Text.Encoding.Default.GetString(sessionInfoData);
 
-            sessionInfoString = sessionInfoString.Substring(0, sessionInfoString.IndexOf('\0'));
+                var length = sessionInfoString.IndexOf('\0');
+                if (length == -1)
+                {
+                    lastSessionInfo = null;
+                    return;
+                }
 
-            Trace.WriteLine("New Session data retrieved from iRacing", "INFO");
-            return lastSessionInfo = DeserialiseSessionInfo(sessionInfoString);
+                sessionInfoString = sessionInfoString.Substring(0, sessionInfoString.IndexOf('\0'));
+                Trace.WriteLine("Deserialising new session data. {0}".F(header.sessionInfoUpdate));
+
+                lastSessionInfo = DeserialiseSessionInfo(sessionInfoString);
+                Trace.WriteLine(lastSessionInfo.Raw, "DEBUG");
+            });
+
+            return lastSessionInfo;
         }
 
         static SessionData DeserialiseSessionInfo(string sessionInfoString)
