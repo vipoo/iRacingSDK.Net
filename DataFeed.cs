@@ -111,14 +111,14 @@ namespace iRacingSDK
                 sessionInfoString = sessionInfoString.Substring(0, sessionInfoString.IndexOf('\0'));
                 Trace.WriteLine("Deserialising new session data. {0}".F(header.sessionInfoUpdate));
 
-                lastSessionInfo = DeserialiseSessionInfo(sessionInfoString);
+                lastSessionInfo = DeserialiseSessionInfo(sessionInfoString, header.sessionInfoUpdate);
                 Trace.WriteLine(lastSessionInfo.Raw, "DEBUG");
             });
 
             return lastSessionInfo;
         }
 
-        static SessionData DeserialiseSessionInfo(string sessionInfoString)
+        static SessionData DeserialiseSessionInfo(string sessionInfoString, int sessionInfoUpdate)
         {
             if (sessionInfoString.Length == 0)
                 return null;
@@ -131,6 +131,7 @@ namespace iRacingSDK
 
                 var result = (SessionData)deserializer.Deserialize(input, typeof(SessionData));
                 result.Raw = sessionInfoString.Replace("\n", "\r\n");
+                result.InfoUpdate = sessionInfoUpdate;
                 return result;
             }
             catch (Exception e)
