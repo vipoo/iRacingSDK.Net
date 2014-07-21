@@ -16,8 +16,9 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
+using iRacingSDK.Support;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace iRacingSDK
@@ -51,5 +52,36 @@ namespace iRacingSDK
         public bool HasData { get { return telemetry.HasData(carIdx); } }
         public bool HasRetired { get { return telemetry.HasRetired[carIdx]; } }
         public TrackLocation TrackSurface { get { return telemetry.CarIdxTrackSurface[carIdx]; } }
+
+        public SessionData._SessionInfo._Sessions._ResultsPositions ResultPosition
+        {
+            get
+            {
+                return telemetry.Session.ResultsPositions.FirstOrDefault(rp => rp.CarIdx == carIdx);
+            }
+        }
+
+        public TimeSpan LastTimeSpan
+        {
+            get { return LastTime.Seconds(); }
+        }
+
+        public double LastTime
+        {
+            get
+            {
+                var rp = ResultPosition;
+                if (rp == null)
+                    return 0f;
+
+                if( rp.LapsComplete != (Lap-1))
+                {
+                    Trace.WriteLine("Attempt to get LastTime from session data, with mismatch Lap counters.  Telemerty Lap: {0}.  Session LapComplete: {1}".F(Lap-1, rp.LapsComplete), "INFO");
+                    return 0f;
+                }
+
+                return rp.LastTime;
+            }
+        }
     }
 }
