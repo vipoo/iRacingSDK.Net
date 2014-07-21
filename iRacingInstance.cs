@@ -31,18 +31,17 @@ namespace iRacingSDK
     {
         readonly CrossThreadEvents connected = new CrossThreadEvents();
         readonly CrossThreadEvents disconnected = new CrossThreadEvents();
+        readonly CrossThreadEvents<DataSample> newSessionData = new CrossThreadEvents<DataSample>();
         
         DataFeed dataFeed = null;
         bool isRunning = false;
         iRacingMemory iRacingMemory;
         internal bool IsRunning { get { return isRunning; } }
 
-        
         public readonly Replay Replay;
         public readonly PitCommand PitCommand;
 
         public bool IsConnected { get; private set; }
-
 
         public event Action Connected
         {
@@ -56,6 +55,12 @@ namespace iRacingSDK
             remove { disconnected.Event -= value; }
         }
 
+        public event Action<DataSample> NewSessionData
+        {
+            add { newSessionData.Event += value; }
+            remove { newSessionData.Event -= value; }
+        }
+
         public iRacingConnection()
         {
             this.Replay = new Replay(this);
@@ -65,7 +70,7 @@ namespace iRacingSDK
 
         public IEnumerable<DataSample> GetDataFeed()
         {
-            return GetRawDataFeed().WithLastSample().WithEvents(connected, disconnected);
+            return GetRawDataFeed().WithLastSample().WithEvents(connected, disconnected, newSessionData);
         }
 
         internal IEnumerable<DataSample> GetRawDataFeed()
