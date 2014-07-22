@@ -57,6 +57,9 @@ namespace iRacingSDK
         {
             get
             {
+                if (telemetry.Session.ResultsPositions == null)
+                    return null;
+
                 return telemetry.Session.ResultsPositions.FirstOrDefault(rp => rp.CarIdx == carIdx);
             }
         }
