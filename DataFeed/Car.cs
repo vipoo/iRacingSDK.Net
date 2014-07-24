@@ -52,6 +52,7 @@ namespace iRacingSDK
         public bool HasData { get { return telemetry.HasData(carIdx); } }
         public bool HasRetired { get { return telemetry.HasRetired[carIdx]; } }
         public TrackLocation TrackSurface { get { return telemetry.CarIdxTrackSurface[carIdx]; } }
+        public string CarPath { get { return driver.CarPath; } }
 
         public SessionData._SessionInfo._Sessions._ResultsPositions ResultPosition
         {
