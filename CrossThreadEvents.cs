@@ -23,7 +23,47 @@ using System.Threading;
 
 namespace iRacingSDK
 {
-    internal class CrossThreadEvents<T>
+    public class CrossThreadEvents<T1, T2>
+    {
+        event Action<T1, T2> evnt;
+
+        Dictionary<Action<T1, T2>, Action<T1, T2>> evntDelegates = new Dictionary<Action<T1, T2>, Action<T1, T2>>();
+
+        public void Invoke(T1 t1, T2 t2)
+        {
+            if (evnt != null)
+                evnt(t1, t2);
+        }
+
+        public event Action<T1, T2> Event
+        {
+            add
+            {
+                var context = SynchronizationContext.Current;
+                Action<T1, T2> newDelgate;
+
+                if (context != null)
+                    newDelgate = (t1, t2) => context.Send(i => value(t1, t2), null);
+                else
+                    newDelgate = value;
+
+                evntDelegates.Add(value, newDelgate);
+                evnt += newDelgate;
+            }
+
+            remove
+            {
+                var context = SynchronizationContext.Current;
+
+                var delgate = evntDelegates[value];
+                evntDelegates.Remove(value);
+
+                evnt -= delgate;
+            }
+        }
+    }
+
+    public class CrossThreadEvents<T>
     {
         event Action<T> evnt;
 
@@ -63,7 +103,7 @@ namespace iRacingSDK
         }
     }
 
-    internal class CrossThreadEvents
+    public class CrossThreadEvents
     {
         event Action evnt;
 
