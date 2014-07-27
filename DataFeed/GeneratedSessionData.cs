@@ -231,11 +231,18 @@ namespace iRacingSDK
                 public long CarClassLicenseLevel { get; set; }
                 public string CarClassMaxFuel { get; set; }
                 public string CarClassWeightPenalty { get; set; }
+                public string CarClassColor { get; set; }
                 public long IRating { get; set; }
                 public long LicLevel { get; set; }
                 public long LicSubLevel { get; set; }
                 public string LicColor { get; set; }
                 public long IsSpectator { get; set; }
+                public string CarDesignStr { get; set; }
+                public string HelmetDesignStr { get; set; }
+                public string SuitDesignStr { get; set; }
+                public string CarNumberDesignStr { get; set; }
+                public long CarSponsor_1 { get; set; }
+                public long CarSponsor_2 { get; set; }
             }
 
             public _Drivers[] Drivers { get; set; }

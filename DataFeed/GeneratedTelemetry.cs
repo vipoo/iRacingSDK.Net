@@ -68,6 +68,16 @@ namespace iRacingSDK
         public System.Int32 RadioTransmitCarIdx { get { return (System.Int32)this["RadioTransmitCarIdx"]; } }
 
         /// <summary>
+        /// The radio index of the current person speaking on the radio
+        /// </summary>
+        public System.Int32 RadioTransmitRadioIdx { get { return (System.Int32)this["RadioTransmitRadioIdx"]; } }
+
+        /// <summary>
+        /// The frequency index of the current person speaking on the radio
+        /// </summary>
+        public System.Int32 RadioTransmitFrequencyIdx { get { return (System.Int32)this["RadioTransmitFrequencyIdx"]; } }
+
+        /// <summary>
         /// Driver activated flag
         /// </summary>
         public System.Boolean DriverMarker { get { return (System.Boolean)this["DriverMarker"]; } }
@@ -453,6 +463,11 @@ namespace iRacingSDK
         public System.Single BrakeRaw { get { return (System.Single)this["BrakeRaw"]; } }
 
         /// <summary>
+        /// Peak torque mapping to direct input units for FFB
+        /// </summary>
+        public System.Single SteeringWheelPeakForceNm { get { return (System.Single)this["SteeringWheelPeakForceNm"]; } }
+
+        /// <summary>
         /// Bitfield for warning lights
         /// </summary>
         public System.Int32 EngineWarnings { get { return (System.Int32)this["EngineWarnings"]; } }
@@ -491,6 +506,26 @@ namespace iRacingSDK
         /// In car brake bias adjustment
         /// </summary>
         public System.Single dcBrakeBias { get { return (System.Single)this["dcBrakeBias"]; } }
+
+        /// <summary>
+        /// In car traction control adjustment
+        /// </summary>
+        public System.Single dcTractionControl { get { return (System.Single)this["dcTractionControl"]; } }
+
+        /// <summary>
+        /// In car abs adjustment
+        /// </summary>
+        public System.Single dcABS { get { return (System.Single)this["dcABS"]; } }
+
+        /// <summary>
+        /// In car throttle shape adjustment
+        /// </summary>
+        public System.Single dcThrottleShape { get { return (System.Single)this["dcThrottleShape"]; } }
+
+        /// <summary>
+        /// In car fuel mixture adjustment
+        /// </summary>
+        public System.Single dcFuelMixture { get { return (System.Single)this["dcFuelMixture"]; } }
 
         /// <summary>
         /// Engine coolant temp
@@ -533,6 +568,11 @@ namespace iRacingSDK
         public System.Single ManifoldPress { get { return (System.Single)this["ManifoldPress"]; } }
 
         /// <summary>
+        /// RR brake line pressure
+        /// </summary>
+        public System.Single RRbrakeLinePress { get { return (System.Single)this["RRbrakeLinePress"]; } }
+
+        /// <summary>
         /// RR tire cold pressure, as set in the garage
         /// </summary>
         public System.Single RRcoldPressure { get { return (System.Single)this["RRcoldPressure"]; } }
@@ -566,6 +606,11 @@ namespace iRacingSDK
         /// RR tire right percent tread remaining
         /// </summary>
         public System.Single RRwearR { get { return (System.Single)this["RRwearR"]; } }
+
+        /// <summary>
+        /// LR brake line pressure
+        /// </summary>
+        public System.Single LRbrakeLinePress { get { return (System.Single)this["LRbrakeLinePress"]; } }
 
         /// <summary>
         /// LR tire cold pressure, as set in the garage
@@ -603,6 +648,11 @@ namespace iRacingSDK
         public System.Single LRwearR { get { return (System.Single)this["LRwearR"]; } }
 
         /// <summary>
+        /// RF brake line pressure
+        /// </summary>
+        public System.Single RFbrakeLinePress { get { return (System.Single)this["RFbrakeLinePress"]; } }
+
+        /// <summary>
         /// RF tire cold pressure, as set in the garage
         /// </summary>
         public System.Single RFcoldPressure { get { return (System.Single)this["RFcoldPressure"]; } }
@@ -636,6 +686,11 @@ namespace iRacingSDK
         /// RF tire right percent tread remaining
         /// </summary>
         public System.Single RFwearR { get { return (System.Single)this["RFwearR"]; } }
+
+        /// <summary>
+        /// LF brake line pressure
+        /// </summary>
+        public System.Single LFbrakeLinePress { get { return (System.Single)this["LFbrakeLinePress"]; } }
 
         /// <summary>
         /// LF tire cold pressure, as set in the garage
