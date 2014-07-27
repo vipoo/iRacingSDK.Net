@@ -38,11 +38,6 @@ namespace Sample
             Trace.Listeners.Add(new MyListener(logMessages.TraceMessage));
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            new EventSample().Show();
-        }
-
         private void fastestLapButton_Click(object sender, EventArgs e)
         {
             logMessages.StartOperation( SampleFastestLap.Sample );
@@ -116,6 +111,11 @@ namespace Sample
         private void IRacingDataStreamConnection_Click(object sender, EventArgs e)
         {
             logMessages.StartOperation(SampleIRacingDataStreamConnection.Sample);
+        }
+
+        private void button14_Click(object sender, EventArgs e)
+        {
+            logMessages.StartOperation(SampleConventionEventData.Sample);
         }
     }
 }

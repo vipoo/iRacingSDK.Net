@@ -52,18 +52,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SampleFindIncidents.cs" />
+    <Compile Include="SampleConventionEventData.cs" />
     <Compile Include="SampleIRacingDataStreamConnection.cs" />
     <Compile Include="SamplePitCommands.cs" />
     <Compile Include="SampleTelemetryAccess.cs" />
     <Compile Include="SampleReplayMove.cs" />
     <Compile Include="SampleRaceEnd.cs" />
     <Compile Include="SampleEnumerableAndEventAccess.cs" />
-    <Compile Include="EventSample.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="EventSample.Designer.cs">
-      <DependentUpon>EventSample.cs</DependentUpon>
-    </Compile>
     <Compile Include="SampleFastestLap.cs" />
     <Compile Include="LogMessages.cs">
       <SubType>Form</SubType>
@@ -97,9 +92,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="EventSample.resx">
-      <DependentUpon>EventSample.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="LogMessages.resx">
       <DependentUpon>LogMessages.cs</DependentUpon>
     </EmbeddedResource>

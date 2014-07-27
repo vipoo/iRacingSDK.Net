@@ -99,7 +99,8 @@ namespace iRacingSDK
                         disconnected.Invoke();
                     }
 
-                   newData.Invoke(d);
+                    if( d.IsConnected)
+                        newData.Invoke(d);
                 }
             }
             catch(Exception e)
