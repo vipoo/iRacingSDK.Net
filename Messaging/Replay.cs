@@ -215,12 +215,13 @@ namespace iRacingSDK
 
             var timeout = DateTime.Now + TimeSpan.FromMilliseconds(wait);
             var data = iRacing.GetDataFeed().First();
-            while (verifyFn(data) && DateTime.Now < timeout)
+            while ((!data.IsConnected || verifyFn(data)) && DateTime.Now < timeout)
             {
                 action();
                 data = iRacing.GetDataFeed().First();
                 Thread.Sleep(100);
             }
+
             System.Diagnostics.Debug.Assert(!verifyFn(data));
 
             return data;
