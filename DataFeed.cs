@@ -114,6 +114,9 @@ namespace iRacingSDK
                 Trace.WriteLine(lastSessionInfo.Raw, "DEBUG");
             });
 
+            if (lastSessionInfo == null)
+                t.Wait();
+
             return lastSessionInfo;
         }
 
