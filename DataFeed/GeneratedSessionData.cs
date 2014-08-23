@@ -223,6 +223,7 @@ namespace iRacingSDK
                 public string Initials { get; set; }
                 public long UserID { get; set; }
                 public long CarNumber { get; set; }
+                public long CarNumberRaw { get; set; }
                 public string CarPath { get; set; }
                 public long CarClassID { get; set; }
                 public long CarID { get; set; }
