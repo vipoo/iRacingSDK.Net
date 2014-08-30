@@ -22,23 +22,23 @@ using System.Linq;
 
 namespace iRacingSDK
 {
-	public partial class Telemetry : Dictionary<string, object>
-	{
+    public partial class Telemetry : Dictionary<string, object>
+    {
         public SessionData._SessionInfo._Sessions Session { get { return SessionData.SessionInfo.Sessions[SessionNum]; } }
 
         public Car CamCar { get { return Cars[CamCarIdx]; } }
 
-		Car[] cars;
-		public Car[] Cars
-		{
-			get
-			{
-				if(cars != null)
-					return cars;
+        Car[] cars;
+        public Car[] Cars
+        {
+            get
+            {
+                if (cars != null)
+                    return cars;
 
                 return cars = Enumerable.Range(0, this.SessionData.DriverInfo.Drivers.Length).Select(i => new Car(this, i)).ToArray();
-			}
-		}
+            }
+        }
 
         public IEnumerable<Car> RaceCars
         {
@@ -47,5 +47,13 @@ namespace iRacingSDK
                 return Cars.Where(c => !c.IsPaceCar);
             }
         }
-	}
+
+        public bool UnderPaceCar
+        {
+            get
+            {
+                return this.CarIdxTrackSurface[0] == TrackLocation.OnTrack;
+            }
+        }
+    }
 }

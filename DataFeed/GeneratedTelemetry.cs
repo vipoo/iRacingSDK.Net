@@ -50,7 +50,7 @@ namespace iRacingSDK
         /// <summary>
         /// Session flags
         /// </summary>
-        public iRacingSDK.SessionFlags SessionFlags { get { return (iRacingSDK.SessionFlags)this["SessionFlags"]; } }
+        public iRacingSDK.SessionFlags SessionFlags { get { return (iRacingSDK.SessionFlags)(int)this["SessionFlags"]; } }
 
         /// <summary>
         /// Seconds left till session ends

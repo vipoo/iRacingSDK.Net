@@ -20,6 +20,7 @@ using System;
 
 namespace iRacingSDK
 {
+    [Flags]
     public enum SessionFlags : uint
     {
         // global flags

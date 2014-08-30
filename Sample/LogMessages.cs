@@ -86,11 +86,17 @@ namespace Sample
 
         public override void Write(string message, string category)
         {
+            if (category != "INFO")
+                return;
+
             WriteInfo(string.Format("{0} {1}", category, message));
         }
 
         public override void WriteLine(string message, string category)
         {
+            if (category != "INFO")
+                return;
+            
             WriteInfoLine(string.Format("{0} {1}", category, message));
         }
 

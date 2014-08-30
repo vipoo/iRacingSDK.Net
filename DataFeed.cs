@@ -93,7 +93,7 @@ namespace iRacingSDK
                 return lastSessionInfo;
 
             sessionLastInfoUpdate = header.sessionInfoUpdate;
-            Trace.WriteLine("New Session data retrieved from iRacing. {0}".F(sessionLastInfoUpdate), "INFO");
+            Trace.WriteLine("New Session data retrieved from iRacing. {0}".F(sessionLastInfoUpdate), "DEBUG");
 
             var t = Task.Factory.StartNew(() => {
 

@@ -54,6 +54,7 @@
     <Compile Include="SampleFindIncidents.cs" />
     <Compile Include="SampleConventionEventData.cs" />
     <Compile Include="SampleIRacingDataStreamConnection.cs" />
+    <Compile Include="SampleCarAndRaceState.cs" />
     <Compile Include="SamplePitCommands.cs" />
     <Compile Include="SampleTelemetryAccess.cs" />
     <Compile Include="SampleReplayMove.cs" />
