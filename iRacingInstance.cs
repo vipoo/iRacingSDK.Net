@@ -38,6 +38,15 @@ namespace iRacingSDK
         iRacingMemory iRacingMemory;
         internal bool IsRunning { get { return isRunning; } }
 
+        long processingTime;
+        public long ProcessingTime { get { return processingTime * 1000000L / Stopwatch.Frequency; } }
+
+        long waitingTime;
+        public long WaitingTime { get { return waitingTime * 1000000L / Stopwatch.Frequency; } }
+
+        long yieldTime;
+        public long YieldTime { get { return (yieldTime * 1000000L / Stopwatch.Frequency) ; } }
+
         public readonly Replay Replay;
         public readonly PitCommand PitCommand;
 
@@ -121,9 +130,16 @@ namespace iRacingSDK
             var nextTickCount = 0;
             var lastTickTime = DateTime.Now;
 
+            var watchProcessingTime = new Stopwatch();
+            var watchWaitingTime = new Stopwatch();
+
             while (true)
             {
+                watchWaitingTime.Restart();
                 iRacingMemory.WaitForData();
+                waitingTime = watchWaitingTime.ElapsedTicks;
+
+                watchProcessingTime.Restart();
 
                 var data = dataFeed.GetNextDataSample(nextTickCount);
                 if (data != null)
@@ -140,7 +156,11 @@ namespace iRacingSDK
                         nextTickCount = data.Telemetry.TickCount + 1;
                         lastTickTime = DateTime.Now;
                     }
+                    processingTime = watchProcessingTime.ElapsedTicks;
+
+                    watchProcessingTime.Restart();
                     yield return data;
+                    yieldTime = watchProcessingTime.ElapsedTicks;
                 }
             }
         }

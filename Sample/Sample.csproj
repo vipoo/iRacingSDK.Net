@@ -56,6 +56,7 @@
     <Compile Include="SampleIRacingDataStreamConnection.cs" />
     <Compile Include="SampleCarAndRaceState.cs" />
     <Compile Include="SamplePitCommands.cs" />
+    <Compile Include="SamplePerformanceMeasurement.cs" />
     <Compile Include="SampleTelemetryAccess.cs" />
     <Compile Include="SampleReplayMove.cs" />
     <Compile Include="SampleRaceEnd.cs" />

@@ -17,23 +17,27 @@
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
 using iRacingSDK;
+using iRacingSDK.Support;
 using System.Diagnostics;
 using System.Threading;
 
 namespace Sample
 {
-    public static class SampleTelemetryAccess
+    public static class SamplePerformanceMeasurement
     {
         public static void Sample()
         {
             var iracing = new iRacingConnection();
+            var i = 0;
 
             foreach (var data in iracing.GetDataFeed())
-            {
-                System.Diagnostics.Debugger.Break();
-
-                var inspectData = data;
-            }
+                if (i++ % 100 == 0)
+                {
+                    Trace.WriteLine("Processing Time: {0} micro seconds".F(iracing.ProcessingTime));
+                    Trace.WriteLine("Waiting Time: {0} micro seconds".F(iracing.WaitingTime));
+                    Trace.WriteLine("Yield Time: {0} micro seconds".F(iracing.YieldTime));
+                    Trace.WriteLine("");
+                }
         }
     }
 }

@@ -123,5 +123,10 @@ namespace Sample
             logMessages.StartOperation(SampleCarAndSessionState.Sample);
 
         }
+
+        private void button16_Click(object sender, EventArgs e)
+        {
+            logMessages.StartOperation(SamplePerformanceMeasurement.Sample);
+        }
     }
 }
