@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace iRacingSDK
 {
@@ -54,6 +55,21 @@ namespace iRacingSDK
             {
                 return this.CarIdxTrackSurface[0] == TrackLocation.OnTrack;
             }
+        }
+
+        public override string ToString()
+        {
+            var result = new StringBuilder();
+
+            foreach( var kv in this)
+            {
+                result.Append(kv.Key.ToString());
+                result.Append(": ");
+                result.Append(kv.Value.ToString());
+                result.Append("\n");
+            }
+
+            return result.ToString();
         }
     }
 }
