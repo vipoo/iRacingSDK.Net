@@ -3,3 +3,5 @@
 **/*.suo
 packages/**/*
 !packages/repositories.config
+TestResult.xml
+
