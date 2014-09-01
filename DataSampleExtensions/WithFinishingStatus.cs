@@ -26,49 +26,49 @@ namespace iRacingSDK
     public static partial class DataSampleExtensions
     {
         /// <summary>
-		/// Assignes the telemetry fields HasSeenCheckeredFlag, IsFinalLap, LeaderHasFinished, HasRetired
+        /// Assignes the telemetry fields HasSeenCheckeredFlag, IsFinalLap, LeaderHasFinished, HasRetired
         /// </summary>
         /// <param name="samples"></param>
         /// <returns></returns>
         public static IEnumerable<DataSample> WithFinishingStatus(this IEnumerable<DataSample> samples)
-		{
-			var hasSeenCheckeredFlag = new bool[64];
+        {
+            var hasSeenCheckeredFlag = new bool[64];
             var lastTimeForData = new TimeSpan[64];
 
-			foreach(var data in samples)
-			{
-				ApplyIsFinalLap(data);
+            foreach (var data in samples)
+            {
+                ApplyIsFinalLap(data);
 
-				ApplyLeaderHasFinished(data);
-					
-				ApplyHasSeenCheckeredFlag(data, hasSeenCheckeredFlag);
+                ApplyLeaderHasFinished(data);
+
+                ApplyHasSeenCheckeredFlag(data, hasSeenCheckeredFlag);
 
                 ApplyHasRetired(data, lastTimeForData);
 
-				yield return data;
-			}
-		}
+                yield return data;
+            }
+        }
 
-		static void ApplyIsFinalLap(DataSample data)
-		{
-			data.Telemetry.IsFinalLap = data.Telemetry.RaceLaps >= data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum].ResultsLapsComplete;
-		}
+        static void ApplyIsFinalLap(DataSample data)
+        {
+            data.Telemetry.IsFinalLap = data.Telemetry.RaceLaps >= data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum].ResultsLapsComplete;
+        }
 
-		static void ApplyLeaderHasFinished(DataSample data)
-		{
-			if(data.Telemetry.RaceLaps > data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum].ResultsLapsComplete)
-				data.Telemetry.LeaderHasFinished = true;
-		}
+        static void ApplyLeaderHasFinished(DataSample data)
+        {
+            if (data.Telemetry.RaceLaps > data.SessionData.SessionInfo.Sessions[data.Telemetry.SessionNum].ResultsLapsComplete)
+                data.Telemetry.LeaderHasFinished = true;
+        }
 
-		static void ApplyHasSeenCheckeredFlag(DataSample data, bool[] hasSeenCheckeredFlag)
-		{
-			if(data.LastSample != null && data.Telemetry.LeaderHasFinished)
-				for(int i = 1; i < data.SessionData.DriverInfo.Drivers.Length; i++)
-					if(data.LastSample.Telemetry.CarIdxLapDistPct[i] > 0.90 && data.Telemetry.CarIdxLapDistPct[i] < 0.10)
-						hasSeenCheckeredFlag[i] = true;
+        static void ApplyHasSeenCheckeredFlag(DataSample data, bool[] hasSeenCheckeredFlag)
+        {
+            if (data.LastSample != null && data.Telemetry.LeaderHasFinished)
+                for (int i = 1; i < data.SessionData.DriverInfo.Drivers.Length; i++)
+                    if (data.LastSample.Telemetry.CarIdxLapDistPct[i] > 0.90 && data.Telemetry.CarIdxLapDistPct[i] < 0.10)
+                        hasSeenCheckeredFlag[i] = true;
 
-			data.Telemetry.HasSeenCheckeredFlag = hasSeenCheckeredFlag;
-		}
+            data.Telemetry.HasSeenCheckeredFlag = hasSeenCheckeredFlag;
+        }
 
         static void ApplyHasRetired(DataSample data, TimeSpan[] lastTimeOfData)
         {
@@ -77,7 +77,7 @@ namespace iRacingSDK
             if (!(new[] { SessionState.Racing, SessionState.Checkered, SessionState.CoolDown }).Contains(data.Telemetry.SessionState))
                 return;
 
-			for(int i = 1; i < data.SessionData.DriverInfo.Drivers.Length; i++)
+            for (int i = 1; i < data.SessionData.DriverInfo.Drivers.Length; i++)
             {
                 if (data.Telemetry.HasSeenCheckeredFlag[i])
                     continue;
@@ -88,7 +88,7 @@ namespace iRacingSDK
                     continue;
                 }
 
-                if( lastTimeOfData[i] + 30.Seconds() < data.Telemetry.SessionTimeSpan)
+                if (lastTimeOfData[i] + 30.Seconds() < data.Telemetry.SessionTimeSpan)
                     data.Telemetry.HasRetired[i] = true;
             }
         }

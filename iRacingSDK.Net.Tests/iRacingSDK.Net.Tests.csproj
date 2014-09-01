@@ -37,6 +37,8 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataSampleExtensions\VerifyReplayFrame.cs" />
+    <Compile Include="DataSampleExtensions\ForwardOnly.cs" />
     <Compile Include="DataSampleExtensions\TakeUntilEndOfReplay.cs" />
     <Compile Include="DataSampleExtensions\WithCorrectedDistances.cs" />
     <Compile Include="DataSampleExtensions\IncidentsSupport.cs" />
