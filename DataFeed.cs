@@ -48,14 +48,14 @@ namespace iRacingSDK
             });
 
             if ((headers.Header.status & 1) == 0)
-                return DataSample.YetToConnected;
+                return DisconnectedSample();
 
             var sessionData = ReadSessionInfo(headers.Header);
             var variables = ReadVariables(headers.Header, headers.VarHeaders, requestedTickCount);
             var variableDescriptions = headers.VarHeaders.ToDictionary(vh => vh.name, vh => vh.desc);
 
             if (sessionData == null)
-                return DataSample.YetToConnected;
+                return DisconnectedSample();
 
             if (variables == null)
                 return null;
@@ -87,6 +87,14 @@ namespace iRacingSDK
 
         int sessionLastInfoUpdate = -2;
         SessionData lastSessionInfo;
+
+        DataSample DisconnectedSample()
+        {
+            lastSessionInfo = null;
+            sessionLastInfoUpdate = -2;
+            return DataSample.YetToConnected;
+        }
+
         SessionData ReadSessionInfo(iRSDKHeader header)
         {
             if (header.sessionInfoUpdate == sessionLastInfoUpdate)
