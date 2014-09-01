@@ -28,8 +28,10 @@ namespace iRacingSDK
     {
         readonly iRacingConnection instance = new iRacingConnection();
         readonly CrossThreadEvents<DataSample> newData = new CrossThreadEvents<DataSample>();
+        readonly CrossThreadEvents<DataSample> newSessionData = new CrossThreadEvents<DataSample>();
         readonly CrossThreadEvents connected = new CrossThreadEvents();
         readonly CrossThreadEvents disconnected = new CrossThreadEvents();
+
         Task backListener;
         bool requestCancel;
 
@@ -49,6 +51,12 @@ namespace iRacingSDK
         {
             add { newData.Event += value; }
             remove { newData.Event -= value; }
+        }
+
+        public event Action<DataSample> NewSessionData
+        {
+            add { newSessionData.Event += value; }
+            remove { newSessionData.Event -= value; }
         }
 
         public void StartListening()
@@ -77,7 +85,8 @@ namespace iRacingSDK
         {
             var isConnected = false;
             var isDisconnected = true;
-
+            var lastSessionInfoUpdate = -1;
+            
             try
             {
                 foreach (var d in instance.GetDataFeed())
@@ -101,13 +110,18 @@ namespace iRacingSDK
 
                     if( d.IsConnected)
                         newData.Invoke(d);
+
+                    if (d.IsConnected && d.SessionData.InfoUpdate != lastSessionInfoUpdate)
+                    {
+                        lastSessionInfoUpdate = d.SessionData.InfoUpdate;
+                        newSessionData.Invoke(d);
+                    }
                 }
             }
             catch(Exception e)
             {
                 Trace.WriteLine(e.Message, "DEBUG");
                 Trace.WriteLine(e.StackTrace, "DEBUG");
-                throw e;
             }
             finally
             {
