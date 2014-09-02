@@ -21,6 +21,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Diagnostics;
+using iRacingSDK.Support;
 
 namespace iRacingSDK
 {
@@ -35,7 +36,7 @@ namespace iRacingSDK
 
         public void SetSpeed(double p)
         {
-            Trace.WriteLine(string.Format("Setting speed to {0}", p), "INFO");
+            TraceInfo.WriteLine("Setting speed to {0}", p);
             SendMessage(BroadcastMessage.ReplaySetPlaySpeed, (short)p, 0);
         }
 
@@ -76,7 +77,7 @@ namespace iRacingSDK
 
             Wait();
 
-            Trace.WriteLine(string.Format("Moving to frame {0} with mode {1}", frameNumber, mode), "INFO");
+            TraceInfo.WriteLine("Moving to frame {0} with mode {1}", frameNumber, mode);
 
             SendMessage(BroadcastMessage.ReplaySetPlayPosition, (short)mode, frameNumber);
 
@@ -90,7 +91,7 @@ namespace iRacingSDK
             if (data != null)
                 frameNumber = data.Telemetry.ReplayFrameNum;
 
-            Trace.WriteLine(string.Format("Moved to frame {0}", frameNumber), "INFO");
+            TraceInfo.WriteLine("Moved to frame {0}", frameNumber);
         }
 
         public void MoveToStartOfRace()

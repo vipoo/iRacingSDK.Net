@@ -16,6 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
+using iRacingSDK.Support;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -66,7 +67,7 @@ namespace iRacingSDK
                 {
                     if (timeoutAt < DateTime.Now)
                     {
-                        Trace.WriteLine(string.Format("{0} Replay paused for {1}.  Assuming end of replay", data.Telemetry.SessionTimeSpan, period), "INFO");
+                        TraceInfo.WriteLine("{0} Replay paused for {1}.  Assuming end of replay", data.Telemetry.SessionTimeSpan, period);
                         break;
                     }
                 }

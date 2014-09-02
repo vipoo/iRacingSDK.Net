@@ -80,7 +80,7 @@ namespace iRacingSDK
 
                 if( rp.LapsComplete != (Lap-1))
                 {
-                    Trace.WriteLine("Attempt to get LastTime from session data, with mismatch Lap counters.  Telemerty Lap: {0}.  Session LapComplete: {1}".F(Lap-1, rp.LapsComplete), "INFO");
+                    TraceInfo.WriteLine("Attempt to get LastTime from session data, with mismatch Lap counters.  Telemerty Lap: {0}.  Session LapComplete: {1}", Lap-1, rp.LapsComplete);
                     return 0f;
                 }
 

@@ -24,6 +24,7 @@ using System.Runtime.InteropServices;
 using System.IO.MemoryMappedFiles;
 using System.Diagnostics;
 using iRacingSDK;
+using iRacingSDK.Support;
 
 namespace iRacingSDK
 {
@@ -111,7 +112,7 @@ namespace iRacingSDK
         IEnumerable<DataSample> WaitForInitialConnection()
         {
             bool wasConnected = iRacingMemory.Accessor != null;
-            Trace.WriteLineIf(!wasConnected, "Waiting to connect to iRacing application", "INFO");
+            TraceInfo.WriteLineIf(!wasConnected, "Waiting to connect to iRacing application");
 
             while (!iRacingMemory.IsConnected())
             {
@@ -119,7 +120,7 @@ namespace iRacingSDK
                 Thread.Sleep(10);
             }
 
-            Trace.WriteLineIf(!wasConnected, "Connected to iRacing application", "INFO");
+            TraceInfo.WriteLineIf(!wasConnected, "Connected to iRacing application");
         }
 
         IEnumerable<DataSample> AllSamples()

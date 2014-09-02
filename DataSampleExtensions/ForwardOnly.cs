@@ -16,9 +16,9 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
+using iRacingSDK.Support;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace iRacingSDK
 {
@@ -33,9 +33,9 @@ namespace iRacingSDK
             foreach (var data in samples)
             {
                 if (data.LastSample != null && data.LastSample.Telemetry.ReplayFrameNum > data.Telemetry.ReplayFrameNum)
-                    Trace.WriteLine(string.Format(
+                    TraceInfo.WriteLine(
                         "WARNING! Replay data reversed.  Current enumeration only support iRacing in forward mode. Received sample {0} after sample {1}",
-                        data.Telemetry.ReplayFrameNum, data.LastSample.Telemetry.ReplayFrameNum), "INFO");
+                        data.Telemetry.ReplayFrameNum, data.LastSample.Telemetry.ReplayFrameNum);
                 else
                     yield return data;
             }

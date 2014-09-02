@@ -16,31 +16,30 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
-using iRacingSDK;
-using iRacingSDK.Support;
 using System.Diagnostics;
-using System.Threading;
 
-namespace Sample
+namespace iRacingSDK.Support
 {
-    public static class SamplePitCommands
+    public static class TraceInfo
     {
-        public static void Sample()
+        public static void WriteLine(string value, params object[] args)
         {
-            var iracing = new iRacingConnection();
+            Trace.WriteLine(value.F(args), "INFO");
+        }
 
-            TraceInfo.WriteLine("Clearing tire change");
-            iracing.PitCommand.ClearTireChange();
-            Thread.Sleep(2000);
+        public static void Write(string value, params object[] args)
+        {
+            Trace.Write(value.F(args), "INFO");
+        }
 
-            TraceInfo.WriteLine("Changing left front");
-            iracing.PitCommand.ChangeLeftFrontTire(120);
-            Thread.Sleep(2000);
+        public static void WriteLineIf(bool condition, string value, params object[] args)
+        {
+            Trace.WriteLineIf(condition, value.F(args), "INFO");
+        }
 
-
-            TraceInfo.WriteLine("Setting fueld to 20");
-            iracing.PitCommand.SetFuel(20);
-            Thread.Sleep(2000);
+        public static void WriteIf(bool condition, string value, params object[] args)
+        {
+            Trace.WriteIf(condition, value.F(args), "INFO");
         }
     }
 }
