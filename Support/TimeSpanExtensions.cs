@@ -27,6 +27,11 @@ namespace iRacingSDK.Support
             return TimeSpan.FromSeconds(seconds);
         }
 
+        public static TimeSpan Second(this int seconds)
+        {
+            return TimeSpan.FromSeconds(seconds);
+        }
+
         public static TimeSpan Seconds(this double seconds)
         {
             return TimeSpan.FromSeconds(seconds);
