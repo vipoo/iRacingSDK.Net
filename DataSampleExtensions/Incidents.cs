@@ -34,44 +34,43 @@ namespace iRacingSDK
         /// <returns>Return a DataSample of each frame that an identified incident occured on.</returns>
         public static IEnumerable<DataSample> RaceIncidents(this IEnumerable<DataSample> samples, int maxTotalIncidents = int.MaxValue)
         {
-			var sessionNumber = GetSessionNumber(samples);
+            var sessionNumber = GetSessionNumber(samples);
 
             var incidentsOnForward = GetIncidentsForward(samples, maxTotalIncidents);
 
-			var incidentsOnReverse = GetIncidentsReverse(samples, sessionNumber, maxTotalIncidents - incidentsOnForward.Count);
-		
-			var incidents =  incidentsOnForward
-				.Concat(incidentsOnReverse)
-				.OrderBy( d => d.Telemetry.ReplayFrameNum)
-				.ToList();
+            var incidentsOnReverse = GetIncidentsReverse(samples, sessionNumber, maxTotalIncidents - incidentsOnForward.Count);
 
-			foreach( var incident in incidents)
-				Trace.WriteLine(string.Format("Found new incident at frame {0} for {1}", incident.Telemetry.SessionTimeSpan, incident.Telemetry.CamCar.UserName), "DEBUG");
+            var incidents = incidentsOnForward
+                .Concat(incidentsOnReverse)
+                .OrderBy(d => d.Telemetry.ReplayFrameNum)
+                .ToList();
 
-			return incidents;
+            foreach (var incident in incidents)
+                Trace.WriteLine(string.Format("Found new incident at frame {0} for {1}", incident.Telemetry.SessionTimeSpan, incident.Telemetry.CamCar.UserName), "DEBUG");
+
+            return incidents;
         }
 
-		static int GetSessionNumber(IEnumerable<DataSample> samples)
-		{
-			var data = samples.First();
-			return data.Telemetry.SessionNum;
-		}
+        static int GetSessionNumber(IEnumerable<DataSample> samples)
+        {
+            var data = samples.First();
+            return data.Telemetry.SessionNum;
+        }
 
         static List<DataSample> GetIncidentsForward(IEnumerable<DataSample> samples, int maxTotalIncidents)
-		{
+        {
             return IncidentsSupport.FindIncidents(
-                samples.TakeWhile(data => data.Telemetry.SessionState != SessionState.CoolDown), 
-                d => iRacing.Replay.MoveToNextIncident(), 
+                samples.TakeWhile(data => data.Telemetry.SessionState != SessionState.CoolDown),
+                d => iRacing.Replay.MoveToNextIncident(),
                 maxTotalIncidents);
-		}
+        }
 
         static List<DataSample> GetIncidentsReverse(IEnumerable<DataSample> samples, int sessionNumber, int maxTotalIncidents)
-		{
+        {
             return IncidentsSupport.FindIncidents(
                 samples.TakeWhile(data => data.Telemetry.SessionNum == sessionNumber && data.Telemetry.RaceLaps > 0),
-                d => iRacing.Replay.MoveToPrevIncident(), 
+                d => iRacing.Replay.MoveToPrevIncident(),
                 maxTotalIncidents);
-		}
-	}
+        }
+    }
 }
-
