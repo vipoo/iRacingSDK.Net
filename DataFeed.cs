@@ -38,7 +38,7 @@ namespace iRacingSDK
             this.accessor = accessor;
         }
 
-        public unsafe DataSample GetNextDataSample(int requestedTickCount)
+        public unsafe DataSample GetNextDataSample(int requestedTickCount, bool logging)
         {
             var headers = accessor.AcquirePointer(ptr =>
             {
@@ -51,7 +51,7 @@ namespace iRacingSDK
                 return DisconnectedSample();
 
             var sessionData = ReadSessionInfo(headers.Header);
-            var variables = ReadVariables(headers.Header, headers.VarHeaders, requestedTickCount);
+            var variables = ReadVariables(headers.Header, headers.VarHeaders, requestedTickCount, logging);
             var variableDescriptions = headers.VarHeaders.ToDictionary(vh => vh.name, vh => vh.desc);
 
             if (sessionData == null)
@@ -153,7 +153,7 @@ namespace iRacingSDK
             }
         }
 
-        unsafe Telemetry ReadVariables(iRSDKHeader header, VarHeader[] varHeaders, int requestedTickCount)
+        unsafe Telemetry ReadVariables(iRSDKHeader header, VarHeader[] varHeaders, int requestedTickCount, bool logging)
         {
             var buf = header.FindLatestBuf(requestedTickCount);
 
@@ -168,7 +168,7 @@ namespace iRacingSDK
 
             if (latestHeader.HasChangedSinceReading(buf))
             {
-                Trace.WriteLine("Failed to read data before iRacing overwrote new sample!", "DEBUG");
+                Trace.WriteLineIf(logging, "Failed to read data before iRacing overwrote new sample!", "DEBUG");
                 return null;
             }
 

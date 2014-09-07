@@ -78,12 +78,12 @@ namespace iRacingSDK
             this.iRacingMemory = new iRacingMemory();
         }
 
-        public IEnumerable<DataSample> GetDataFeed()
+        public IEnumerable<DataSample> GetDataFeed(bool logging = true)
         {
-            return GetRawDataFeed().WithLastSample().WithEvents(connected, disconnected, newSessionData);
+            return GetRawDataFeed(logging).WithLastSample().WithEvents(connected, disconnected, newSessionData);
         }
 
-        internal IEnumerable<DataSample> GetRawDataFeed()
+        internal IEnumerable<DataSample> GetRawDataFeed(bool logging = true)
         {
             if (isRunning)
                 throw new Exception("Can not call GetDataFeed concurrently.");
@@ -97,7 +97,7 @@ namespace iRacingSDK
                     yield return notConnectedSample;
                 }
 
-                foreach (var sample in AllSamples())
+                foreach (var sample in AllSamples(logging))
                 {
                     IsConnected = sample.IsConnected;
                     yield return sample;
@@ -123,7 +123,7 @@ namespace iRacingSDK
             TraceInfo.WriteLineIf(!wasConnected, "Connected to iRacing application");
         }
 
-        IEnumerable<DataSample> AllSamples()
+        IEnumerable<DataSample> AllSamples(bool logging)
         {
             if (dataFeed == null)
                 dataFeed = new DataFeed(iRacingMemory.Accessor);
@@ -142,7 +142,7 @@ namespace iRacingSDK
 
                 watchProcessingTime.Restart();
 
-                var data = dataFeed.GetNextDataSample(nextTickCount);
+                var data = dataFeed.GetNextDataSample(nextTickCount, logging);
                 if (data != null)
                 {
                     if (data.IsConnected)
@@ -150,7 +150,7 @@ namespace iRacingSDK
                         if (data.Telemetry.TickCount == nextTickCount - 1)
                             continue; //Got the same sample - try again.
 
-                        if (data.Telemetry.TickCount != nextTickCount && nextTickCount != 0)
+                        if (logging && data.Telemetry.TickCount != nextTickCount && nextTickCount != 0)
                             Debug.WriteLine("Warning dropped DataSample from {0} to {1}. Over time of {2}",
                                 nextTickCount, data.Telemetry.TickCount - 1, (DateTime.Now - lastTickTime).ToString(@"s\.fff"), "WARN");
 

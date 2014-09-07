@@ -22,7 +22,7 @@ using System.Linq;
 
 namespace iRacingSDK
 {
-	public partial class Telemetry : Dictionary<string, object>
+    public partial class Telemetry : Dictionary<string, object>
     {
         LapSector? _raceLapSector;
         public LapSector RaceLapSector
@@ -40,9 +40,9 @@ namespace iRacingSDK
 
                 if (firstSector == null)
                     return (_raceLapSector = new LapSector(this.RaceLaps, 2)).Value;
-                
-				return (_raceLapSector = new LapSector(this.RaceLaps, ToSectorFromPercentage(firstSector.Pct))).Value;
+
+                return (_raceLapSector = new LapSector(this.RaceLaps, ToSectorFromPercentage(firstSector.Pct))).Value;
             }
         }
-	}
+    }
 }

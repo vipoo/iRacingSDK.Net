@@ -89,7 +89,7 @@ namespace iRacingSDK
             
             try
             {
-                foreach (var d in instance.GetDataFeed())
+                foreach (var d in instance.GetDataFeed(logging: false))
                 {
                     if (requestCancel)
                         return;
