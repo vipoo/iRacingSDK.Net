@@ -77,6 +77,7 @@
     <Compile Include="iRSDKHeader.cs" />
     <Compile Include="Support\StringExtensions.cs" />
     <Compile Include="Support\TimeSpanExtensions.cs" />
+    <Compile Include="Support\TraceDebug.cs" />
     <Compile Include="Support\TraceInfo.cs" />
     <Compile Include="VarBuf.cs" />
     <Compile Include="VarBufWithIndex.cs" />

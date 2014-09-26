@@ -20,9 +20,9 @@ using System.Diagnostics;
 
 namespace iRacingSDK.Support
 {
-    public static class TraceInfo
+    public static class TraceDebug
     {
-        const string Category = "INFO";
+        const string Category = "DEBUG";
 
         public static void WriteLine(string value, params object[] args)
         {

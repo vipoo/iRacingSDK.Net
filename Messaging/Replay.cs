@@ -196,6 +196,8 @@ namespace iRacingSDK
 
         void ReplaySearch(ReplaySearchMode mode)
         {
+            TraceDebug.WriteLine("Replay Search {0}", mode.ToString());
+
             SendMessage(BroadcastMessage.ReplaySearch, (short)mode);
         }
 
