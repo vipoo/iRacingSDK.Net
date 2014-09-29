@@ -6,7 +6,7 @@ namespace iRacingSDK.Net.Tests
     {
         public static void Main()
         {
-            new VerifyReplayFrame().it_skips_a_single_zero_frame();
+            new WithPitStopCounts().Increment_pit_stop_count_when_driver_enters_pit_road();
         }
     }
 }

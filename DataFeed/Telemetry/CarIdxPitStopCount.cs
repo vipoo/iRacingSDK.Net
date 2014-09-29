@@ -1,4 +1,4 @@
-﻿// This file is part of iRacingSDK.
+// This file is part of iRacingSDK.
 //
 // Copyright 2014 Dean Netherton
 // https://github.com/vipoo/iRacingSDK.Net
@@ -17,34 +17,23 @@
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace iRacingSDK.Support
+namespace iRacingSDK
 {
-    public static class TimeSpanExtensions
+    public partial class Telemetry : Dictionary<string, object>
     {
-        public static TimeSpan Seconds(this int seconds)
+        int[] carIdxPitStopCount;
+        public int[] CarIdxPitStopCount
         {
-            return TimeSpan.FromSeconds(seconds);
-        }
+            get
+            {
+                if (carIdxPitStopCount == null)
+                    carIdxPitStopCount = new int[this.SessionData.DriverInfo.Drivers.Length];
 
-        public static TimeSpan Second(this int seconds)
-        {
-            return TimeSpan.FromSeconds(seconds);
-        }
-
-        public static TimeSpan Seconds(this double seconds)
-        {
-            return TimeSpan.FromSeconds(seconds);
-        }
-
-        public static TimeSpan Minutes(this int minutes)
-        {
-            return TimeSpan.FromMinutes(minutes);
-        }
-
-        public static TimeSpan Minutes(this double minutes)
-        {
-            return TimeSpan.FromMinutes(minutes);
+                return carIdxPitStopCount;
+            }
         }
     }
 }

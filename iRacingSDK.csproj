@@ -45,7 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CrossThreadEvents.cs" />
+    <Compile Include="DataFeed\Telemetry\CarIdxPitStopCount.cs" />
     <Compile Include="DataSampleExtensions\EmitTo.cs" />
+    <Compile Include="DataSampleExtensions\WithPitStopCounts.cs" />
     <Compile Include="DataSampleExtensions\VerifyReplayFrames.cs" />
     <Compile Include="DataSampleExtensions\WithEvents.cs" />
     <Compile Include="Messaging\iRacingMessaging.cs" />
