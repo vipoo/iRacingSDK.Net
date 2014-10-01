@@ -30,30 +30,26 @@ namespace iRacingSDK.Net.Tests
         {
             var s = new SessionData { DriverInfo = new SessionData._DriverInfo { Drivers = new[] { new SessionData._DriverInfo._Drivers { UserName = "Test" } } } };
 
-            var sample1 = new DataSample
+            var samples = values.Select(ss => new DataSample
             {
                 IsConnected = true,
                 SessionData = s,
-                Telemetry = new Telemetry {
+                Telemetry = new Telemetry 
                 {
-                    "CarIdxTrackSurface",	new[] { values[0] }	}
+                    { "CarIdxTrackSurface",       new[] { ss } },
+                    { "SessionTime",              0d },
                 }
-            };
+            }).ToList();
 
-            var sample2 = new DataSample
+            DataSample lastSs = null;
+            foreach( var ss in samples)
             {
-                IsConnected = true,
-                SessionData = s,
-                Telemetry = new Telemetry {	
-                    { "CarIdxTrackSurface",	new[] { values[1] }	}
-                }
-            };
+                ss.Telemetry.SessionData = s;
+                ss.LastSample = lastSs;
+                lastSs = ss;
+            }
 
-            sample1.Telemetry.SessionData = s;
-            sample2.Telemetry.SessionData = s;
-            sample2.LastSample = sample1;
-
-            return new[] { sample1, sample2 };
+            return samples.ToArray();
         }
 
         [Test]
@@ -70,6 +66,16 @@ namespace iRacingSDK.Net.Tests
         public void Increment_pit_stop_count_when_driver_enters_pit_road()
         {
             var samples = CreatesSamples(TrackLocation.OnTrack, TrackLocation.InPitStall);
+
+            var correctedSamples = samples.WithPitStopCounts().ToArray();
+
+            Assert.That(correctedSamples.Last().Telemetry.CarIdxPitStopCount[0], Is.EqualTo(1));
+        }
+
+        [Test]
+        public void Pit_counts_are_persisted()
+        {
+            var samples = CreatesSamples(TrackLocation.OnTrack, TrackLocation.InPitStall, TrackLocation.OnTrack);
 
             var correctedSamples = samples.WithPitStopCounts().ToArray();
 

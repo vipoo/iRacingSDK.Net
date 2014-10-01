@@ -29,10 +29,11 @@ namespace iRacingSDK
         {
             get
             {
-                if (carIdxPitStopCount == null)
-                    carIdxPitStopCount = new int[this.SessionData.DriverInfo.Drivers.Length];
-
                 return carIdxPitStopCount;
+            }
+            set
+            {
+                carIdxPitStopCount = value;
             }
         }
     }

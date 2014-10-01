@@ -30,20 +30,27 @@ namespace iRacingSDK
         /// </summary>
         public static IEnumerable<DataSample> WithPitStopCounts(this IEnumerable<DataSample> samples)
         {
+            int[] carIdxPitStopCount = new int[64];
+
             foreach (var data in samples)
             {
                 if (data.LastSample != null)
-                    PopulateCarIdxPitStopCount(data.LastSample.Telemetry, data.Telemetry);
-                
+                    PopulateCarIdxPitStopCount(data.LastSample.Telemetry, data.Telemetry, carIdxPitStopCount);
+
+                data.Telemetry.CarIdxPitStopCount = (int[])carIdxPitStopCount.Clone();
+
                 yield return data;
             }
         }
 
-        static void PopulateCarIdxPitStopCount(Telemetry last, Telemetry telemetry)
+        static void PopulateCarIdxPitStopCount(Telemetry last, Telemetry telemetry, int[] carIdxPitStopCount)
         {
             for (var i = 0; i < telemetry.CarIdxTrackSurface.Length; i++)
                 if (last.CarIdxTrackSurface[i] != TrackLocation.InPitStall && telemetry.CarIdxTrackSurface[i] == TrackLocation.InPitStall)
-                    telemetry.CarIdxPitStopCount[i] += 1;
+                {
+                    carIdxPitStopCount[i] += 1;
+                    TraceInfo.WriteLine("{0} Driver {1} has pitted {2} times", telemetry.SessionTimeSpan, telemetry.Cars[i].UserName, carIdxPitStopCount[i]);
+                }
         }
     }
 }
