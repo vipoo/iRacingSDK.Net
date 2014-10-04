@@ -40,7 +40,7 @@ namespace Sample
 
         private void fastestLapButton_Click(object sender, EventArgs e)
         {
-            logMessages.StartOperation( SampleFastestLap.Sample );
+            logMessages.StartOperation(SampleFastestLap.Sample);
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
