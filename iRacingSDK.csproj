@@ -95,6 +95,7 @@
     <Compile Include="DataFeed\SessionData.cs" />
     <Compile Include="DataFeed\Session.cs" />
     <Compile Include="Messaging\Replay.cs" />
+    <Compile Include="Win32\keyboard.cs" />
     <Compile Include="Win32\Synchronization\Event.cs" />
     <Compile Include="Win32\Messages.cs" />
     <Compile Include="Messaging\BroadcastMessage.cs" />
