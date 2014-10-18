@@ -45,7 +45,8 @@ namespace iRacingSDK
         public SessionData._DriverInfo._Drivers Driver { get { return driver; } }
         public LapSector LapSector { get { return telemetry.CarSectorIdx[carIdx]; } }
         public int Position { get { return telemetry.Positions[carIdx]; } }
-        public short CarNumber { get { return (short)driver.CarNumber; } }
+        public short CarNumberDisplay { get { return (short)driver.CarNumber; } }
+        public short CarNumberRaw { get { return (short)driver.CarNumberRaw; } }
         public string UserName { get { return driver.UserName; } }
         public bool HasSeenCheckeredFlag { get { return telemetry.HasSeenCheckeredFlag[carIdx]; } }
         public bool IsPaceCar { get { return carIdx == 0; } }

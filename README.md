@@ -67,7 +67,7 @@ var data = iracing.GetDataFeed().First();
 var camera = data.SessionData.CameraInfo.Groups.First(g => g.GroupName == "TV3");
 
 var carIdx = 3;
-var number = data.SessionData.DriverInfo.Drivers[carIdx].CarNumber;
+var number = data.SessionData.DriverInfo.Drivers[carIdx].CarNumberRaw;
 iRacing.Replay.CameraOnDriver((short)number, (short)camera.GroupNum, 0);
 ```
 
