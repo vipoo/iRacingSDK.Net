@@ -37,6 +37,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataFeed\Telemetry\TelemetryCamCarTests.cs" />
     <Compile Include="DataSampleExtensions\VerifyReplayFrame.cs" />
     <Compile Include="DataSampleExtensions\ForwardOnly.cs" />
     <Compile Include="DataSampleExtensions\TakeUntilEndOfReplay.cs" />

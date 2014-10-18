@@ -20,24 +20,61 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using iRacingSDK.Support;
 
 namespace iRacingSDK
 {
+    public class CarArray : IEnumerable<Car>
+    {
+        Car[] cars;
+        
+        public CarArray(Car[] cars)
+        {
+            this.cars = cars;
+        }
+
+        public Car this[long carIdx]
+        {
+            get
+            {
+                if (carIdx < 0)
+                    throw new Exception("Attempt to load car details for negative car index {0}".F(carIdx));
+
+                if (carIdx >= cars.Length)
+                    throw new Exception("Attempt to load car details for unknown carIndex.  carIdx: {0}, maxNumber: {1}".F(carIdx, cars.Length - 1));
+
+                return cars[carIdx];
+            }
+        }
+
+        public IEnumerator<Car> GetEnumerator()
+        {
+            return (cars as IEnumerable<Car>).GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return cars.GetEnumerator();
+        }
+    }
+
     public partial class Telemetry : Dictionary<string, object>
     {
         public SessionData._SessionInfo._Sessions Session { get { return SessionData.SessionInfo.Sessions[SessionNum]; } }
 
         public Car CamCar { get { return Cars[CamCarIdx]; } }
 
-        Car[] cars;
-        public Car[] Cars
+        CarArray cars;
+        public CarArray Cars
         {
             get
             {
                 if (cars != null)
                     return cars;
 
-                return cars = Enumerable.Range(0, this.SessionData.DriverInfo.Drivers.Length).Select(i => new Car(this, i)).ToArray();
+                return cars = new CarArray(
+                    Enumerable.Range(0, this.SessionData.DriverInfo.Drivers.Length).Select(i => new Car(this, i)).ToArray());
+
             }
         }
 
