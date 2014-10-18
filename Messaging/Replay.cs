@@ -118,6 +118,20 @@ namespace iRacingSDK
             WaitAndVerify(d => d.Telemetry.SessionNum != session.SessionNum, () => MoveToNextSession());
         }
 
+        public bool AttempToMoveToQualifyingSection()
+        {
+            try
+            {
+                MoveToQualifying();
+                return true;
+            }
+            catch(Exception e)
+            {
+                return false;
+            }
+        }
+
+
         public void MoveToParadeLap()
         {
             MoveToStartOfRace();
@@ -225,7 +239,8 @@ namespace iRacingSDK
                 Thread.Sleep(100);
             }
 
-            System.Diagnostics.Debug.Assert(!verifyFn(data));
+            if (verifyFn(data))
+                throw new Exception("iRacing failed to respond to message");
 
             return data;
         }
