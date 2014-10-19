@@ -75,13 +75,21 @@ namespace Sample
 
     public class MyListener : TraceListener
     {
-        TextBox textBox;
-        SynchronizationContext context;
+        static TextBox textBox;
+        static SynchronizationContext context;
 
         public MyListener(TextBox textBox)
         {
             context = SynchronizationContext.Current;
-            this.textBox = textBox;
+            MyListener.textBox = textBox;
+        }
+
+        public static void Clear()
+        {
+            context.Post(ignore =>
+            {
+                textBox.Text = "";
+            }, null);
         }
 
         public override void Write(string message, string category)

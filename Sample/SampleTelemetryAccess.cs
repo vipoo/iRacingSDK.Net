@@ -28,7 +28,9 @@ namespace Sample
         {
             var iracing = new iRacingConnection();
 
-            foreach (var data in iracing.GetDataFeed())
+            foreach (var data in iracing.GetDataFeed()
+                .WithCorrectedPercentages()
+                .WithCorrectedDistances())
             {
                 System.Diagnostics.Debugger.Break();
 

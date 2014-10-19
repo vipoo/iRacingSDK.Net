@@ -30,7 +30,7 @@ namespace iRacingSDK
             get
             {
                 if (carIdxDistance == null)
-                    carIdxDistance = Enumerable.Range(0, this.SessionData.DriverInfo.Drivers.Length)
+                    carIdxDistance = Enumerable.Range(0, 64)
                         .Select(CarIdx => this.CarIdxLap[CarIdx] + this.CarIdxLapDistPct[CarIdx] )
                         .ToArray();
 
