@@ -83,8 +83,6 @@
         #endregion
 
         private System.Windows.Forms.TextBox TraceMessageTextBox;
-        private System.Windows.Forms.Button CancelButton;
-
-
+        private new System.Windows.Forms.Button CancelButton;
     }
 }

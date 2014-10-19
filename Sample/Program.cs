@@ -209,10 +209,6 @@ namespace iRacingSDKSample
 
                 Console.WriteLine("Session Data");
 
-
-
-
-
                 Console.WriteLine("Telemtary");
 
 				foreach(var kv in data.Telemetry)
