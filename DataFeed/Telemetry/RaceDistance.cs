@@ -36,8 +36,13 @@ namespace iRacingSDK
 
                 raceDistance = this.CarIdxLap
                     .Select((lap, idx) => new { Lap = lap, Distance = lap + this.CarIdxLapDistPct[idx] })
-                    .Where(l => l.Lap == this.RaceLaps)
                     .Max(l => l.Distance);
+
+                if (raceDistance.Value < this.RaceLaps)
+                {
+                    Trace.WriteLine("WARNING! No cars on current RaceLaps", "DEBUG");
+                    return this.RaceLaps;
+                }
 
                 return raceDistance.Value;
             }

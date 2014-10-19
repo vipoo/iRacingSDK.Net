@@ -20,6 +20,7 @@ using iRacingSDK;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using iRacingSDK.Support;
 
 namespace Sample
 {
@@ -29,7 +30,7 @@ namespace Sample
         {
             var iracing = new iRacingConnection();
 
-            iracing.Replay.MoveToStart();
+            iracing.Replay.MoveToStartOfRace();
             iracing.Replay.SetSpeed(1);
 
             foreach (var data in iracing.GetDataFeed()
@@ -40,6 +41,9 @@ namespace Sample
 
                 Trace.WriteLine("Driver Distances");
                 Trace.WriteLine("================");
+
+                Trace.WriteLine("RaceDistance: {0}".F(data.Telemetry.RaceDistance));
+                Trace.WriteLine("");
 
                 foreach (var c in data.Telemetry.Cars.OrderByDescending(d => d.TotalDistance))
                     Trace.WriteLine(string.Format("{0}, dist: {1}, pos: {2}", c.Details.UserName, c.TotalDistance, c.Position));
