@@ -49,7 +49,7 @@ namespace iRacingSDK
                 if (last.CarIdxTrackSurface[i] != TrackLocation.InPitStall && telemetry.CarIdxTrackSurface[i] == TrackLocation.InPitStall)
                 {
                     carIdxPitStopCount[i] += 1;
-                    TraceInfo.WriteLine("{0} Driver {1} has pitted {2} times", telemetry.SessionTimeSpan, telemetry.Cars[i].UserName, carIdxPitStopCount[i]);
+                    TraceInfo.WriteLine("{0} Driver {1} has pitted {2} times", telemetry.SessionTimeSpan, telemetry.Cars[i].Details.UserName, carIdxPitStopCount[i]);
                 }
         }
     }

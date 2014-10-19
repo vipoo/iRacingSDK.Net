@@ -42,8 +42,8 @@ namespace Sample
                 {
                     Trace.WriteLine("=============================================================");
 
-                    foreach (var c in data.Telemetry.Cars.Where(c => !c.IsPaceCar))
-                        Trace.WriteLine(string.Format("{0,-20}\tCheckedFlag: {1}\tRetired: {2}\tData:{3}", c.UserName, c.HasSeenCheckeredFlag, c.HasRetired, c.HasData));
+                    foreach (var c in data.Telemetry.Cars.Where(c => !c.Details.IsPaceCar))
+                        Trace.WriteLine(string.Format("{0,-20}\tCheckedFlag: {1}\tRetired: {2}\tData:{3}", c.Details.UserName, c.HasSeenCheckeredFlag, c.HasRetired, c.HasData));
 
                     Trace.WriteLine("");
                     Trace.WriteLine(string.Format("IsFinalLap: {0}, LeaderHasFinished: {1}", data.Telemetry.IsFinalLap, data.Telemetry.LeaderHasFinished));

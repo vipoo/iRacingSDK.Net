@@ -46,7 +46,7 @@ namespace iRacingSDK
                 .ToList();
 
             foreach (var incident in incidents)
-                Trace.WriteLine(string.Format("Found new incident at frame {0} for {1}", incident.Telemetry.SessionTimeSpan, incident.Telemetry.CamCar.UserName), "DEBUG");
+                Trace.WriteLine(string.Format("Found new incident at frame {0} for {1}", incident.Telemetry.SessionTimeSpan, incident.Telemetry.CamCar.Details.UserName), "DEBUG");
 
             return incidents;
         }

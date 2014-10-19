@@ -49,7 +49,7 @@ namespace Sample
                 if (lastCount != count)
                 {
                     foreach( var x in data.Telemetry.RaceCars)
-                        Trace.WriteLine(string.Format("{0,20}\tHasSeenCheckedFlag: {1}\tHasRetired: {2}", x.UserName, x.HasSeenCheckeredFlag, x.HasRetired));
+                        Trace.WriteLine(string.Format("{0,20}\tHasSeenCheckedFlag: {1}\tHasRetired: {2}", x.Details.UserName, x.HasSeenCheckeredFlag, x.HasRetired));
 
                     Trace.WriteLine(string.Format("{0} finishers", count));
                 }

@@ -55,5 +55,10 @@ namespace iRacingSDK
         {
             return sessions.FirstOrDefault(s => s.SessionType.ToLower().Contains("qualif"));
         }
+
+        public static int MaxLength(this SessionData._DriverInfo._Drivers[] self)
+        {
+            return (int)self.Max(d => d.CarIdx) + 1;
+        }
     }
 }

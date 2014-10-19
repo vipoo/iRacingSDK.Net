@@ -28,9 +28,15 @@ namespace iRacingSDK
     {
         Car[] cars;
         
-        public CarArray(Car[] cars)
+        public CarArray(Telemetry telemetry)
         {
-            this.cars = cars;
+            var drivers = telemetry.SessionData.DriverInfo.Drivers;
+            var maxIdx = drivers.Max( d => d.CarIdx);
+
+            cars = new Car[maxIdx + 1];
+
+            for (var i = 0; i < maxIdx + 1; i++)
+                cars[i] = new Car(telemetry, i);
         }
 
         public Car this[long carIdx]
@@ -72,17 +78,17 @@ namespace iRacingSDK
                 if (cars != null)
                     return cars;
 
-                return cars = new CarArray(
-                    Enumerable.Range(0, this.SessionData.DriverInfo.Drivers.Length).Select(i => new Car(this, i)).ToArray());
-
+                return cars = new CarArray(this);
             }
         }
+
+        public CarDetails[] CarDetails { get { return Cars.Select(c => c.Details).ToArray(); } }
 
         public IEnumerable<Car> RaceCars
         {
             get
             {
-                return Cars.Where(c => !c.IsPaceCar);
+                return Cars.Where(c => !c.Details.IsPaceCar);
             }
         }
 
