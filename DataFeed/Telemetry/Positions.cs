@@ -42,7 +42,7 @@ namespace iRacingSDK
                     .Select((c, order) => new { CarIdx = c.CarIdx, Position = order + 1, Distance = c.Distance})
                     .ToList();
 
-                var maxRunningOrderIndex = runningOrder.Max(ro => ro.CarIdx);
+                var maxRunningOrderIndex = runningOrder.Count == 0 ? 0 : runningOrder.Max(ro => ro.CarIdx);
                 var maxSessionIndex = this.SessionData.DriverInfo.Drivers.MaxLength();
 
                 positions = new int[ Math.Max(maxRunningOrderIndex, maxSessionIndex)+1 ];
@@ -51,7 +51,7 @@ namespace iRacingSDK
                 foreach( var runner in runningOrder )
                     positions[runner.CarIdx] = runner.Position;
 
-                var lastKnownPosition = runningOrder.Max(ro => ro.Position);
+                var lastKnownPosition = (runningOrder.Count == 0 ? 0 : runningOrder.Max(ro => ro.Position)) + 1;
                 for (var i = 0; i < positions.Length; i++)
                     if (positions[i] == 0)
                         positions[i] = lastKnownPosition++;
