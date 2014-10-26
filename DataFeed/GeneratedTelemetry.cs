@@ -533,6 +533,16 @@ namespace iRacingSDK
         public System.Single dcFuelMixture { get { return (System.Single)this["dcFuelMixture"]; } }
 
         /// <summary>
+        /// Pitstop qtape adjustment
+        /// </summary>
+        public System.Single dpQtape { get { return (System.Single)this["dpQtape"]; } }
+
+        /// <summary>
+        /// Pitstop wedge adjustment
+        /// </summary>
+        public System.Single dpWedgeAdj { get { return (System.Single)this["dpWedgeAdj"]; } }
+
+        /// <summary>
         /// Engine coolant temp
         /// </summary>
         public System.Single WaterTemp { get { return (System.Single)this["WaterTemp"]; } }
@@ -751,6 +761,26 @@ namespace iRacingSDK
         /// LF shock deflection
         /// </summary>
         public System.Single LFshockDefl { get { return (System.Single)this["LFshockDefl"]; } }
+
+        /// <summary>
+        /// RRSH shock deflection
+        /// </summary>
+        public System.Single RRSHshockDefl { get { return (System.Single)this["RRSHshockDefl"]; } }
+
+        /// <summary>
+        /// LRSH shock deflection
+        /// </summary>
+        public System.Single LRSHshockDefl { get { return (System.Single)this["LRSHshockDefl"]; } }
+
+        /// <summary>
+        /// RFSH shock deflection
+        /// </summary>
+        public System.Single RFSHshockDefl { get { return (System.Single)this["RFSHshockDefl"]; } }
+
+        /// <summary>
+        /// LFSH shock deflection
+        /// </summary>
+        public System.Single LFSHshockDefl { get { return (System.Single)this["LFSHshockDefl"]; } }
 
         /// <summary>
         /// 
