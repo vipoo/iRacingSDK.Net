@@ -83,6 +83,11 @@ namespace iRacingSDK
         public System.Boolean DriverMarker { get { return (System.Boolean)this["DriverMarker"]; } }
 
         /// <summary>
+        /// 1=Car on track physics running with player in car
+        /// </summary>
+        public System.Boolean IsOnTrack { get { return (System.Boolean)this["IsOnTrack"]; } }
+
+        /// <summary>
         /// 0=replay not playing  1=replay playing
         /// </summary>
         public System.Boolean IsReplayPlaying { get { return (System.Boolean)this["IsReplayPlaying"]; } }
@@ -400,7 +405,7 @@ namespace iRacingSDK
         /// <summary>
         /// 1=Car on track physics running
         /// </summary>
-        public System.Boolean IsOnTrack { get { return (System.Boolean)this["IsOnTrack"]; } }
+        public System.Boolean IsOnTrackCar { get { return (System.Boolean)this["IsOnTrackCar"]; } }
 
         /// <summary>
         /// 1=Car in garage physics running
@@ -751,5 +756,6 @@ namespace iRacingSDK
         /// 
         /// </summary>
         public System.Int32 TickCount { get { return (System.Int32)this["TickCount"]; } }
+
     }
 }

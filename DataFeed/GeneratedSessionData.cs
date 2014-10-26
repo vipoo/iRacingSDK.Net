@@ -36,6 +36,7 @@ namespace iRacingSDK
             public string TrackLength { get; set; }
             public string TrackDisplayName { get; set; }
             public string TrackDisplayShortName { get; set; }
+            public string TrackConfigName { get; set; }
             public string TrackCity { get; set; }
             public string TrackCountry { get; set; }
             public string TrackAltitude { get; set; }
@@ -63,6 +64,13 @@ namespace iRacingSDK
             public string EventType { get; set; }
             public string Category { get; set; }
             public string SimMode { get; set; }
+            public long TeamRacing { get; set; }
+            public long MinDrivers { get; set; }
+            public long MaxDrivers { get; set; }
+            public string DCRuleSet { get; set; }
+            public long QualifierMustStartRace { get; set; }
+            public long NumCarClasses { get; set; }
+            public long NumCarTypes { get; set; }
 
             public partial class _WeekendOptions
             {
@@ -227,6 +235,8 @@ namespace iRacingSDK
                 public string CarPath { get; set; }
                 public long CarClassID { get; set; }
                 public long CarID { get; set; }
+                public string CarScreenName { get; set; }
+                public string CarScreenNameShort { get; set; }
                 public string CarClassShortName { get; set; }
                 public long CarClassRelSpeed { get; set; }
                 public long CarClassLicenseLevel { get; set; }
@@ -236,6 +246,7 @@ namespace iRacingSDK
                 public long IRating { get; set; }
                 public long LicLevel { get; set; }
                 public long LicSubLevel { get; set; }
+                public string LicString { get; set; }
                 public string LicColor { get; set; }
                 public long IsSpectator { get; set; }
                 public string CarDesignStr { get; set; }
