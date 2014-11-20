@@ -117,9 +117,8 @@ namespace iRacingSDK
                 }
 
                 sessionInfoString = sessionInfoString.Substring(0, sessionInfoString.IndexOf('\0'));
-
+                Trace.WriteLine(sessionInfoString, "DEBUG");
                 lastSessionInfo = DeserialiseSessionInfo(sessionInfoString, header.sessionInfoUpdate);
-                Trace.WriteLine(lastSessionInfo.Raw, "DEBUG");
             });
 
             if (lastSessionInfo == null)
