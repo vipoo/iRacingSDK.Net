@@ -134,6 +134,7 @@ namespace iRacingSDK
 
             try
             {
+                sessionInfoString.Replace(": *", ": ");
                 var input = new StringReader(sessionInfoString);
 
                 var deserializer = new Deserializer(ignoreUnmatched: true);
@@ -148,7 +149,6 @@ namespace iRacingSDK
                 Trace.WriteLine(string.Format("Error decoding session yml data {0}", e.Message), "DEBUG");
 
                 return null;
-                //return new SessionData { Raw = sessionInfoString.Replace("\n", "\r\n") };
             }
         }
 
