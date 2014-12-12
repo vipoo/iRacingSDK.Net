@@ -216,6 +216,7 @@ namespace iRacingSDK
             public double DriverHeadPosX { get; set; }
             public double DriverHeadPosY { get; set; }
             public double DriverHeadPosZ { get; set; }
+            public double DriverCarIdleRPM { get; set; }
             public double DriverCarRedLine { get; set; }
             public double DriverCarFuelKgPerLtr { get; set; }
             public double DriverCarSLFirstRPM { get; set; }
@@ -230,6 +231,8 @@ namespace iRacingSDK
                 public string AbbrevName { get; set; }
                 public string Initials { get; set; }
                 public long UserID { get; set; }
+                public long TeamID { get; set; }
+                public string TeamName { get; set; }
                 public long CarNumber { get; set; }
                 public long CarNumberRaw { get; set; }
                 public string CarPath { get; set; }
