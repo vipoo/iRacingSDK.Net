@@ -39,7 +39,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="YamlDotNet">
-      <HintPath>..\iRacingReplayOverlay.net\packages\YamlDotNet.3.1.1\lib\net35\YamlDotNet.dll</HintPath>
+      <HintPath>packages\YamlDotNet.3.1.1\lib\net35\YamlDotNet.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
@@ -123,7 +123,6 @@
     <None Include="Docs\DataSample.md" />
     <None Include="LICENSE.txt" />
     <None Include="packages.config" />
-    <None Include="packages\repositories.config" />
     <None Include="README.md" />
   </ItemGroup>
   <ProjectExtensions>
