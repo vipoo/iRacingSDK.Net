@@ -134,7 +134,7 @@ namespace iRacingSDK
 
             try
             {
-                sessionInfoString = sessionInfoString.Replace(": *", ": ").Replace(": \"\"", ": ");
+                sessionInfoString.Replace(": *", ": ");
                 var input = new StringReader(sessionInfoString);
 
                 var deserializer = new Deserializer(ignoreUnmatched: true);
