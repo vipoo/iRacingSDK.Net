@@ -66,7 +66,16 @@ namespace iRacingSDK
 
     public partial class Telemetry : Dictionary<string, object>
     {
-        public SessionData._SessionInfo._Sessions Session { get { return SessionData.SessionInfo.Sessions[SessionNum]; } }
+        public SessionData._SessionInfo._Sessions Session 
+        {
+            get 
+            {
+                if (SessionNum < 0 || SessionNum >= SessionData.SessionInfo.Sessions.Length)
+                    return null;
+
+                return SessionData.SessionInfo.Sessions[SessionNum];
+            }
+        }
 
         public Car CamCar { get { return Cars[CamCarIdx]; } }
 

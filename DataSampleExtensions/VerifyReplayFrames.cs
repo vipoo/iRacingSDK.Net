@@ -29,19 +29,31 @@ namespace iRacingSDK
         /// </summary>
         public static IEnumerable<DataSample> VerifyReplayFrames(this IEnumerable<DataSample> samples)
         {
-            bool hasLoggedBadSample = false;
+            bool hasLoggedBadReplayFrameNum = false;
+            bool hasLoggedBadSessionNum = false;
 
             foreach (var data in samples)
             {
-                if( data.Telemetry.ReplayFrameNum != 0)
-                    yield return data;
-                else if( !hasLoggedBadSample )
+                if (data.Telemetry.ReplayFrameNum == 0 ) 
                 {
-                    hasLoggedBadSample = true;
-
                     Trace.WriteLine("Received bad sample.  No ReplayFrameNumber.", "DEBUG");
-                    Trace.WriteLine(data.Telemetry.ToString(), "DEBUG");
+                    if (!hasLoggedBadReplayFrameNum )
+                    {
+                        Trace.WriteLine(data.Telemetry.ToString(), "DEBUG");
+                        hasLoggedBadReplayFrameNum = true;
+                    }
+                } 
+                else if( data.Telemetry.Session == null )
+                {
+                    Trace.WriteLine("Received bad sample.  Invalid SessionNum.", "DEBUG");
+                    if (!hasLoggedBadSessionNum )
+                    {
+                        Trace.WriteLine(data.Telemetry.ToString(), "DEBUG");
+                        hasLoggedBadSessionNum = true;
+                    }
                 }
+                else
+                    yield return data;
             }
         }
     }
