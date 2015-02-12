@@ -26,7 +26,7 @@ namespace iRacingSDK.Net.Tests
     [TestFixture]
     public class VerifyReplayFrame
     {
-        DataSample[] CreateSamplesFromFrameNumbers(params int[] frameNumbers)
+        DataSample[] CreateSamplesFromFrameNumbers(SessionData s, params int[] frameNumbers)
         {
             DataSample lastSample = null;
 
@@ -37,11 +37,13 @@ namespace iRacingSDK.Net.Tests
                         IsConnected = true,
                         Telemetry = new Telemetry
                         {
+                            { "SessionNum", 0 },
                             { "ReplayFrameNum", n }
                         },
                         LastSample = lastSample
                     };
 
+                    sample.Telemetry.SessionData = s;
                     lastSample = sample;
                     return sample;
                 }
@@ -56,7 +58,9 @@ namespace iRacingSDK.Net.Tests
         [Test]
         public void it_skips_a_single_zero_frame()
         {
-            var inputSamples = CreateSamplesFromFrameNumbers(1, 2, 3, 0, 4, 5);
+            var s = new SessionData { SessionInfo = new SessionData._SessionInfo { Sessions = new[] { new SessionData._SessionInfo._Sessions() } } };
+
+            var inputSamples = CreateSamplesFromFrameNumbers(s, 1, 2, 3, 0, 4, 5);
 
             var samples = iRacingSDK.DataSampleExtensions.VerifyReplayFrames(inputSamples).ToList();
 
@@ -66,11 +70,27 @@ namespace iRacingSDK.Net.Tests
         [Test]
         public void it_skips_a_two_zero_frame()
         {
-            var inputSamples = CreateSamplesFromFrameNumbers(1, 2, 3, 0, 0, 4, 5);
+            var s = new SessionData { SessionInfo = new SessionData._SessionInfo { Sessions = new[] { new SessionData._SessionInfo._Sessions() } } };
+
+            var inputSamples = CreateSamplesFromFrameNumbers(s, 1, 2, 3, 0, 0, 4, 5);
 
             var samples = iRacingSDK.DataSampleExtensions.VerifyReplayFrames(inputSamples).ToList();
 
             Assert.That(FrameNumbersFromSamples(samples), Is.EqualTo(new[] { 1, 2, 3, 4, 5 }));
+        }
+
+        [Test]
+        public void it_skips_if_no_matching_session()
+        {
+            var s = new SessionData { SessionInfo = new SessionData._SessionInfo { Sessions = new[] { new SessionData._SessionInfo._Sessions() } } };
+
+            var inputSamples = CreateSamplesFromFrameNumbers(s, 1, 2, 3, 4, 5);
+
+            inputSamples.First().Telemetry["SessionNum"] = 1;
+               
+            var samples = iRacingSDK.DataSampleExtensions.VerifyReplayFrames(inputSamples).ToList();
+
+            Assert.That(FrameNumbersFromSamples(samples), Is.EqualTo(new [] { 2, 3, 4, 5 }));
         }
     }
 }
