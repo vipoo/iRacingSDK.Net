@@ -30,7 +30,7 @@ namespace iRacingSDK
         
         public CarArray(Telemetry telemetry)
         {
-            var drivers = telemetry.SessionData.DriverInfo.FixDrivers;
+            var drivers = telemetry.SessionData.DriverInfo.CompetingDrivers;
 
             cars = new Car[drivers.Length];
 

@@ -128,7 +128,7 @@ namespace iRacingSDKSample
                 if (next == null)
                     break;
 
-                var number = data.SessionData.DriverInfo.FixDrivers[next.CarIdx].CarNumberRaw;
+                var number = data.SessionData.DriverInfo.CompetingDrivers[next.CarIdx].CarNumberRaw;
 
                 iRacing.Replay.CameraOnDriver((short)number, (short)camera.GroupNum, 0);
 
@@ -148,7 +148,7 @@ namespace iRacingSDKSample
 //                Console.WriteLine("Final Lap is {0}", data.Telemetry.IsFinalLap);
   //              Console.WriteLine("Is Finished {0}", data.Telemetry.LeaderHasFinished);
 
-                for (int i = 1; i < data.SessionData.DriverInfo.FixDrivers.Length; i++)
+                for (int i = 1; i < data.SessionData.DriverInfo.CompetingDrivers.Length; i++)
                 {
                     //Console.WriteLine("{0} lap is {1}", data.SessionData.DriverInfo.Drivers[i].UserName, data.Telemetry.CarIdxLap[i]);
                     //Console.WriteLine("{0} is finished {1}", data.SessionData.DriverInfo.Drivers[i].UserName, data.Telemetry.HasSeenCheckeredFlag[i]);
@@ -160,7 +160,7 @@ namespace iRacingSDKSample
 
                     if (data.Telemetry.CarIdxTrackSurface[i] == TrackLocation.NotInWorld)
                     {
-                        Console.WriteLine("{0} has no data at {1}", data.SessionData.DriverInfo.FixDrivers[i].UserName, data.Telemetry.SessionTime, data.Telemetry.ReplayFrameNum);
+                        Console.WriteLine("{0} has no data at {1}", data.SessionData.DriverInfo.CompetingDrivers[i].UserName, data.Telemetry.SessionTime, data.Telemetry.ReplayFrameNum);
                     }
                 }
 
@@ -192,7 +192,7 @@ namespace iRacingSDKSample
                     if( lastLaps[i] != data.Telemetry.CarIdxLap[i])
                     {
                         lastLaps[i] = data.Telemetry.CarIdxLap[i];
-                        var name = data.SessionData.DriverInfo.FixDrivers[i].UserName;
+                        var name = data.SessionData.DriverInfo.CompetingDrivers[i].UserName;
                         var position = data.SessionData.SessionInfo.Sessions[2].ResultsPositions.First(r => r.CarIdx == i).Position;
 
                        // if (lastLaps[i] == data.SessionData.SessionInfo.Sessions[2].ResultsLapsComplete + 1)

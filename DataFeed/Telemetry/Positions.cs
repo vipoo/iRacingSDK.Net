@@ -43,7 +43,7 @@ namespace iRacingSDK
                     .ToList();
 
                 var maxRunningOrderIndex = runningOrder.Count == 0 ? 0 : runningOrder.Max(ro => ro.CarIdx);
-                var maxSessionIndex = this.SessionData.DriverInfo.FixDrivers.Length;
+                var maxSessionIndex = this.SessionData.DriverInfo.CompetingDrivers.Length;
 
                 positions = new int[ Math.Max(maxRunningOrderIndex, maxSessionIndex)+1 ];
 

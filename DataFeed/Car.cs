@@ -33,7 +33,7 @@ namespace iRacingSDK
         {
             this.telemetry = telemetry;
             this.carIdx = carIdx;
-            this.driver = telemetry.SessionData.DriverInfo.FixDrivers[carIdx];
+            this.driver = telemetry.SessionData.DriverInfo.CompetingDrivers[carIdx];
         }
 
         public int Index { get { return carIdx; } }
@@ -61,7 +61,7 @@ namespace iRacingSDK
         {
             this.telemetry = telemetry;
             this.carIdx = carIdx;
-            this.driver = telemetry.SessionData.DriverInfo.FixDrivers[carIdx];
+            this.driver = telemetry.SessionData.DriverInfo.CompetingDrivers[carIdx];
             this.Details = new CarDetails(telemetry, carIdx);
         }
 

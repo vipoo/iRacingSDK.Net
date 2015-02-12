@@ -47,25 +47,46 @@ namespace iRacingSDK
                 public bool IsPaceCar { get { return this.CarIdx == 0; } }
             }
 
-            _Drivers[] fixDrivers = null;
+            _Drivers[] competingDrivers = null;
 
-            public _Drivers[] FixDrivers
+            public _Drivers[] CompetingDrivers
             {
                 get
                 {
-                    if (fixDrivers != null)
-                        return fixDrivers;
+                    if (competingDrivers != null)
+                        return competingDrivers;
 
-                    fixDrivers = new _Drivers[this.Drivers.MaxLength()];
+                    competingDrivers = new _Drivers[this.Drivers.MaxLength()];
 
                     foreach (var d in this.Drivers)
-                        fixDrivers[d.CarIdx] = d;
+                        if( d.CarIdx < competingDrivers.Length)
+                            competingDrivers[d.CarIdx] = d;
 
-                    for (var i = 0; i < fixDrivers.Length; i++)
-                        if (fixDrivers[i] == null)
-                            fixDrivers[i] = new _Drivers();
+                    for (var i = 0; i < competingDrivers.Length; i++)
+                        if (competingDrivers[i] == null)
+                            competingDrivers[i] = new _Drivers
+                            {
+                                UserName = "",
+                                AbbrevName = "",
+                                Initials = "",
+                                TeamName = "",
+                                CarNumber = "",
+                                CarPath = "",
+                                CarScreenName = "",
+                                CarScreenNameShort = "",
+                                CarClassShortName = "",
+                                CarClassMaxFuel = "",
+                                CarClassWeightPenalty = "",
+                                CarClassColor = "",
+                                LicString = "",
+                                LicColor = "",
+                                CarDesignStr = "",
+                                HelmetDesignStr = "",
+                                SuitDesignStr = "",
+                                CarNumberDesignStr = ""
+                            };
 
-                    return fixDrivers;
+                    return competingDrivers;
                 }
             }
            
@@ -81,12 +102,7 @@ namespace iRacingSDK
 
         public static int MaxLength(this SessionData._DriverInfo._Drivers[] self)
         {
-            return (int)self.Max(d => d.CarIdx) + 1;
-        }
-
-        public static int MaxCarIdx(this SessionData._DriverInfo._Drivers[] self)
-        {
-            return (int)self.Max(d => d.CarIdx);
+            return (int)self.Where(d => d.CarNumberRaw > 0).Max(d => d.CarIdx) + 1;
         }
     }
 }

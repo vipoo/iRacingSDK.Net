@@ -63,7 +63,7 @@ namespace iRacingSDK
         static void ApplyHasSeenCheckeredFlag(DataSample data, bool[] hasSeenCheckeredFlag)
         {
             if (data.LastSample != null && data.Telemetry.LeaderHasFinished)
-                for (int i = 1; i < data.SessionData.DriverInfo.FixDrivers.Length; i++)
+                for (int i = 1; i < data.SessionData.DriverInfo.CompetingDrivers.Length; i++)
                     if (data.LastSample.Telemetry.CarIdxLapDistPct[i] > 0.90 && data.Telemetry.CarIdxLapDistPct[i] < 0.10)
                         hasSeenCheckeredFlag[i] = true;
 
@@ -77,7 +77,7 @@ namespace iRacingSDK
             if (!(new[] { SessionState.Racing, SessionState.Checkered, SessionState.CoolDown }).Contains(data.Telemetry.SessionState))
                 return;
 
-            for (int i = 1; i < data.SessionData.DriverInfo.FixDrivers.Length; i++)
+            for (int i = 1; i < data.SessionData.DriverInfo.CompetingDrivers.Length; i++)
             {
                 if (data.Telemetry.HasSeenCheckeredFlag[i])
                     continue;

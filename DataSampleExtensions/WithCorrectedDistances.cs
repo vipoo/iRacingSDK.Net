@@ -42,8 +42,8 @@ namespace iRacingSDK
 
             foreach (var data in samples.ForwardOnly())
             {
-                for (int i = 0; i < data.SessionData.DriverInfo.FixDrivers.Length; i++)
-                    CorrectDistance(data.SessionData.DriverInfo.FixDrivers[i].UserName,
+                for (int i = 0; i < data.SessionData.DriverInfo.CompetingDrivers.Length; i++)
+                    CorrectDistance(data.SessionData.DriverInfo.CompetingDrivers[i].UserName,
                         ref data.Telemetry.CarIdxLap[i],
                         ref data.Telemetry.CarIdxLapDistPct[i],
                         ref maxDistance[i],

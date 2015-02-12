@@ -41,7 +41,7 @@ namespace iRacingSDK
 
 			foreach (var data in samples.ForwardOnly())
 			{
-				for (int i = 0; i < data.SessionData.DriverInfo.FixDrivers.Length; i++)
+				for (int i = 0; i < data.SessionData.DriverInfo.CompetingDrivers.Length; i++)
 					if (data.Telemetry.HasData(i))
 						FixPercentagesOnLapChange(
 							ref lastLaps[i], 
