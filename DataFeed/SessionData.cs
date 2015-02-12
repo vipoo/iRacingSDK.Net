@@ -46,6 +46,29 @@ namespace iRacingSDK
             {
                 public bool IsPaceCar { get { return this.CarIdx == 0; } }
             }
+
+            _Drivers[] fixDrivers = null;
+
+            public _Drivers[] FixDrivers
+            {
+                get
+                {
+                    if (fixDrivers != null)
+                        return fixDrivers;
+
+                    fixDrivers = new _Drivers[this.Drivers.MaxLength()];
+
+                    foreach (var d in this.Drivers)
+                        fixDrivers[d.CarIdx] = d;
+
+                    for (var i = 0; i < fixDrivers.Length; i++)
+                        if (fixDrivers[i] == null)
+                            fixDrivers[i] = new _Drivers();
+
+                    return fixDrivers;
+                }
+            }
+           
         }
     }
 
@@ -59,6 +82,11 @@ namespace iRacingSDK
         public static int MaxLength(this SessionData._DriverInfo._Drivers[] self)
         {
             return (int)self.Max(d => d.CarIdx) + 1;
+        }
+
+        public static int MaxCarIdx(this SessionData._DriverInfo._Drivers[] self)
+        {
+            return (int)self.Max(d => d.CarIdx);
         }
     }
 }

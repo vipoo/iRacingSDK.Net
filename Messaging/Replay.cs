@@ -125,7 +125,7 @@ namespace iRacingSDK
                 MoveToQualifying();
                 return true;
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 return false;
             }
