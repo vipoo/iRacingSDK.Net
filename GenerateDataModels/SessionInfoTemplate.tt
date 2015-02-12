@@ -42,65 +42,71 @@ using System.Linq;
 
 namespace iRacingSDK
 {
-	public partial class SessionData
-	{
-		<# foreach(var kv in mapping)
-			Process(kv.Key.ToString(), kv.Value);
-		 #>
+    public partial class SessionData
+    {
+        <# foreach(var kv in mapping)
+            Process(kv.Key.ToString(), kv.Value);
+        #>
     }
 }
 
 <#+
-	private void Process(string name, YamlNode node)
-	{
-		var mappingNode = node as YamlMappingNode;
+    private void Process(string name, YamlNode node)
+    {
+        var mappingNode = node as YamlMappingNode;
         var scalarNode = node as YamlScalarNode;
         var sequenceNode = node as YamlSequenceNode;
 
-		if( scalarNode != null )
-		{
-			long result;
-			var isLong = long.TryParse(scalarNode.Value, out result);
-			double doubleResult;
+        if( scalarNode != null )
+        {
+            long result;
+            var isLong = long.TryParse(scalarNode.Value, out result);
+            double doubleResult;
 
-			var isDouble = double.TryParse(scalarNode.Value, out doubleResult);
+            var isDouble = double.TryParse(scalarNode.Value, out doubleResult);
 
-			var type = "string";
-			if( isDouble)
-				type = "double";
-			if( isLong)
-				type = "long";
-#>				public <#=type #> <#= name #> { get; set; }
-<#+			
-		}
-		else if (sequenceNode != null )
-		{
-#>
-			public partial class _<#= name #>
-			{
+            var type = "string";
+            if( isDouble )
+                type = "double";
+            if( isLong )
+                type = "long";
+
+				Console.WriteLine(name);
+
+            if( name == "CarNumber")
+                type = "string";
+
+#>          public <#=type #> <#= name #> { get; set; }
 <#+
-				var nodes = (YamlMappingNode)sequenceNode.First();
-				foreach( var kv in nodes)
-				{
-					Process(kv.Key.ToString(), kv.Value);
-				}
+        }
+            else if (sequenceNode != null )
+        {
+#>
+            public partial class _<#= name #>
+            {
+<#+
+                var nodes = (YamlMappingNode)sequenceNode.First();
+                foreach( var kv in nodes)
+                {
+                    Process(kv.Key.ToString(), kv.Value);
+                }
 
-#>			}
+#>            }
 
-			public _<#= name #>[] <#=name #> { get; set; }
-<#+		}
-		else if( mappingNode != null )
-		{
+            public _<#= name #>[] <#=name #> { get; set; }
+<#+        }
+        else if( mappingNode != null )
+        {
 #>
 
-			public partial class _<#= name #>
-			{
-<#+				foreach(var kv in mappingNode)
-					Process(kv.Key.ToString(), kv.Value);
-#>			}
+            public partial class _<#= name #>
+            {
+<#+            foreach(var kv in mappingNode)
+                Process(kv.Key.ToString(), kv.Value);
+#>            }
 
-			public _<#= name #> <#= name #>  { get; set; }
-<#+		
-		}
-	}
+            public _<#= name #> <#= name #>  { get; set; }
+<#+
+        }
+    }
 #>

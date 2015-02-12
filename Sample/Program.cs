@@ -128,7 +128,7 @@ namespace iRacingSDKSample
                 if (next == null)
                     break;
 
-                var number = data.SessionData.DriverInfo.FixDrivers[next.CarIdx].CarNumber;
+                var number = data.SessionData.DriverInfo.FixDrivers[next.CarIdx].CarNumberRaw;
 
                 iRacing.Replay.CameraOnDriver((short)number, (short)camera.GroupNum, 0);
 
