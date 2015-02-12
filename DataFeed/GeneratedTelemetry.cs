@@ -508,6 +508,11 @@ namespace iRacingSDK
         public System.Int32 ReplaySessionNum { get { return (System.Int32)this["ReplaySessionNum"]; } }
 
         /// <summary>
+        /// In car front anti roll bar adjustment
+        /// </summary>
+        public System.Single dcAntiRollFront { get { return (System.Single)this["dcAntiRollFront"]; } }
+
+        /// <summary>
         /// In car brake bias adjustment
         /// </summary>
         public System.Single dcBrakeBias { get { return (System.Single)this["dcBrakeBias"]; } }
@@ -541,6 +546,16 @@ namespace iRacingSDK
         /// Pitstop wedge adjustment
         /// </summary>
         public System.Single dpWedgeAdj { get { return (System.Single)this["dpWedgeAdj"]; } }
+        
+        /// <summary>
+        /// In car rear anti roll bar adjustment
+        /// </summary>
+        public System.Single dcAntiRollRear { get { return (System.Single)this["dcAntiRollRear"]; } }
+
+        /// <summary>
+        /// Pitstop rear wing adjustment
+        /// </summary>
+        public System.Single dpRWingSetting { get { return (System.Single)this["dpRWingSetting"]; } }
 
         /// <summary>
         /// Engine coolant temp
