@@ -28,7 +28,7 @@ namespace iRacingSDK.Net.Tests
     {
         static DataSample[] CreatesSamples(params TrackLocation[] values)
         {
-            var s = new SessionData { DriverInfo = new SessionData._DriverInfo { Drivers = new[] { new SessionData._DriverInfo._Drivers { UserName = "Test" } } } };
+            var s = new SessionData { DriverInfo = new SessionData._DriverInfo { Drivers = new[] { new SessionData._DriverInfo._Drivers { UserName = "Test", CarNumberRaw = 1 } } } };
 
             var samples = values.Select(ss => new DataSample
             {

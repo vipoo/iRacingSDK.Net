@@ -18,7 +18,7 @@ namespace iRacingSDK
         {
             telemetry = new Telemetry();
 
-            driver = new SessionData._DriverInfo._Drivers();
+            driver = new SessionData._DriverInfo._Drivers { CarNumberRaw = 1 };
 
             telemetry.SessionData = new SessionData
             {
