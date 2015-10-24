@@ -84,7 +84,7 @@ namespace iRacingSDK
             Wait();
 
             if (mode == ReplayPositionMode.Begin)
-                data = WaitAndVerify(d => Math.Abs(d.Telemetry.ReplayFrameNum - frameNumber) > 32, 6000);
+                data = WaitAndVerify(d => Math.Abs(d.Telemetry.ReplayFrameNum - frameNumber) > 32);
 
             Wait();
 
@@ -215,18 +215,15 @@ namespace iRacingSDK
             SendMessage(BroadcastMessage.ReplaySearch, (short)mode);
         }
 
-        DataSample WaitAndVerify(Func<DataSample, bool> verifyFn, int wait = 5000)
-        {
-            return WaitAndVerify(verifyFn, () => { }, wait);
-        }
-
         DataSample WaitAndVerify(Func<DataSample, bool> verifyFn)
         {
             return WaitAndVerify(verifyFn, () => { });
         }
 
-        DataSample WaitAndVerify(Func<DataSample, bool> verifyFn, Action action, int wait = 5000)
+        DataSample WaitAndVerify(Func<DataSample, bool> verifyFn, Action action)
         {
+            const int wait = 60000;
+
             if (iRacingInstance.IsRunning)
                 return null;
 
