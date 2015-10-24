@@ -78,6 +78,11 @@ namespace iRacingSDK
         public System.Int32 RadioTransmitFrequencyIdx { get { return (System.Int32)this["RadioTransmitFrequencyIdx"]; } }
 
         /// <summary>
+        /// Default units for the user interface 0 = english 1 = metric
+        /// </summary>
+        public System.Int32 DisplayUnits { get { return (System.Int32)this["DisplayUnits"]; } }
+
+        /// <summary>
         /// Driver activated flag
         /// </summary>
         public System.Boolean DriverMarker { get { return (System.Boolean)this["DriverMarker"]; } }
@@ -103,7 +108,7 @@ namespace iRacingSDK
         public System.Int32 ReplayFrameNumEnd { get { return (System.Int32)this["ReplayFrameNumEnd"]; } }
 
         /// <summary>
-        /// 0=disk based telemetry turned off, 1=turned on
+        /// 0=disk based telemetry turned off  1=turned on
         /// </summary>
         public System.Boolean IsDiskLoggingEnabled { get { return (System.Boolean)this["IsDiskLoggingEnabled"]; } }
 
@@ -121,6 +126,16 @@ namespace iRacingSDK
         /// Percent of available tim bg thread took with a 1 sec avg
         /// </summary>
         public System.Single CpuUsageBG { get { return (System.Single)this["CpuUsageBG"]; } }
+
+        /// <summary>
+        /// Players position in race
+        /// </summary>
+        public System.Int32 PlayerCarPosition { get { return (System.Int32)this["PlayerCarPosition"]; } }
+
+        /// <summary>
+        /// Players class position in race
+        /// </summary>
+        public System.Int32 PlayerCarClassPosition { get { return (System.Int32)this["PlayerCarClassPosition"]; } }
 
         /// <summary>
         /// Lap count by car index
@@ -141,6 +156,26 @@ namespace iRacingSDK
         /// On pit road between the cones by car index
         /// </summary>
         public System.Boolean[] CarIdxOnPitRoad { get { return (System.Boolean[])this["CarIdxOnPitRoad"]; } }
+
+        /// <summary>
+        /// Cars position in race by car index
+        /// </summary>
+        public System.Int32[] CarIdxPosition { get { return (System.Int32[])this["CarIdxPosition"]; } }
+
+        /// <summary>
+        /// Cars class position in race by car index
+        /// </summary>
+        public System.Int32[] CarIdxClassPosition { get { return (System.Int32[])this["CarIdxClassPosition"]; } }
+
+        /// <summary>
+        /// Race time behind leader or fastest lap time otherwise
+        /// </summary>
+        public System.Single[] CarIdxF2Time { get { return (System.Single[])this["CarIdxF2Time"]; } }
+
+        /// <summary>
+        /// Estimated time to reach current location on track
+        /// </summary>
+        public System.Single[] CarIdxEstTime { get { return (System.Single[])this["CarIdxEstTime"]; } }
 
         /// <summary>
         /// Is the player car on pit road between the cones
@@ -231,6 +266,26 @@ namespace iRacingSDK
         /// Estimate of players current lap time as shown in F3 box
         /// </summary>
         public System.Single LapCurrentLapTime { get { return (System.Single)this["LapCurrentLapTime"]; } }
+
+        /// <summary>
+        /// Player num consecutive clean laps completed for N average
+        /// </summary>
+        public System.Int32 LapLasNLapSeq { get { return (System.Int32)this["LapLasNLapSeq"]; } }
+
+        /// <summary>
+        /// Player last N average lap time
+        /// </summary>
+        public System.Single LapLastNLapTime { get { return (System.Single)this["LapLastNLapTime"]; } }
+
+        /// <summary>
+        /// Player last lap in best N average lap time
+        /// </summary>
+        public System.Int32 LapBestNLapLap { get { return (System.Int32)this["LapBestNLapLap"]; } }
+
+        /// <summary>
+        /// Player best N average lap time
+        /// </summary>
+        public System.Single LapBestNLapTime { get { return (System.Single)this["LapBestNLapTime"]; } }
 
         /// <summary>
         /// Delta time for best lap
@@ -373,6 +428,71 @@ namespace iRacingSDK
         public System.Single Roll { get { return (System.Single)this["Roll"]; } }
 
         /// <summary>
+        /// Indicate action the reset key will take 0 enter 1 exit 2 reset
+        /// </summary>
+        public System.Int32 EnterExitReset { get { return (System.Int32)this["EnterExitReset"]; } }
+
+        /// <summary>
+        /// Temperature of track at start/finish line
+        /// </summary>
+        public System.Single TrackTemp { get { return (System.Single)this["TrackTemp"]; } }
+
+        /// <summary>
+        /// Temperature of air at start/finish line
+        /// </summary>
+        public System.Single AirTemp { get { return (System.Single)this["AirTemp"]; } }
+
+        /// <summary>
+        /// Weather type (0=constant  1=dynamic)
+        /// </summary>
+        public System.Int32 WeatherType { get { return (System.Int32)this["WeatherType"]; } }
+
+        /// <summary>
+        /// Skies (0=clear/1=p cloudy/2=m cloudy/3=overcast)
+        /// </summary>
+        public System.Int32 Skies { get { return (System.Int32)this["Skies"]; } }
+
+        /// <summary>
+        /// Density of air at start/finish line
+        /// </summary>
+        public System.Single AirDensity { get { return (System.Single)this["AirDensity"]; } }
+
+        /// <summary>
+        /// Pressure of air at start/finish line
+        /// </summary>
+        public System.Single AirPressure { get { return (System.Single)this["AirPressure"]; } }
+
+        /// <summary>
+        /// Wind velocity at start/finish line
+        /// </summary>
+        public System.Single WindVel { get { return (System.Single)this["WindVel"]; } }
+
+        /// <summary>
+        /// Wind direction at start/finish line
+        /// </summary>
+        public System.Single WindDir { get { return (System.Single)this["WindDir"]; } }
+
+        /// <summary>
+        /// Relative Humidity
+        /// </summary>
+        public System.Single RelativeHumidity { get { return (System.Single)this["RelativeHumidity"]; } }
+
+        /// <summary>
+        /// Fog level
+        /// </summary>
+        public System.Single FogLevel { get { return (System.Single)this["FogLevel"]; } }
+
+        /// <summary>
+        /// Status of driver change lap requirements
+        /// </summary>
+        public System.Int32 DCLapStatus { get { return (System.Int32)this["DCLapStatus"]; } }
+
+        /// <summary>
+        /// Number of team drivers who have run a stint
+        /// </summary>
+        public System.Int32 DCDriversSoFar { get { return (System.Int32)this["DCDriversSoFar"]; } }
+
+        /// <summary>
         /// Time left for mandatory pit repairs if repairs are active
         /// </summary>
         public System.Single PitRepairLeft { get { return (System.Single)this["PitRepairLeft"]; } }
@@ -486,6 +606,36 @@ namespace iRacingSDK
         /// Percent fuel remaining
         /// </summary>
         public System.Single FuelLevelPct { get { return (System.Single)this["FuelLevelPct"]; } }
+
+        /// <summary>
+        /// Bitfield of pit service checkboxes
+        /// </summary>
+        public System.Int32 PitSvFlags { get { return (System.Int32)this["PitSvFlags"]; } }
+
+        /// <summary>
+        /// Pit service left front tire pressure
+        /// </summary>
+        public System.Single PitSvLFP { get { return (System.Single)this["PitSvLFP"]; } }
+
+        /// <summary>
+        /// Pit service right front tire pressure
+        /// </summary>
+        public System.Single PitSvRFP { get { return (System.Single)this["PitSvRFP"]; } }
+
+        /// <summary>
+        /// Pit service left rear tire pressure
+        /// </summary>
+        public System.Single PitSvLRP { get { return (System.Single)this["PitSvLRP"]; } }
+
+        /// <summary>
+        /// Pit service right rear tire pressure
+        /// </summary>
+        public System.Single PitSvRRP { get { return (System.Single)this["PitSvRRP"]; } }
+
+        /// <summary>
+        /// Pit service fuel add amount
+        /// </summary>
+        public System.Single PitSvFuel { get { return (System.Single)this["PitSvFuel"]; } }
 
         /// <summary>
         /// Replay playback speed

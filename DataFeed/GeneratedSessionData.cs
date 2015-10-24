@@ -219,11 +219,18 @@ namespace iRacingSDK
             public double DriverCarIdleRPM { get; set; }
             public double DriverCarRedLine { get; set; }
             public double DriverCarFuelKgPerLtr { get; set; }
+            public double DriverCarFuelMaxLtr { get; set; }
+            public double DriverCarMaxFuelPct { get; set; }
             public double DriverCarSLFirstRPM { get; set; }
             public double DriverCarSLShiftRPM { get; set; }
             public double DriverCarSLLastRPM { get; set; }
             public double DriverCarSLBlinkRPM { get; set; }
             public double DriverPitTrkPct { get; set; }
+            public double DriverCarEstLapTime { get; set; }
+            public string DriverSetupName { get; set; }
+            public long DriverSetupIsModified { get; set; }
+            public string DriverSetupLoadTypeName { get; set; }
+            public long DriverSetupPassedTech { get; set; }
             public partial class _Drivers
             {
                 public long CarIdx { get; set; }
@@ -244,6 +251,7 @@ namespace iRacingSDK
                 public long CarClassRelSpeed { get; set; }
                 public long CarClassLicenseLevel { get; set; }
                 public string CarClassMaxFuel { get; set; }
+                public string CarClassMaxFuelPct { get; set; }
                 public string CarClassWeightPenalty { get; set; }
                 public string CarClassColor { get; set; }
                 public long IRating { get; set; }
