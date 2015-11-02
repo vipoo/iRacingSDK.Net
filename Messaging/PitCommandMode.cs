@@ -53,6 +53,10 @@ namespace iRacingSDK
         /// <summary>
         /// Clear tire pit checkboxes tire, optionally specifying the pressure in KPa or pass '0' to use existing pressure
         /// </summary>
-        ClearTires
+        ClearTires,
+        /// <summary>
+        /// Request fast repair
+        /// </summary>
+        FastRepair
     };
 }

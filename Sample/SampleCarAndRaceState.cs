@@ -40,6 +40,7 @@ namespace Sample
                 Trace.WriteLine("Pace Car Location: {0}".F(data.Telemetry.CarIdxTrackSurface[0]));
                 Trace.WriteLine("Under pace car: {0}".F(data.Telemetry.UnderPaceCar));
 
+                Trace.WriteLine("Position:{0}".F(data.Telemetry.PlayerCarPosition));
                 Trace.WriteLine("\n\n");
 
                 Thread.Sleep(2000);

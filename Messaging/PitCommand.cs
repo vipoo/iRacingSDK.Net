@@ -74,5 +74,10 @@ namespace iRacingSDK
             ChangeLeftRearTire();
             ChangeRightRearTire();
         }
+
+        public void RequestFastRepair()
+        {
+            SendMessage(PitCommandMode.FastRepair);
+        }
     }
 }

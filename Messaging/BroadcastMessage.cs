@@ -82,6 +82,16 @@ namespace iRacingSDK
         /// The Telemetry Command : TelemCommandMode, ...
         /// You can call this any time, but telemtry only records when driver is in there car
         /// </summary>
-        BroadcastTelemetryCommand
+        BroadcastTelemetryCommand,
+
+        /// <summary>
+        /// value (float, high, low)
+        /// </summary>
+        BroadcastFFBCommand,
+        
+        /// <summary>
+        /// sessionTimeMS (high, low)
+        /// </summary>
+        BroadcastReplaySearchSessionTime
     };
 }
