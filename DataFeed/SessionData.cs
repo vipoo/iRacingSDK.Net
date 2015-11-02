@@ -100,6 +100,11 @@ namespace iRacingSDK
             return sessions.FirstOrDefault(s => s.SessionType.ToLower().Contains("qualif"));
         }
 
+        public static SessionData._SessionInfo._Sessions Race(this SessionData._SessionInfo._Sessions[] sessions)
+        {
+            return sessions.FirstOrDefault(s => s.SessionType.ToLower().Contains("race"));
+        }
+
         public static int MaxLength(this SessionData._DriverInfo._Drivers[] self)
         {
             return (int)self.Where(d => d.CarNumberRaw > 0).Max(d => d.CarIdx) + 1;
