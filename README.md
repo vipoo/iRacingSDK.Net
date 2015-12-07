@@ -1,5 +1,7 @@
 #iRacingSDK.Net - Alternative
 
+[![Build status](https://ci.appveyor.com/api/projects/status/853b0br452jiflwg?svg=true)](https://ci.appveyor.com/project/vipoo/iracingsdk-net)
+
 This dot.net library allows access to the raw data stream from the iRacing Motorsport Racing simulation (www.iracing.com).  It also provides an interface to control certain aspects of the game.  It is based on the official C++ SDK.
 
 It provides access to the game's data interface using conventional dot.net paradigms.
