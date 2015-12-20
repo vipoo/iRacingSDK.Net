@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTitle("iRacingSDK")]
 [assembly: AssemblyDescription("Accesses iRacing's published data feed for use in dot.net based applications.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Dean Netherton")]
 [assembly: AssemblyProduct("")]
 [assembly: AssemblyCopyright("Dean Netherton")]
 [assembly: AssemblyTrademark("")]

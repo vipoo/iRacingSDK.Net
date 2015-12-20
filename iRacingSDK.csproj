@@ -35,6 +35,8 @@
     <LangVersion>5</LangVersion>
     <AssemblyName>iRacingSDK</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -121,6 +123,7 @@
     <None Include="Docs\DataFeedFilters_WithCorrectedPercentages.md" />
     <None Include="Docs\DataFeedFilters.md" />
     <None Include="Docs\DataSample.md" />
+    <None Include="iRacingSDK.nuspec" />
     <None Include="LICENSE.txt" />
     <None Include="packages.config" />
     <None Include="README.md" />
