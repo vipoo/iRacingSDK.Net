@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>$id$</id>
+    <id>iRacingSDK</id>
     <version>$version$</version>
     <title>iRacingSDK</title>
     <authors>Dean Netherton</authors>
@@ -16,6 +16,7 @@
     <tags>iRacing</tags>
   </metadata>
   <files>
+    <file src="bin\AnyCPU\Release\iRacingSDK.dll" target="lib\net451" />
     <file src="bin\AnyCPU\Release\iRacingSDK.pdb" target="lib\net451" />
   </files>
 </package>
