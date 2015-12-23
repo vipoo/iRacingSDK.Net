@@ -16,7 +16,7 @@
     <tags>iRacing</tags>
   </metadata>
   <files>
-    <file src="bin\AnyCPU\Release\iRacingSDK.dll" target="lib\net4" />
-    <file src="bin\AnyCPU\Release\iRacingSDK.pdb" target="lib\net4" />
+    <file src="bin\AnyCPU\Release\iRacingSDK.dll" target="lib\net40-client" />
+    <file src="bin\AnyCPU\Release\iRacingSDK.pdb" target="lib\net40-client" />
   </files>
 </package>
