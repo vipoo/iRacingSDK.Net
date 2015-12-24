@@ -105,20 +105,27 @@ namespace iRacingSDK
 
             var t = Task.Factory.StartNew(() => {
 
-                var sessionInfoData = new byte[header.sessionInfoLen];
-                accessor.ReadArray<byte>(header.sessionInfoOffset, sessionInfoData, 0, header.sessionInfoLen);
-                var sessionInfoString = System.Text.Encoding.Default.GetString(sessionInfoData);
+                try {
+                    var sessionInfoData = new byte[header.sessionInfoLen];
+                    accessor.ReadArray<byte>(header.sessionInfoOffset, sessionInfoData, 0, header.sessionInfoLen);
+                    var sessionInfoString = System.Text.Encoding.Default.GetString(sessionInfoData);
 
-                var length = sessionInfoString.IndexOf('\0');
-                if (length == -1)
-                {
-                    lastSessionInfo = null;
-                    return;
+                    var length = sessionInfoString.IndexOf('\0');
+                    if (length == -1)
+                    {
+                        lastSessionInfo = null;
+                        return;
+                    }
+
+                    sessionInfoString = sessionInfoString.Substring(0, sessionInfoString.IndexOf('\0'));
+                    Trace.WriteLine(sessionInfoString, "DEBUG");
+                    lastSessionInfo = DeserialiseSessionInfo(sessionInfoString, header.sessionInfoUpdate);
                 }
-
-                sessionInfoString = sessionInfoString.Substring(0, sessionInfoString.IndexOf('\0'));
-                Trace.WriteLine(sessionInfoString, "DEBUG");
-                lastSessionInfo = DeserialiseSessionInfo(sessionInfoString, header.sessionInfoUpdate);
+                catch(Exception e)
+                {
+                    TraceInfo.WriteLine(e.Message);
+                    Trace.WriteLine(e.StackTrace, "DEBUG");
+                }
             });
 
             if (lastSessionInfo == null)
