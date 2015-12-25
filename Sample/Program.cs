@@ -203,7 +203,9 @@ namespace iRacingSDKSample
 
             return;
 
+#pragma warning disable CS0162 // Unreachable code detected
             foreach (var data in iRacing.GetDataFeed().WithCorrectedPercentages().AtSpeed(16).RaceOnly())
+#pragma warning restore CS0162 // Unreachable code detected
             {
                 Console.Clear();
 
