@@ -17,7 +17,9 @@
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
 using iRacingSDK;
+using iRacingSDK.Support;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 
 namespace Sample
@@ -30,11 +32,15 @@ namespace Sample
 
             foreach (var data in iracing.GetDataFeed()
                 .WithCorrectedPercentages()
-                .WithCorrectedDistances())
+                .WithCorrectedDistances()
+                .WithPitStopCounts())
             {
-                System.Diagnostics.Debugger.Break();
+                var name = "Nelson Armada";
+                var driver = data.SessionData.DriverInfo.Drivers.First(d => d.UserName == name);
 
-                var inspectData = data;
+                TraceInfo.WriteLine(data.Telemetry.CarIdxTrackSurface[driver.CarIdx].ToString());
+
+                Thread.Sleep(2000);
             }
         }
     }

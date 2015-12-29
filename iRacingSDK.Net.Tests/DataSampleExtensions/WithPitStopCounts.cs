@@ -30,12 +30,14 @@ namespace iRacingSDK.Net.Tests
         {
             var s = new SessionData { DriverInfo = new SessionData._DriverInfo { Drivers = new[] { new SessionData._DriverInfo._Drivers { UserName = "Test", CarNumberRaw = 1 } } } };
 
+            var i = 1;
             var samples = values.Select(ss => new DataSample
             {
                 IsConnected = true,
                 SessionData = s,
                 Telemetry = new Telemetry 
                 {
+                    { "ReplayFrameNum",           i++ },
                     { "CarIdxTrackSurface",       new[] { ss } },
                     { "SessionTime",              0d },
                 }
@@ -76,6 +78,16 @@ namespace iRacingSDK.Net.Tests
         public void Pit_counts_are_persisted()
         {
             var samples = CreatesSamples(TrackLocation.OnTrack, TrackLocation.InPitStall, TrackLocation.OnTrack);
+
+            var correctedSamples = samples.WithPitStopCounts().ToArray();
+
+            Assert.That(correctedSamples.Last().Telemetry.CarIdxPitStopCount[0], Is.EqualTo(1));
+        }
+        
+        [Test]
+        public void Does_not_double_count_when_car_leaves_world()
+        {
+            var samples = CreatesSamples(TrackLocation.OnTrack, TrackLocation.InPitStall, TrackLocation.NotInWorld, TrackLocation.InPitStall, TrackLocation.OnTrack);
 
             var correctedSamples = samples.WithPitStopCounts().ToArray();
 

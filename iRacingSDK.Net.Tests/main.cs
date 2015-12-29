@@ -7,9 +7,9 @@ namespace iRacingSDK.Net.Tests
     {
         public static void Main()
         {
-            //new WithPitStopCounts().Increment_pit_stop_count_when_driver_enters_pit_road();
+            new WithPitStopCounts().Does_not_double_count_when_car_leaves_world();
 
-            var deserializer = new YamlDotNet.Serialization.Deserializer(ignoreUnmatched: true);
+           /* var deserializer = new YamlDotNet.Serialization.Deserializer(ignoreUnmatched: true);
 
             var yaml = File.ReadAllText(@"C:\Users\dean\Downloads\data.yaml");
 
@@ -18,7 +18,7 @@ namespace iRacingSDK.Net.Tests
             var input = new StringReader(yaml);
 
             var result = (iRacingSDK.SessionData)deserializer.Deserialize(input, typeof(iRacingSDK.SessionData));
-        }
+        */}
     }
 }
 

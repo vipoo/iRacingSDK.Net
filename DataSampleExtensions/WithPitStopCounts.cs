@@ -16,8 +16,6 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
-using iRacingSDK.Support;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -30,12 +28,12 @@ namespace iRacingSDK
         /// </summary>
         public static IEnumerable<DataSample> WithPitStopCounts(this IEnumerable<DataSample> samples)
         {
-            int[] carIdxPitStopCount = new int[64];
+            var lastTrackLocation = Enumerable.Repeat(TrackLocation.NotInWorld, 64).ToArray();
+            var carIdxPitStopCount = new int[64];
 
-            foreach (var data in samples)
+            foreach (var data in samples.ForwardOnly())
             {
-                if (data.LastSample != null)
-                    PopulateCarIdxPitStopCount(data.LastSample.Telemetry, data.Telemetry, carIdxPitStopCount);
+                CapturePitStopCounts(lastTrackLocation, carIdxPitStopCount, data);
 
                 data.Telemetry.CarIdxPitStopCount = (int[])carIdxPitStopCount.Clone();
 
@@ -43,14 +41,29 @@ namespace iRacingSDK
             }
         }
 
-        static void PopulateCarIdxPitStopCount(Telemetry last, Telemetry telemetry, int[] carIdxPitStopCount)
+        static void CapturePitStopCounts(TrackLocation[] lastTrackLocation, int[] carIdxPitStopCount, DataSample data)
         {
-            for (var i = 0; i < telemetry.CarIdxTrackSurface.Length; i++)
-                if (last.CarIdxTrackSurface[i] != TrackLocation.InPitStall && telemetry.CarIdxTrackSurface[i] == TrackLocation.InPitStall)
-                {
+            if (data.LastSample == null)
+                return;
+
+            CaptureLastTrackLocations(lastTrackLocation, data);
+            IncrementPitStopCounts(lastTrackLocation, carIdxPitStopCount, data);
+        }
+
+        static void CaptureLastTrackLocations(TrackLocation[] lastTrackLocation, DataSample data)
+        {
+            var last = data.LastSample.Telemetry.CarIdxTrackSurface;
+            for (var i = 0; i < last.Length; i++)
+                if (last[i] != TrackLocation.NotInWorld)
+                    lastTrackLocation[i] = last[i];
+        }
+
+        static void IncrementPitStopCounts(TrackLocation[] lastTrackLocation, int[] carIdxPitStopCount, DataSample data)
+        {
+            var current = data.Telemetry.CarIdxTrackSurface;
+            for (var i = 0; i < current.Length; i++)
+                if (lastTrackLocation[i] != TrackLocation.InPitStall && current[i] == TrackLocation.InPitStall)
                     carIdxPitStopCount[i] += 1;
-                    TraceInfo.WriteLine("{0} Driver {1} has pitted {2} times", telemetry.SessionTimeSpan, telemetry.Cars[i].Details.UserName, carIdxPitStopCount[i]);
-                }
         }
     }
 }
