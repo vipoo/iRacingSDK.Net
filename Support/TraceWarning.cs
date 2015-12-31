@@ -16,30 +16,32 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
-using iRacingSDK;
-using iRacingSDK.Support;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading;
 
-namespace Sample
+namespace iRacingSDK.Support
 {
-    public static class SampleTelemetryAccess
+    public static class TraceWarning
     {
-        public static void Sample()
+        const string Category = "WARNING";
+
+        public static void WriteLine(string value, params object[] args)
         {
-            var iracing = new iRacingConnection();
+            Trace.WriteLine(value.F(args), Category);
+        }
 
-            foreach (var data in iracing.GetDataFeed()
-                .WithCorrectedPercentages()
-                .WithCorrectedDistances()
-                .WithPitStopCounts())
-            {
+        public static void Write(string value, params object[] args)
+        {
+            Trace.Write(value.F(args), Category);
+        }
 
-                var tele = data.Telemetry;
-                System.Diagnostics.Debugger.Break();
+        public static void WriteLineIf(bool condition, string value, params object[] args)
+        {
+            Trace.WriteLineIf(condition, value.F(args), Category);
+        }
 
-            }
+        public static void WriteIf(bool condition, string value, params object[] args)
+        {
+            Trace.WriteIf(condition, value.F(args), Category);
         }
     }
 }

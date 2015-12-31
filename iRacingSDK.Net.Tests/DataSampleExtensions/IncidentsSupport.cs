@@ -34,6 +34,7 @@ namespace iRacingSDK.Net.Tests
                     IsConnected = true,
                     Telemetry = new Telemetry
                     {
+                        { "CamCarIdx", 1 },
                         { "ReplayFrameNum", n }
                     }
                 }).ToArray();
@@ -63,7 +64,7 @@ namespace iRacingSDK.Net.Tests
 
             var receivedSamples = new List<DataSample>();
 
-            var samples = iRacingSDK.IncidentsSupport.FindIncidents(inputSamples, d => { receivedSamples.Add(d); }).ToList();
+            var samples = iRacingSDK.IncidentsSupport.FindIncidents(inputSamples, d => { receivedSamples.Add(d); }, 100).ToList();
 
             Assert.That(FrameNumbersFromSamples(samples), Is.EqualTo(new[] { incidentFrame }));
 
@@ -80,15 +81,15 @@ namespace iRacingSDK.Net.Tests
             var frameNumbers = new List<int>();
             for (var i = 0; i < 2; i++)
                 frameNumbers.Add(start);
-            for (var i = 0; i < 50; i++)
+            for (var i = 0; i < 101; i++)
                 frameNumbers.Add(incidentFrame1);
-            for (var i = 0; i < 100; i++)
+            for (var i = 0; i < 201; i++)
                 frameNumbers.Add(incidentFrame2);
 
 
             var inputSamples = CreateSamplesFromFrameNumbers(frameNumbers.ToArray());
 
-            var samples = iRacingSDK.IncidentsSupport.FindIncidents(inputSamples, d => { });
+            var samples = iRacingSDK.IncidentsSupport.FindIncidents(inputSamples, d => { }, 100);
 
             Assert.That(FrameNumbersFromSamples(samples), Is.EqualTo(new[] { incidentFrame1, incidentFrame2 }));
         }
@@ -110,7 +111,7 @@ namespace iRacingSDK.Net.Tests
 
             var receivedSamples = new List<DataSample>();
 
-            var samples = iRacingSDK.IncidentsSupport.FindIncidents(inputSamples, (d) => { receivedSamples.Add(d); });
+            var samples = iRacingSDK.IncidentsSupport.FindIncidents(inputSamples, (d) => { receivedSamples.Add(d); }, 100);
 
             Assert.That(FrameNumbersFromSamples(samples), Is.EqualTo(new[] { incidentFrame }));
 

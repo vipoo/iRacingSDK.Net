@@ -7,7 +7,7 @@ namespace iRacingSDK.Net.Tests
     {
         public static void Main()
         {
-            new WithPitStopCounts().Does_not_double_count_when_car_leaves_world();
+            new IncidentsSupport().should_find_two_incidents();
 
            /* var deserializer = new YamlDotNet.Serialization.Deserializer(ignoreUnmatched: true);
 

@@ -23,6 +23,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Externalconsole>true</Externalconsole>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

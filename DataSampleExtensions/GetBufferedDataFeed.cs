@@ -73,7 +73,7 @@ namespace iRacingSDK
                 if (que.Count < maxBufferLength)
                     que.Enqueue(data);
                 else
-                    Debug.WriteLine(string.Format("Warning dropped DataSample {0}.", data.Telemetry.TickCount));
+                    Debug.WriteLine(string.Format("Dropped DataSample {0}.", data.Telemetry.TickCount));
             }
         }
     }

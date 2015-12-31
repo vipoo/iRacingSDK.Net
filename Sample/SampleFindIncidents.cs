@@ -32,13 +32,13 @@ namespace Sample
 
             iRacing.Replay.MoveToStartOfRace();
             iRacing.Replay.MoveToFrame(-600, ReplayPositionMode.Current);
+            
+            var incidentSamples = iRacing.GetDataFeed().RaceIncidents2(100);
 
-            var incidentSamples = iRacing.GetDataFeed().RaceIncidents(6);
-
-            /*foreach( var i in incidentSamples)
+            foreach( var i in incidentSamples)
             {
-                Trace.WriteLine(string.Format("Found new incident at frame {0} for {1}", incident.Telemetry.SessionTimeSpan, incident.Telemetry.CamCar.UserName), "DEBUG");
-            }*/
+                Trace.WriteLine(string.Format("Found new incident at frame {0} for {1}", i.Telemetry.SessionTimeSpan, i.Telemetry.CamCar.Details.UserName), "DEBUG");
+            }
 
             Trace.WriteLine("Sample Finished");
         }

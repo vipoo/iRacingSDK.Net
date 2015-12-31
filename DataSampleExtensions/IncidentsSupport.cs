@@ -16,6 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
+using iRacingSDK.Support;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,9 +32,10 @@ namespace iRacingSDK
         /// </summary>
         /// <param name="samples"></param>
         /// <param name="toNext">A function to that sends ither move to next incident or move to previous incident</param>
+        /// <param name="sampleScanSettle">The number of samples to take, which must all have the same frame number - to identify that iRacing has paused.</param>
         /// <param name="maxTotalIncidents">an optional hard limit on the total number of incidents that can be returned.</param>
         /// <returns>DataSamples of each incident</returns>
-        public static List<DataSample> FindIncidents(IEnumerable<DataSample> samples, Action<DataSample> toNext, int maxTotalIncidents = int.MaxValue)
+        public static List<DataSample> FindIncidents(IEnumerable<DataSample> samples, Action<DataSample> toNext, int sampleScanSettle, int maxTotalIncidents = int.MaxValue)
         {
             if (maxTotalIncidents <= 0)
                 return new List<DataSample>();
@@ -41,7 +43,7 @@ namespace iRacingSDK
             iRacing.Replay.SetSpeed(0);
             iRacing.Replay.Wait();
 
-            return samples.PositionsOf(toNext).Take(maxTotalIncidents).ToList();
+            return samples.PositionsOf(toNext, sampleScanSettle).Take(maxTotalIncidents).ToList();
         }
 
         /// <summary>
@@ -51,31 +53,50 @@ namespace iRacingSDK
         /// </summary>
         /// <param name="samples"></param>
         /// <param name="moveReplay"></param>
+        /// <param name="sampleScanSettle">The number of samples to take, which must all have the same frame number - to identify that iRacing has paused.</param>
         /// <returns></returns>
-        static IEnumerable<DataSample> PositionsOf(this IEnumerable<DataSample> samples, Action<DataSample> moveReplay)
+        static IEnumerable<DataSample> PositionsOf(this IEnumerable<DataSample> samples, Action<DataSample> moveReplay, int sampleScanSettle)
         {
-            const int MaxRetryAttempt = 50;
-            int frameNumber = -1;
-            var retryCount = MaxRetryAttempt;
-            
-            foreach( var data in samples)
+            var lastSamples = new List<int>();
+            var jumpMessageSent = false;
+            var lastFrameNumber = -2;
+
+            foreach(var data in samples)
             {
-                if (retryCount <= 0)
+                if(!jumpMessageSent)
                 {
-                    if (frameNumber != data.Telemetry.ReplayFrameNum)
-                    {
-                        yield return data;
-                        retryCount = MaxRetryAttempt;
-                    }
-                    else
-                        break;
+                    iRacing.Replay.CameraOnDriver(0, 0); //Pace Car
+                    moveReplay(data);
+                    Thread.Sleep(100);
+                    jumpMessageSent = true;
+                    continue;
                 }
 
-                if (retryCount-- == MaxRetryAttempt)
+                lastSamples.Add(data.Telemetry.ReplayFrameNum);
+
+                if (lastSamples.Count == sampleScanSettle)
+                    lastSamples.RemoveAt(0);
+
+                if(lastSamples.Count == (sampleScanSettle-1) && lastSamples.All(f => f == data.Telemetry.ReplayFrameNum))
                 {
-                    frameNumber = data.Telemetry.ReplayFrameNum;
-                    moveReplay(data);
-                    continue;
+                    if (data.Telemetry.ReplayFrameNum == lastFrameNumber)
+                    {
+                        TraceDebug.WriteLine("Incidents: Frame number did not change - asuming no more incidents.  Current Frame: {0}", data.Telemetry.ReplayFrameNum);
+                        break;
+                    }
+
+                    if ( data.Telemetry.CamCarIdx == 0) //Pace Car
+                    {
+                        TraceWarning.WriteLine("Incident scan aborted - iRacing has not progressed to incident.  Frame Number: {0}", data.Telemetry.ReplayFrameNum);
+                        break;
+                    }
+
+                    lastFrameNumber = data.Telemetry.ReplayFrameNum;
+                    TraceDebug.WriteLine("Incidents: last {0} samples have settled on frame number {1}", sampleScanSettle, data.Telemetry.ReplayFrameNum);
+                    yield return data;
+                    jumpMessageSent = false;
+                    lastSamples.Add(-1);
+                    lastSamples.RemoveAt(0);
                 }
             }
         }

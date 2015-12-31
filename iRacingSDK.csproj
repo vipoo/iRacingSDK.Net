@@ -26,6 +26,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
     <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -85,6 +86,7 @@
     <Compile Include="iRSDKHeader.cs" />
     <Compile Include="Support\StringExtensions.cs" />
     <Compile Include="Support\TimeSpanExtensions.cs" />
+    <Compile Include="Support\TraceWarning.cs" />
     <Compile Include="Support\TraceDebug.cs" />
     <Compile Include="Support\TraceInfo.cs" />
     <Compile Include="VarBuf.cs" />
