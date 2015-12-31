@@ -16,12 +16,10 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Linq;
-using System.Diagnostics;
 using iRacingSDK.Support;
+using System;
+using System.Linq;
+using System.Threading;
 
 namespace iRacingSDK
 {

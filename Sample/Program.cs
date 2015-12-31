@@ -16,18 +16,15 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Linq;
 using iRacingSDK;
-using System.Threading;
-using System.Runtime.InteropServices;
-using System.IO;
-using YamlDotNet.RepresentationModel;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Windows.Forms;
 using Sample;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace iRacingSDKSample
 {
