@@ -23,6 +23,26 @@ using System.Threading;
 
 namespace iRacingSDK
 {
+    public class NoWaitReplay : Replay
+    {
+        public NoWaitReplay(iRacingConnection iRacingInstance)
+            : base(iRacingInstance)
+        {
+        }
+
+        protected override void SendMessage(BroadcastMessage message, short var1 = 0, int var2 = 0)
+        {
+            var msgVar1 = FromShorts((short)message, var1);
+
+            if (!Win32.Messages.SendNotifyMessage(Win32.Messages.HWND_BROADCAST, messageId, msgVar1, var2))
+                throw new Exception(String.Format("Error in broadcasting message {0}", message));
+        }
+
+        public override void Wait()
+        {
+        }
+    }
+
     public class Replay : iRacingMessaging
     {
         iRacingConnection iRacingInstance;
@@ -30,6 +50,18 @@ namespace iRacingSDK
         public Replay(iRacingConnection iRacingInstance)
         {
             this.iRacingInstance = iRacingInstance;
+        }
+
+        public NoWaitReplay NoWait
+        {
+            get
+            {
+                return new NoWaitReplay(iRacingInstance);
+            }
+        }
+        public Func<T, T2> WaitOn<T, T2>(Action action, Func<T, T2> testFn)
+        {
+            return x => testFn(x);
         }
 
         public void SetSpeed(double p)

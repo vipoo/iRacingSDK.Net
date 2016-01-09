@@ -25,7 +25,7 @@ namespace iRacingSDK
 {
     public class iRacingMessaging
     {
-        int messageId;
+        protected readonly int messageId;
         DateTime lastMessagePostedTime = DateTime.Now;
         Task currentMessageTask;
         const double MessageThrottleTime = 1000;
@@ -37,7 +37,7 @@ namespace iRacingSDK
             currentMessageTask.Start();
         }
 
-        protected void SendMessage(BroadcastMessage message, short var1 = 0, int var2 = 0)
+        protected virtual void SendMessage(BroadcastMessage message, short var1 = 0, int var2 = 0)
         {
             var msgVar1 = FromShorts((short)message, var1);
 
@@ -69,13 +69,13 @@ namespace iRacingSDK
             var var23 = FromShorts(var2, var3);
             SendMessage(message, var1, var23);
         }
-
+        
         protected static int FromShorts(short lowPart, short highPart)
         {
             return ((int)highPart << 16) | (ushort)lowPart;
         }
 
-        public void Wait()
+        public virtual void Wait()
         {
             currentMessageTask.Wait();
         }

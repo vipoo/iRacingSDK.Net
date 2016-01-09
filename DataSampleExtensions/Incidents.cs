@@ -45,10 +45,7 @@ namespace iRacingSDK
 
             var incidentsOnForward = GetIncidentsForward(samples, sampleScanSettle, maxTotalIncidents);
 
-            var incidentsOnReverse = GetIncidentsReverse(samples, sessionNumber, sampleScanSettle, maxTotalIncidents - incidentsOnForward.Count);
-
             var incidents = incidentsOnForward
-                .Concat(incidentsOnReverse)
                 .OrderBy(d => d.Telemetry.ReplayFrameNum)
                 .ToList();
 
@@ -70,18 +67,6 @@ namespace iRacingSDK
 
             return IncidentsSupport.FindIncidents(
                 samples.TakeWhile(data => data.Telemetry.SessionState != SessionState.CoolDown),
-                d => iRacing.Replay.MoveToNextIncident(),
-                sampleScanSettle,
-                maxTotalIncidents);
-        }
-
-        static List<DataSample> GetIncidentsReverse(IEnumerable<DataSample> samples, int sessionNumber, int sampleScanSettle, int maxTotalIncidents)
-        {
-            TraceDebug.WriteLine("Scanning for incidents backwards from end");
-
-            return IncidentsSupport.FindIncidents(
-                samples.TakeWhile(data => data.Telemetry.SessionNum == sessionNumber && data.Telemetry.RaceLaps > 0),
-                d => iRacing.Replay.MoveToPrevIncident(),
                 sampleScanSettle,
                 maxTotalIncidents);
         }
