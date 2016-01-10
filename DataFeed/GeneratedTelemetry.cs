@@ -58,9 +58,14 @@ namespace iRacingSDK
         public System.Double SessionTimeRemain { get { return (System.Double)this["SessionTimeRemain"]; } }
 
         /// <summary>
-        /// Laps left till session ends
+        /// Old laps left till session ends use SessionLapsRemainEx
         /// </summary>
         public System.Int32 SessionLapsRemain { get { return (System.Int32)this["SessionLapsRemain"]; } }
+
+        /// <summary>
+        /// New improved laps left till session ends
+        /// </summary>
+        public System.Int32 SessionLapsRemainEx { get { return (System.Int32)this["SessionLapsRemainEx"]; } }
 
         /// <summary>
         /// The car index of the current person speaking on the radio
@@ -138,9 +143,14 @@ namespace iRacingSDK
         public System.Int32 PlayerCarClassPosition { get { return (System.Int32)this["PlayerCarClassPosition"]; } }
 
         /// <summary>
-        /// Lap count by car index
+        /// Laps started by car index
         /// </summary>
         public System.Int32[] CarIdxLap { get { return (System.Int32[])this["CarIdxLap"]; } }
+
+        /// <summary>
+        /// Laps completed by car index
+        /// </summary>
+        public System.Int32[] CarIdxLapCompleted { get { return (System.Int32[])this["CarIdxLapCompleted"]; } }
 
         /// <summary>
         /// Percentage distance around lap by car index
@@ -228,9 +238,14 @@ namespace iRacingSDK
         public System.Single RPM { get { return (System.Single)this["RPM"]; } }
 
         /// <summary>
-        /// Lap count
+        /// Laps started count
         /// </summary>
         public System.Int32 Lap { get { return (System.Int32)this["Lap"]; } }
+
+        /// <summary>
+        /// Laps completed count
+        /// </summary>
+        public System.Int32 LapCompleted { get { return (System.Int32)this["LapCompleted"]; } }
 
         /// <summary>
         /// Meters traveled from S/F this lap
@@ -418,6 +433,11 @@ namespace iRacingSDK
         public System.Single Yaw { get { return (System.Single)this["Yaw"]; } }
 
         /// <summary>
+        /// Yaw orientation relative to north
+        /// </summary>
+        public System.Single YawNorth { get { return (System.Single)this["YawNorth"]; } }
+
+        /// <summary>
         /// Pitch orientation
         /// </summary>
         public System.Single Pitch { get { return (System.Single)this["Pitch"]; } }
@@ -436,6 +456,11 @@ namespace iRacingSDK
         /// Temperature of track at start/finish line
         /// </summary>
         public System.Single TrackTemp { get { return (System.Single)this["TrackTemp"]; } }
+
+        /// <summary>
+        /// Temperature of track measured by crew around track
+        /// </summary>
+        public System.Single TrackTempCrew { get { return (System.Single)this["TrackTempCrew"]; } }
 
         /// <summary>
         /// Temperature of air at start/finish line
@@ -491,6 +516,11 @@ namespace iRacingSDK
         /// Number of team drivers who have run a stint
         /// </summary>
         public System.Int32 DCDriversSoFar { get { return (System.Int32)this["DCDriversSoFar"]; } }
+
+        /// <summary>
+        /// True if it is ok to reload car textures at this time
+        /// </summary>
+        public System.Boolean OkToReloadTextures { get { return (System.Boolean)this["OkToReloadTextures"]; } }
 
         /// <summary>
         /// Time left for mandatory pit repairs if repairs are active
@@ -723,6 +753,11 @@ namespace iRacingSDK
         public System.Single FuelPress { get { return (System.Single)this["FuelPress"]; } }
 
         /// <summary>
+        /// Engine fuel used instantaneous
+        /// </summary>
+        public System.Single FuelUsePerHour { get { return (System.Single)this["FuelUsePerHour"]; } }
+
+        /// <summary>
         /// Engine oil temperature
         /// </summary>
         public System.Single OilTemp { get { return (System.Single)this["OilTemp"]; } }
@@ -753,7 +788,7 @@ namespace iRacingSDK
         public System.Single RRbrakeLinePress { get { return (System.Single)this["RRbrakeLinePress"]; } }
 
         /// <summary>
-        /// RR tire cold pressure, as set in the garage
+        /// RR tire cold pressure  as set in the garage
         /// </summary>
         public System.Single RRcoldPressure { get { return (System.Single)this["RRcoldPressure"]; } }
 
@@ -793,7 +828,7 @@ namespace iRacingSDK
         public System.Single LRbrakeLinePress { get { return (System.Single)this["LRbrakeLinePress"]; } }
 
         /// <summary>
-        /// LR tire cold pressure, as set in the garage
+        /// LR tire cold pressure  as set in the garage
         /// </summary>
         public System.Single LRcoldPressure { get { return (System.Single)this["LRcoldPressure"]; } }
 
@@ -833,7 +868,7 @@ namespace iRacingSDK
         public System.Single RFbrakeLinePress { get { return (System.Single)this["RFbrakeLinePress"]; } }
 
         /// <summary>
-        /// RF tire cold pressure, as set in the garage
+        /// RF tire cold pressure  as set in the garage
         /// </summary>
         public System.Single RFcoldPressure { get { return (System.Single)this["RFcoldPressure"]; } }
 
@@ -873,7 +908,7 @@ namespace iRacingSDK
         public System.Single LFbrakeLinePress { get { return (System.Single)this["LFbrakeLinePress"]; } }
 
         /// <summary>
-        /// LF tire cold pressure, as set in the garage
+        /// LF tire cold pressure  as set in the garage
         /// </summary>
         public System.Single LFcoldPressure { get { return (System.Single)this["LFcoldPressure"]; } }
 
@@ -913,9 +948,19 @@ namespace iRacingSDK
         public System.Single RRshockDefl { get { return (System.Single)this["RRshockDefl"]; } }
 
         /// <summary>
+        /// RR shock velocity
+        /// </summary>
+        public System.Single RRshockVel { get { return (System.Single)this["RRshockVel"]; } }
+
+        /// <summary>
         /// LR shock deflection
         /// </summary>
         public System.Single LRshockDefl { get { return (System.Single)this["LRshockDefl"]; } }
+
+        /// <summary>
+        /// LR shock velocity
+        /// </summary>
+        public System.Single LRshockVel { get { return (System.Single)this["LRshockVel"]; } }
 
         /// <summary>
         /// RF shock deflection
@@ -923,9 +968,19 @@ namespace iRacingSDK
         public System.Single RFshockDefl { get { return (System.Single)this["RFshockDefl"]; } }
 
         /// <summary>
+        /// RF shock velocity
+        /// </summary>
+        public System.Single RFshockVel { get { return (System.Single)this["RFshockVel"]; } }
+
+        /// <summary>
         /// LF shock deflection
         /// </summary>
         public System.Single LFshockDefl { get { return (System.Single)this["LFshockDefl"]; } }
+
+        /// <summary>
+        /// LF shock velocity
+        /// </summary>
+        public System.Single LFshockVel { get { return (System.Single)this["LFshockVel"]; } }
 
         /// <summary>
         /// RRSH shock deflection
@@ -946,7 +1001,7 @@ namespace iRacingSDK
         /// LFSH shock deflection
         /// </summary>
         public System.Single LFSHshockDefl { get { return (System.Single)this["LFSHshockDefl"]; } }
-
+        
         /// <summary>
         /// 
         /// </summary>

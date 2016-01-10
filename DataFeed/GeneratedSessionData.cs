@@ -42,6 +42,7 @@ namespace iRacingSDK
             public string TrackAltitude { get; set; }
             public string TrackLatitude { get; set; }
             public string TrackLongitude { get; set; }
+            public string TrackNorthOffset { get; set; }
             public long TrackNumTurns { get; set; }
             public string TrackPitSpeedLimit { get; set; }
             public string TrackType { get; set; }
@@ -54,6 +55,8 @@ namespace iRacingSDK
             public string TrackWindDir { get; set; }
             public string TrackRelativeHumidity { get; set; }
             public string TrackFogLevel { get; set; }
+            public long TrackCleanup { get; set; }
+            public long TrackDynamicTrack { get; set; }
             public long SeriesID { get; set; }
             public long SeasonID { get; set; }
             public long SessionID { get; set; }
@@ -117,6 +120,7 @@ namespace iRacingSDK
                 public string SessionTime { get; set; }
                 public long SessionNumLapsToAvg { get; set; }
                 public string SessionType { get; set; }
+                public string SessionTrackRubberState { get; set; }
                 public partial class _ResultsPositions
                 {
                     public long Position { get; set; }
@@ -213,6 +217,7 @@ namespace iRacingSDK
         public partial class _DriverInfo
         {
             public long DriverCarIdx { get; set; }
+            public long PaceCarIdx { get; set; }
             public double DriverHeadPosX { get; set; }
             public double DriverHeadPosY { get; set; }
             public double DriverHeadPosZ { get; set; }
@@ -245,6 +250,8 @@ namespace iRacingSDK
                 public string CarPath { get; set; }
                 public long CarClassID { get; set; }
                 public long CarID { get; set; }
+                public long CarIsPaceCar { get; set; }
+                public long CarIsAI { get; set; }
                 public string CarScreenName { get; set; }
                 public string CarScreenNameShort { get; set; }
                 public string CarClassShortName { get; set; }
