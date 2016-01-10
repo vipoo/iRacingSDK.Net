@@ -64,7 +64,7 @@ namespace iRacingSDK
             return x => testFn(x);
         }
 
-        public void SetSpeed(double p)
+        public void SetSpeed(int p)
         {
             TraceInfo.WriteLine("Setting speed to {0}", p);
             SendMessage(BroadcastMessage.ReplaySetPlaySpeed, (short)p, 0);
