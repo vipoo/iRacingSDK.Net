@@ -33,22 +33,26 @@ namespace Sample
             iracing.Replay.MoveToStartOfRace();
             iracing.Replay.SetSpeed(1);
 
+            var i = 0;
+
             foreach (var data in iracing.GetDataFeed()
                 .WithCorrectedPercentages()
                 .WithCorrectedDistances())
             {
-                MyListener.Clear();
+                i++;
+                if( i % 200 == 0)
+                {
+                    MyListener.Clear();
 
-                Trace.WriteLine("Driver Distances");
-                Trace.WriteLine("================");
+                    Trace.WriteLine("Driver Distances");
+                    Trace.WriteLine("================");
 
-                Trace.WriteLine("RaceDistance: {0}".F(data.Telemetry.RaceDistance));
-                Trace.WriteLine("");
+                    Trace.WriteLine("RaceDistance: {0}".F(data.Telemetry.RaceDistance));
+                    Trace.WriteLine("");
 
-                foreach (var c in data.Telemetry.Cars.OrderByDescending(d => d.TotalDistance))
-                    Trace.WriteLine(string.Format("{0}, dist: {1}, pos: {2}", c.Details.UserName, c.TotalDistance, c.Position));
-
-                Thread.Sleep(2000);
+                    foreach (var c in data.Telemetry.Cars.OrderByDescending(d => d.TotalDistance))
+                        Trace.WriteLine(string.Format("{0}, dist: {1}, pos: {2}", c.Details.UserName, c.TotalDistance, c.Position));
+                }
             }
         }
     }

@@ -16,16 +16,11 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace iRacingSDK
 {
-	public static partial class DataSampleExtensions
+    public static partial class DataSampleExtensions
 	{
 		/// <summary>
 		/// Work around bug in iRacing data stream, where cars lap percentage is reported slightly behind 
@@ -37,36 +32,39 @@ namespace iRacingSDK
 		/// <returns></returns>
 		public static IEnumerable<DataSample> WithCorrectedPercentages(this IEnumerable<DataSample> samples)
 		{
-			var lastLaps = InitArray();
+            int[] lastLaps = null;
+            var distOffset = new float[64];
 
 			foreach (var data in samples.ForwardOnly())
 			{
-				for (int i = 0; i < data.SessionData.DriverInfo.CompetingDrivers.Length; i++)
+                if( lastLaps == null)
+                    lastLaps = (int[])data.Telemetry.CarIdxLap.Clone();
+
+                for (int i = 0; i < data.SessionData.DriverInfo.CompetingDrivers.Length; i++)
 					if (data.Telemetry.HasData(i))
 						FixPercentagesOnLapChange(
 							ref lastLaps[i], 
 							ref data.Telemetry.CarIdxLapDistPct[i], 
-							data.Telemetry.CarIdxLap[i]);
+							data.Telemetry.CarIdxLap[i], ref distOffset[i]);
 
 				yield return data;
 			}
 		}
 
-		static void FixPercentagesOnLapChange(ref int lastLap, ref float carIdxLapDistPct, int carIdxLap)
+		static void FixPercentagesOnLapChange(ref int lastLap, ref float carIdxLapDistPct, int carIdxLap, ref float distOffset)
 		{
-            if (carIdxLap > lastLap && carIdxLapDistPct > 0.90f)
-                carIdxLapDistPct = 0;
+            if (carIdxLap > lastLap && carIdxLapDistPct > 0.80f)
+            {
+                if (distOffset == 0f)
+                    distOffset = carIdxLapDistPct - 0.80f;
+
+                carIdxLapDistPct = distOffset;
+            }
             else
+            {
                 lastLap = carIdxLap;
-		}
-
-		static int[] InitArray()
-		{
-			var lastLaps = new int[64];
-			for(var i = 0; i < 64; i++)
-				lastLaps[i] = -1;
-
-			return lastLaps;
+                distOffset = 0f;
+            }
 		}
 	}
 }
