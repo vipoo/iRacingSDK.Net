@@ -37,12 +37,27 @@ namespace Sample
 
             foreach (var data in iracing.GetDataFeed()
                 .WithCorrectedPercentages()
-                .WithCorrectedDistances())
+                .WithCorrectedDistances()
+                .WithFinishingStatus())
             {
                 i++;
                 if( i % 200 == 0)
                 {
                     MyListener.Clear();
+
+                    var car = data.Telemetry.Cars
+                        .Where(c => c.TotalDistance > 0)
+                        .Where(c => !c.HasSeenCheckeredFlag)
+                        .Where(c => !c.Details.IsPaceCar)
+                        .Where(c => c.HasData)
+                        .Where(c => c.Details.Driver != null)
+                        .Where(c => c.TrackSurface == TrackLocation.OnTrack)
+                        .OrderByDescending(c => c.TotalDistance)
+                        .ThenBy(c => c.OfficialPostion == 0 ? int.MaxValue : c.OfficialPostion)
+                        .FirstOrDefault();
+
+                    Trace.WriteLine("=============================================================");
+                    Trace.WriteLine(string.Format("Next Finisher is {0}", car == null ? "null" : car.Details.UserName));
 
                     Trace.WriteLine("Driver Distances");
                     Trace.WriteLine("================");
@@ -50,8 +65,8 @@ namespace Sample
                     Trace.WriteLine("RaceDistance: {0}".F(data.Telemetry.RaceDistance));
                     Trace.WriteLine("");
 
-                    foreach (var c in data.Telemetry.Cars.OrderByDescending(d => d.TotalDistance))
-                        Trace.WriteLine(string.Format("{0}, dist: {1}, pos: {2}", c.Details.UserName, c.TotalDistance, c.Position));
+                    foreach (var c in data.Telemetry.Cars.OrderByDescending(d => d.TotalDistance).ThenBy(c => c.OfficialPostion == 0 ? int.MaxValue : c.OfficialPostion))
+                        Trace.WriteLine(string.Format("{0}, dist: {1}, pos: {2}, official pos: {3}", c.Details.UserName, c.TotalDistance, c.Position, c.OfficialPostion));
                 }
             }
         }

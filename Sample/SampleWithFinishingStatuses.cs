@@ -35,12 +35,18 @@ namespace Sample
             iracing.Replay.SetSpeed(8);
 
             var time = new TimeSpan();
+            iracing.Replay.SetSpeed(1);
 
-            foreach (var data in iracing.GetDataFeed().WithFinishingStatus().AtSpeed(16))
+
+
+            foreach (var data in iracing.GetDataFeed().WithFinishingStatus())
             {
                 if( data.Telemetry.SessionTimeSpan > time)
                 {
-                    Trace.WriteLine("=============================================================");
+                    MyListener.Clear();
+
+                    
+   
 
                     foreach (var c in data.Telemetry.Cars.Where(c => !c.Details.IsPaceCar))
                         Trace.WriteLine(string.Format("{0,-20}\tCheckedFlag: {1}\tRetired: {2}\tData:{3}", c.Details.UserName, c.HasSeenCheckeredFlag, c.HasRetired, c.HasData));

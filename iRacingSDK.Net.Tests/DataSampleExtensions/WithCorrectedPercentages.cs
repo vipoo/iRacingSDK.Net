@@ -59,7 +59,7 @@ namespace iRacingSDK.Net.Tests
         [Test]
         public void should_correct_samples_until_we_get_back_to_low_percentages()
         {
-            var expected = new[] { 4.5f, 4.95f, 5.15f, 5.15f, 5.23f };
+            var expected = new[] { 4.5f, 4.95f, 5.0f, 5.0f, 5.23f };
             var samples = CreatesSamplesForDistancesOf(4.5f, 4.95f, 5.95f, 5.98f, 5.23f);
 
             var correctedSamples = samples.WithCorrectedPercentages().ToArray();
@@ -71,7 +71,7 @@ namespace iRacingSDK.Net.Tests
         [Test]
         public void should_correct_for_pre_race_starting_percentages()
         {
-            var expected = new[] { 0.95f, 1.15f, 1.02f, 1.05f };
+            var expected = new[] { 0.95f, 1.0f, 1.02f, 1.05f };
             var samples = CreatesSamplesForDistancesOf(0.95f, 1.95f, 1.02f, 1.05f);
 
             var correctedSamples = samples.WithCorrectedPercentages().ToArray();

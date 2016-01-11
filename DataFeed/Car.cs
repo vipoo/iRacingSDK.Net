@@ -73,6 +73,7 @@ namespace iRacingSDK
         public float TotalDistance { get { return this.Lap + this.DistancePercentage; } }
         public LapSector LapSector { get { return telemetry.CarSectorIdx[carIdx]; } }
         public int Position { get { return telemetry.Positions[carIdx]; } }
+        public int OfficialPostion { get { return telemetry.CarIdxPosition[carIdx]; } }
         public bool HasSeenCheckeredFlag { get { return telemetry.HasSeenCheckeredFlag[carIdx]; } }
         public bool HasData { get { return telemetry.HasData(carIdx); } }
         public bool HasRetired { get { return telemetry.HasRetired[carIdx]; } }
