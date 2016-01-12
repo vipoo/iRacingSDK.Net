@@ -625,7 +625,7 @@ namespace iRacingSDK
         /// <summary>
         /// Bitfield for warning lights
         /// </summary>
-        public System.Int32 EngineWarnings { get { return (System.Int32)this["EngineWarnings"]; } }
+        public iRacingSDK.EngineWarnings EngineWarnings { get { return (iRacingSDK.EngineWarnings)(System.Int32)this["EngineWarnings"]; } }
 
         /// <summary>
         /// Liters of fuel remaining

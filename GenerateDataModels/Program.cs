@@ -46,6 +46,9 @@ namespace GenerateDataModels
                 case "SessionFlags":
                     return "iRacingSDK.SessionFlags";
 
+                case "EngineWarnings":
+                    return "iRacingSDK.EngineWarnings";
+
                 case "CarIdxTrackSurface":
                     return "iRacingSDK.TrackLocation[]";
 

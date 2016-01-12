@@ -32,7 +32,7 @@ namespace Sample
             iracing.Replay.MoveToStartOfRace();
             iracing.Replay.SetSpeed(16);
 
-            foreach (var data in iRacing.GetDataFeed().AtSpeed(16))
+            foreach (var data in iRacing.GetDataFeed().AtSpeed(2))
             {
                 Trace.WriteLine("Session State: {0}".F(data.Telemetry.SessionState));
                 Trace.WriteLine("Session Flags: {0}".F(data.Telemetry.SessionFlags));
@@ -41,8 +41,11 @@ namespace Sample
                 Trace.WriteLine("Under pace car: {0}".F(data.Telemetry.UnderPaceCar));
 
                 Trace.WriteLine("Position:{0}".F(data.Telemetry.PlayerCarPosition));
-                Trace.WriteLine("\n\n");
 
+                Trace.WriteLine("Session Flags: {0}".F(data.Telemetry.SessionFlags.ToString()));
+                Trace.WriteLine("Engine Warnings: {0}".F(data.Telemetry.EngineWarnings.ToString()));
+
+                Trace.WriteLine("\n\n");
                 Thread.Sleep(2000);
             }
         }
