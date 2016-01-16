@@ -37,6 +37,11 @@ namespace Sample
             {
 
                 var tele = data.Telemetry;
+
+                Trace.WriteLine(data.Telemetry.ToString());
+
+                
+
                 System.Diagnostics.Debugger.Break();
 
             }

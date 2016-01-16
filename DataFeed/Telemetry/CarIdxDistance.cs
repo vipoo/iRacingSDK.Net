@@ -41,5 +41,6 @@ namespace iRacingSDK
                 carIdxDistance = value;
             }
         }
-	}
+
+    }
 }

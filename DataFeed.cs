@@ -53,6 +53,8 @@ namespace iRacingSDK
             var sessionData = ReadSessionInfo(headers.Header);
             var variables = ReadVariables(headers.Header, headers.VarHeaders, requestedTickCount, logging);
             var variableDescriptions = headers.VarHeaders.ToDictionary(vh => vh.name, vh => vh.desc);
+            if(variables != null)
+                variables.Descriptions = variableDescriptions;
 
             if (sessionData == null)
                 return DisconnectedSample();

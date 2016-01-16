@@ -108,16 +108,20 @@ namespace iRacingSDK
             }
         }
 
+        public Dictionary<string, string> Descriptions { get; internal set; }
+
         public override string ToString()
         {
             var result = new StringBuilder();
 
-            foreach( var kv in this)
+            foreach (var kv in this)
             {
-                result.Append(kv.Key.ToString());
-                result.Append(": ");
-                result.Append(kv.Value.ToString());
-                result.Append("\n");
+                var key = kv.Key;
+                var type = kv.Value.GetType().ToString();
+                var description = (Descriptions != null && Descriptions.ContainsKey(key)) ? Descriptions[key] : "";
+                var value = kv.Value;
+
+                result.Append("TeleKey: | {0,-30} | {1,-20} | {2,20} | {3}\n".F(key, type, value, description));
             }
 
             return result.ToString();
