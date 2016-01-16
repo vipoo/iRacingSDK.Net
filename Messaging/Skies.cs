@@ -1,4 +1,4 @@
-﻿// This file is part of iRacingSDK.
+// This file is part of iRacingSDK.
 //
 // Copyright 2014 Dean Netherton
 // https://github.com/vipoo/iRacingSDK.Net
@@ -16,32 +16,15 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
-using iRacingSDK;
-using System.Diagnostics;
+using System;
 
-namespace Sample
+namespace iRacingSDK
 {
-    public static class SampleTelemetryAccess
+    public enum Skies
     {
-        public static void Sample()
-        {
-            var iracing = new iRacingConnection();
-
-            foreach (var data in iracing.GetDataFeed()
-                .WithCorrectedPercentages()
-                .WithCorrectedDistances()
-                .WithPitStopCounts())
-            {
-
-                var tele = data.Telemetry;
-
-                Trace.WriteLine(data.Telemetry.ToString());
-
-                //Trace.WriteLine(data.SessionData.Raw);
-
-                System.Diagnostics.Debugger.Break();
-
-            }
-        }
+        Clear = 0,
+        PartlyCloudy = 1,
+        MostlyCloudy = 2,
+        Overcast = 3
     }
 }

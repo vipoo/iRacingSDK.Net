@@ -117,14 +117,44 @@ namespace iRacingSDK
             foreach (var kv in this)
             {
                 var key = kv.Key;
-                var type = kv.Value.GetType().ToString();
                 var description = (Descriptions != null && Descriptions.ContainsKey(key)) ? Descriptions[key] : "";
-                var value = kv.Value;
+                var value = ConvertToSpecificType(key, kv.Value);
 
-                result.Append("TeleKey: | {0,-30} | {1,-20} | {2,20} | {3}\n".F(key, type, value, description));
+                var type = value.GetType().ToString();
+
+                result.Append("TeleKey: | {0,-30} | {1,-30} | {2,30} | {3}\n".F(key, type, value, description));
             }
 
             return result.ToString();
+        }
+
+        object ConvertToSpecificType(string key, object value)
+        {
+            switch (key)
+            {
+                case "SessionState":
+                    return (SessionState)(int)value;
+
+                case "SessionFlags":
+                    return (SessionFlags)(int)value;
+
+                case "EngineWarnings":
+                    return (EngineWarnings)(int)value;
+
+                case "CarIdxTrackSurface":
+                    return ((int[])value).Select(v => (TrackLocation)v).ToArray();
+
+                case "DisplayUnits":
+                    return (DisplayUnits)(int)value;
+
+                case "WeatherType":
+                    return (WeatherType)(int)value;
+
+                case "Skies":
+                    return (Skies)(int)value;
+            }
+
+            return value;
         }
     }
 }

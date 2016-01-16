@@ -85,7 +85,7 @@ namespace iRacingSDK
         /// <summary>
         /// Default units for the user interface 0 = english 1 = metric
         /// </summary>
-        public System.Int32 DisplayUnits { get { return (System.Int32)this["DisplayUnits"]; } }
+        public iRacingSDK.DisplayUnits DisplayUnits { get { return (iRacingSDK.DisplayUnits)(System.Int32)this["DisplayUnits"]; } }
 
         /// <summary>
         /// Driver activated flag
@@ -470,12 +470,12 @@ namespace iRacingSDK
         /// <summary>
         /// Weather type (0=constant  1=dynamic)
         /// </summary>
-        public System.Int32 WeatherType { get { return (System.Int32)this["WeatherType"]; } }
+        public iRacingSDK.WeatherType WeatherType { get { return (iRacingSDK.WeatherType)(System.Int32)this["WeatherType"]; } }
 
         /// <summary>
         /// Skies (0=clear/1=p cloudy/2=m cloudy/3=overcast)
         /// </summary>
-        public System.Int32 Skies { get { return (System.Int32)this["Skies"]; } }
+        public iRacingSDK.Skies Skies { get { return (iRacingSDK.Skies)(System.Int32)this["Skies"]; } }
 
         /// <summary>
         /// Density of air at start/finish line

@@ -52,6 +52,15 @@ namespace GenerateDataModels
                 case "CarIdxTrackSurface":
                     return "iRacingSDK.TrackLocation[]";
 
+                case "DisplayUnits":
+                    return "iRacingSDK.DisplayUnits";
+
+                case "WeatherType":
+                    return "iRacingSDK.WeatherType";
+
+                case "Skies":
+                    return "iRacingSDK.Skies";
+
                 default:
                     return sampleValue.GetType().ToString();         
             }
