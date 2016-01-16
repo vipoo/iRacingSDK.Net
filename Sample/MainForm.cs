@@ -115,7 +115,7 @@ namespace Sample
 
         private void button14_Click(object sender, EventArgs e)
         {
-            logMessages.StartOperation(SampleConventionEventData.Sample);
+            logMessages.StartOperation(SampleConventionalEventData.Sample);
         }
 
         private void button15_Click(object sender, EventArgs e)

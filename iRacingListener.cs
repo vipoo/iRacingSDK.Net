@@ -31,9 +31,28 @@ namespace iRacingSDK
         readonly CrossThreadEvents<DataSample> newSessionData = new CrossThreadEvents<DataSample>();
         readonly CrossThreadEvents connected = new CrossThreadEvents();
         readonly CrossThreadEvents disconnected = new CrossThreadEvents();
+        readonly TimeSpan period;
 
         Task backListener;
         bool requestCancel;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="period">The time interval for raising the NewData event</param>
+        public iRacingEvents(TimeSpan period)
+        {
+            this.period = period;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="periodInMilliseconds">The time interval in milliseconds to raise the NewData Event.  0 means as often as data arrives from iRacing.</param>
+        public iRacingEvents(int periodInMilliseconds = 0)
+        {
+            period = new TimeSpan(0, 0, 0, 0, periodInMilliseconds);
+        }
 
         public event Action Connected
         {
@@ -86,7 +105,10 @@ namespace iRacingSDK
             var isConnected = false;
             var isDisconnected = true;
             var lastSessionInfoUpdate = -1;
-            
+
+            var periodCount = this.period;
+            var lastTimeStamp = DateTime.Now;
+
             try
             {
                 foreach (var d in instance.GetDataFeed(logging: false))
@@ -108,7 +130,12 @@ namespace iRacingSDK
                         disconnected.Invoke();
                     }
 
-                    if( d.IsConnected)
+                    if (period >= (DateTime.Now - lastTimeStamp))
+                        continue;
+
+                    lastTimeStamp = DateTime.Now;
+
+                    if ( d.IsConnected)
                         newData.Invoke(d);
 
                     if (d.IsConnected && d.SessionData.InfoUpdate != lastSessionInfoUpdate)

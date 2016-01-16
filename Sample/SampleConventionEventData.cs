@@ -17,25 +17,25 @@
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
 using iRacingSDK;
+using iRacingSDK.Support;
 using System.Diagnostics;
 using System.Threading;
 
 namespace Sample
 {
     /// <summary>
-    /// This sample demonstrates a typical way to access your data using a convention
+    /// This sample demonstrates a typical way to access your data using a conventional
     /// event model.
     /// </summary>
-    public static class SampleConventionEventData
+    public static class SampleConventionalEventData
     {
         public static void Sample()
         {
-            var ieventRacing = new iRacingEvents();
+            var ieventRacing = new iRacingEvents(1.Seconds());
 
             ieventRacing.Connected += ieventRacing_Connected;
             ieventRacing.Disconnected += ieventRacing_Disconnected;
             ieventRacing.NewData += ieventRacing_NewData;
-            //ieventRacing.NewSession
 
             Trace.WriteLine("This sample show how to access game data through an event paradigm.");
             
@@ -55,7 +55,13 @@ namespace Sample
         {
             //You can access your game data here
             var x = data.Telemetry.SessionTimeSpan;
+            var z = data.Telemetry["AirTemp"];
+
             var y = data.SessionData.WeekendInfo.TrackDisplayName;
+            var r = data.Telemetry.SessionData.Raw;
+
+
+            Trace.WriteLine("Time: {0}".F(x));
         }
 
         static void ieventRacing_Disconnected()
