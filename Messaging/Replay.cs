@@ -101,7 +101,7 @@ namespace iRacingSDK
             WaitAndVerify(data2 => data.Telemetry.SessionNum + 1 != data2.Telemetry.SessionNum);
         }
 
-        public void MoveToFrame(int frameNumber, ReplayPositionMode mode = ReplayPositionMode.Begin)
+        public void MoveToFrame(int frameNumber, ReplayPositionMode mode = ReplayPositionMode.Begin, int tolerance = 32)
         {
             DataSample data = null;
 
@@ -114,7 +114,7 @@ namespace iRacingSDK
             Wait();
 
             if (mode == ReplayPositionMode.Begin)
-                data = WaitAndVerify(d => Math.Abs(d.Telemetry.ReplayFrameNum - frameNumber) > 32);
+                data = WaitAndVerify(d => Math.Abs(d.Telemetry.ReplayFrameNum - frameNumber) > tolerance);
 
             Wait();
 
