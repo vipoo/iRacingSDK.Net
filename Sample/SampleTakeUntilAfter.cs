@@ -36,9 +36,8 @@ namespace Sample
             int lastLap = -1;
 
             foreach (var data in iracing.GetDataFeed().AtSpeed(8)
-                .TakeUntil(20.Seconds()).After(data => data.Telemetry.RaceLaps == 3)
-                .TakeUntil(20.Seconds()).AfterReplayPaused()
-                )
+                .TakeUntil(20.Seconds()).Of(data => data.Telemetry.RaceLaps == 2)
+                .TakeUntil(20.Seconds()).AfterReplayPaused())
             {
                 if (lastLap != data.Telemetry.RaceLaps)
                     Trace.WriteLine(string.Format("Lap: {0}", data.Telemetry.RaceLaps));

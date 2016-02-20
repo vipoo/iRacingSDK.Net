@@ -36,6 +36,11 @@ namespace iRacingSDK
             this.period = period;
         }
 
+        /// <summary>
+        /// Once supplied function returns true, iteration stops after the specified period
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <returns></returns>
         public IEnumerable<DataSample> After(Func<DataSample, bool> condition)
         {
             bool conditionMet = false;
@@ -48,6 +53,42 @@ namespace iRacingSDK
                     conditionMet = true;
                     conditionMetAt = data.Telemetry.SessionTimeSpan;
                 }
+
+                if (conditionMet && conditionMetAt + period < data.Telemetry.SessionTimeSpan)
+                    break;
+
+                yield return data;
+            }
+        }
+
+        /// <summary>
+        /// If the supplied function returns true for the period, then iteration stops
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        public IEnumerable<DataSample> Of(Func<DataSample, bool> condition)
+        {
+            bool conditionMet = false;
+            TimeSpan conditionMetAt = new TimeSpan();
+
+            foreach (var data in samples)
+            {
+                if (condition(data))
+                {
+                    if (!conditionMet)
+                    {
+                        Trace.WriteLine("{0}: Condition met".F(data.Telemetry.SessionTimeSpan));
+                        conditionMet = true;
+                        conditionMetAt = data.Telemetry.SessionTimeSpan;
+                    }
+                }
+                else
+                {
+                    if(conditionMet)
+                        Trace.WriteLine("{0}: Condition unmet".F(data.Telemetry.SessionTimeSpan));
+                    conditionMet = false;
+                }
+
 
                 if (conditionMet && conditionMetAt + period < data.Telemetry.SessionTimeSpan)
                     break;
