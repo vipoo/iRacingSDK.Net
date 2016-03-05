@@ -16,6 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
+using iRacingSDK.Support;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -147,8 +148,8 @@ namespace iRacingSDK
             }
             catch(Exception e)
             {
-                Trace.WriteLine(e.Message, "DEBUG");
-                Trace.WriteLine(e.StackTrace, "DEBUG");
+                TraceError.WriteLine(e.Message);
+                TraceError.WriteLine(e.StackTrace);
             }
             finally
             {

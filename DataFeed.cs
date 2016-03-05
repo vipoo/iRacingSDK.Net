@@ -125,8 +125,8 @@ namespace iRacingSDK
                 }
                 catch(Exception e)
                 {
-                    TraceInfo.WriteLine(e.Message);
-                    Trace.WriteLine(e.StackTrace, "DEBUG");
+                    TraceError.WriteLine(e.Message);
+                    TraceError.WriteLine(e.StackTrace);
                 }
             });
 
