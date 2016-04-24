@@ -19,9 +19,6 @@
 using iRacingSDK.Support;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 
 namespace iRacingSDK
 {
@@ -77,7 +74,7 @@ namespace iRacingSDK
                 {
                     if (!conditionMet)
                     {
-                        Trace.WriteLine("{0}: Condition met".F(data.Telemetry.SessionTimeSpan));
+                        TraceDebug.WriteLine("{0}: Condition met".F(data.Telemetry.SessionTimeSpan));
                         conditionMet = true;
                         conditionMetAt = data.Telemetry.SessionTimeSpan;
                     }
@@ -85,7 +82,7 @@ namespace iRacingSDK
                 else
                 {
                     if(conditionMet)
-                        Trace.WriteLine("{0}: Condition unmet".F(data.Telemetry.SessionTimeSpan));
+                        TraceDebug.WriteLine("{0}: Condition unmet".F(data.Telemetry.SessionTimeSpan));
                     conditionMet = false;
                 }
 
