@@ -92,7 +92,7 @@ namespace iRacingSDK
                 public string FogLevel { get; set; }
                 public long Unofficial { get; set; }
                 public string CommercialMode { get; set; }
-                public long NightMode { get; set; }
+                public string NightMode { get; set; }
                 public long IsFixedSetup { get; set; }
                 public string StrictLapsChecking { get; set; }
                 public long HasOpenRegistration { get; set; }

@@ -6,4 +6,5 @@ packages/**/*
 TestResult.xml
 **/*.csproj.user
 *.nupkg
+.vs
 
