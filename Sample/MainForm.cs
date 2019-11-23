@@ -128,5 +128,22 @@ namespace Sample
         {
             logMessages.StartOperation(SamplePerformanceMeasurement.Sample);
         }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button17_Click(object sender, EventArgs e)
+        {
+            DateTime targetPosition = dateTimePicker_RacePosition.Value;
+            int targetframe = 60 * (targetPosition.Hour * 3600 + targetPosition.Minute*60 +targetPosition.Second);
+
+            var iracing = new iRacingConnection();
+
+            iRacing.Replay.MoveToFrame(targetframe);
+
+            Trace.WriteLine("Moved to Frame");
+        }
     }
 }
