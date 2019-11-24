@@ -18,6 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
+
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,11 +36,13 @@ namespace iRacingSDK
             public string TrackLength { get; set; }
             public string TrackDisplayName { get; set; }
             public string TrackDisplayShortName { get; set; }
+            public string TrackConfigName { get; set; }
             public string TrackCity { get; set; }
             public string TrackCountry { get; set; }
             public string TrackAltitude { get; set; }
             public string TrackLatitude { get; set; }
             public string TrackLongitude { get; set; }
+            public string TrackNorthOffset { get; set; }
             public long TrackNumTurns { get; set; }
             public string TrackPitSpeedLimit { get; set; }
             public string TrackType { get; set; }
@@ -51,6 +55,8 @@ namespace iRacingSDK
             public string TrackWindDir { get; set; }
             public string TrackRelativeHumidity { get; set; }
             public string TrackFogLevel { get; set; }
+            public long TrackCleanup { get; set; }
+            public long TrackDynamicTrack { get; set; }
             public long SeriesID { get; set; }
             public long SeasonID { get; set; }
             public long SessionID { get; set; }
@@ -61,6 +67,13 @@ namespace iRacingSDK
             public string EventType { get; set; }
             public string Category { get; set; }
             public string SimMode { get; set; }
+            public long TeamRacing { get; set; }
+            public long MinDrivers { get; set; }
+            public long MaxDrivers { get; set; }
+            public string DCRuleSet { get; set; }
+            public long QualifierMustStartRace { get; set; }
+            public long NumCarClasses { get; set; }
+            public long NumCarTypes { get; set; }
 
             public partial class _WeekendOptions
             {
@@ -79,7 +92,7 @@ namespace iRacingSDK
                 public string FogLevel { get; set; }
                 public long Unofficial { get; set; }
                 public string CommercialMode { get; set; }
-                public long NightMode { get; set; }
+                public string NightMode { get; set; }
                 public long IsFixedSetup { get; set; }
                 public string StrictLapsChecking { get; set; }
                 public long HasOpenRegistration { get; set; }
@@ -107,6 +120,7 @@ namespace iRacingSDK
                 public string SessionTime { get; set; }
                 public long SessionNumLapsToAvg { get; set; }
                 public string SessionType { get; set; }
+                public string SessionTrackRubberState { get; set; }
                 public partial class _ResultsPositions
                 {
                     public long Position { get; set; }
@@ -177,7 +191,22 @@ namespace iRacingSDK
                 public long NumFrequencies { get; set; }
                 public long TunedToFrequencyNum { get; set; }
                 public long ScanningIsOn { get; set; }
-                public string Frequencies { get; set; }
+                public partial class _Frequencies
+                {
+                    public long FrequencyNum { get; set; }
+                    public string FrequencyName { get; set; }
+                    public long Priority { get; set; }
+                    public long CarIdx { get; set; }
+                    public long EntryIdx { get; set; }
+                    public long ClubID { get; set; }
+                    public long CanScan { get; set; }
+                    public long CanSquawk { get; set; }
+                    public long Muted { get; set; }
+                    public long IsMutable { get; set; }
+                    public long IsDeletable { get; set; }
+                }
+
+                public _Frequencies[] Frequencies { get; set; }
             }
 
             public _Radios[] Radios { get; set; }
@@ -188,16 +217,25 @@ namespace iRacingSDK
         public partial class _DriverInfo
         {
             public long DriverCarIdx { get; set; }
+            public long PaceCarIdx { get; set; }
             public double DriverHeadPosX { get; set; }
             public double DriverHeadPosY { get; set; }
             public double DriverHeadPosZ { get; set; }
+            public double DriverCarIdleRPM { get; set; }
             public double DriverCarRedLine { get; set; }
             public double DriverCarFuelKgPerLtr { get; set; }
+            public double DriverCarFuelMaxLtr { get; set; }
+            public double DriverCarMaxFuelPct { get; set; }
             public double DriverCarSLFirstRPM { get; set; }
             public double DriverCarSLShiftRPM { get; set; }
             public double DriverCarSLLastRPM { get; set; }
             public double DriverCarSLBlinkRPM { get; set; }
             public double DriverPitTrkPct { get; set; }
+            public double DriverCarEstLapTime { get; set; }
+            public string DriverSetupName { get; set; }
+            public long DriverSetupIsModified { get; set; }
+            public string DriverSetupLoadTypeName { get; set; }
+            public long DriverSetupPassedTech { get; set; }
             public partial class _Drivers
             {
                 public long CarIdx { get; set; }
@@ -205,20 +243,36 @@ namespace iRacingSDK
                 public string AbbrevName { get; set; }
                 public string Initials { get; set; }
                 public long UserID { get; set; }
-                public long CarNumber { get; set; }
+                public long TeamID { get; set; }
+                public string TeamName { get; set; }
+                public string CarNumber { get; set; }
+                public long CarNumberRaw { get; set; }
                 public string CarPath { get; set; }
                 public long CarClassID { get; set; }
                 public long CarID { get; set; }
+                public long CarIsPaceCar { get; set; }
+                public long CarIsAI { get; set; }
+                public string CarScreenName { get; set; }
+                public string CarScreenNameShort { get; set; }
                 public string CarClassShortName { get; set; }
                 public long CarClassRelSpeed { get; set; }
                 public long CarClassLicenseLevel { get; set; }
                 public string CarClassMaxFuel { get; set; }
+                public string CarClassMaxFuelPct { get; set; }
                 public string CarClassWeightPenalty { get; set; }
+                public string CarClassColor { get; set; }
                 public long IRating { get; set; }
                 public long LicLevel { get; set; }
                 public long LicSubLevel { get; set; }
+                public string LicString { get; set; }
                 public string LicColor { get; set; }
                 public long IsSpectator { get; set; }
+                public string CarDesignStr { get; set; }
+                public string HelmetDesignStr { get; set; }
+                public string SuitDesignStr { get; set; }
+                public string CarNumberDesignStr { get; set; }
+                public long CarSponsor_1 { get; set; }
+                public long CarSponsor_2 { get; set; }
             }
 
             public _Drivers[] Drivers { get; set; }

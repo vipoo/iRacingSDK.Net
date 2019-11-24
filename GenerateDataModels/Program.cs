@@ -19,6 +19,7 @@
 using System;
 using System.IO;
 using YamlDotNet.RepresentationModel;
+using System.Linq;
 
 namespace GenerateDataModels
 {
@@ -26,6 +27,8 @@ namespace GenerateDataModels
     {
         static void Main(string[] args)
         {
+            iRacingSDK.iRacing.GetDataFeed().First(d => d.IsConnected);
+
             var x = new TelemetryTemplate();
             File.WriteAllText("GeneratedTelemetry.cs", x.TransformText());
 
@@ -43,8 +46,20 @@ namespace GenerateDataModels
                 case "SessionFlags":
                     return "iRacingSDK.SessionFlags";
 
+                case "EngineWarnings":
+                    return "iRacingSDK.EngineWarnings";
+
                 case "CarIdxTrackSurface":
                     return "iRacingSDK.TrackLocation[]";
+
+                case "DisplayUnits":
+                    return "iRacingSDK.DisplayUnits";
+
+                case "WeatherType":
+                    return "iRacingSDK.WeatherType";
+
+                case "Skies":
+                    return "iRacingSDK.Skies";
 
                 default:
                     return sampleValue.GetType().ToString();         

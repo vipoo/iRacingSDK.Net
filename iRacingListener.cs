@@ -16,6 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
+using iRacingSDK.Support;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -24,43 +25,61 @@ using System.Threading.Tasks;
 
 namespace iRacingSDK
 {
-    public delegate void DataSampleEventHandler(DataSample data);
-
-    public partial class iRacing
+    public class iRacingEvents : IDisposable
     {
-        static DataSampleEventHandler newData;
-        static Dictionary<DataSampleEventHandler, DataSampleEventHandler> newDataDelegates = new Dictionary<DataSampleEventHandler, DataSampleEventHandler>();
+        readonly iRacingConnection instance = new iRacingConnection();
+        readonly CrossThreadEvents<DataSample> newData = new CrossThreadEvents<DataSample>();
+        readonly CrossThreadEvents<DataSample> newSessionData = new CrossThreadEvents<DataSample>();
+        readonly CrossThreadEvents connected = new CrossThreadEvents();
+        readonly CrossThreadEvents disconnected = new CrossThreadEvents();
+        readonly TimeSpan period;
 
-        public static event DataSampleEventHandler NewData
+        Task backListener;
+        bool requestCancel;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="period">The time interval for raising the NewData event</param>
+        public iRacingEvents(TimeSpan period)
         {
-            add
-            {
-                var context = SynchronizationContext.Current;
-                DataSampleEventHandler newDelgate;
-
-                if (context != null)
-                    newDelgate = (d) => context.Send(i => value(d), null);
-                else
-                    newDelgate = value;
-
-                newDataDelegates.Add(value, newDelgate);
-                newData += newDelgate;
-            }
-            remove
-            {
-                var context = SynchronizationContext.Current;
-
-                var delgate = newDataDelegates[value];
-                newDataDelegates.Remove(value);
-
-                newData -= delgate;
-            }
+            this.period = period;
         }
 
-        static Task backListener;
-        static bool requestCancel;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="periodInMilliseconds">The time interval in milliseconds to raise the NewData Event.  0 means as often as data arrives from iRacing.</param>
+        public iRacingEvents(int periodInMilliseconds = 0)
+        {
+            period = new TimeSpan(0, 0, 0, 0, periodInMilliseconds);
+        }
 
-        public static void StartListening()
+        public event Action Connected
+        {
+            add { connected.Event += value; }
+            remove { connected.Event -= value; }
+        }
+
+        public event Action Disconnected
+        {
+            add { disconnected.Event += value; }
+            remove { disconnected.Event -= value; }
+        }
+
+        public event Action<DataSample> NewData
+        {
+            add { newData.Event += value; }
+            remove { newData.Event -= value; }
+        }
+
+        public event Action<DataSample> NewSessionData
+        {
+            add { newSessionData.Event += value; }
+            remove { newSessionData.Event -= value; }
+        }
+
+        public void StartListening()
         {
             if( backListener != null )
                 throw new Exception("Already listening to iRacing data");
@@ -71,7 +90,7 @@ namespace iRacingSDK
             backListener.Start();
         }
 
-        public static void StopListening()
+        public void StopListening()
         {
             var bl = backListener;
 
@@ -82,29 +101,65 @@ namespace iRacingSDK
             bl.Wait(500);
         }
 
-        static void Listen()
+        void Listen()
         {
+            var isConnected = false;
+            var isDisconnected = true;
+            var lastSessionInfoUpdate = -1;
+
+            var periodCount = this.period;
+            var lastTimeStamp = DateTime.Now;
+
             try
             {
-                foreach (var d in iRacing.GetDataFeed())
+                foreach (var d in instance.GetDataFeed(logging: false))
                 {
                     if (requestCancel)
                         return;
 
-                    if (newData != null)
-                        newData(d);
+                    if (!isConnected && d.IsConnected)
+                    {
+                        isConnected = true;
+                        isDisconnected = false;
+                        connected.Invoke();
+                    }
+
+                    if (!isDisconnected && !d.IsConnected)
+                    {
+                        isConnected = false;
+                        isDisconnected = true;
+                        disconnected.Invoke();
+                    }
+
+                    if (period >= (DateTime.Now - lastTimeStamp))
+                        continue;
+
+                    lastTimeStamp = DateTime.Now;
+
+                    if ( d.IsConnected)
+                        newData.Invoke(d);
+
+                    if (d.IsConnected && d.SessionData.InfoUpdate != lastSessionInfoUpdate)
+                    {
+                        lastSessionInfoUpdate = d.SessionData.InfoUpdate;
+                        newSessionData.Invoke(d);
+                    }
                 }
             }
             catch(Exception e)
             {
-                Trace.WriteLine(e.Message, "DEBUG");
-                Trace.WriteLine(e.StackTrace, "DEBUG");
-                throw e;
+                TraceError.WriteLine(e.Message);
+                TraceError.WriteLine(e.StackTrace);
             }
             finally
             {
                 backListener = null;
             }
+        }
+
+        public void Dispose()
+        {
+            StopListening();
         }
     }
 }

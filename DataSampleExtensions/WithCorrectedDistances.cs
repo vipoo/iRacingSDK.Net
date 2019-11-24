@@ -40,35 +40,34 @@ namespace iRacingSDK
             var maxDistance = new float[64];
             var lastAdjustment = new int[64];
 
-			foreach (var data in samples.ForwardOnly())
+            foreach (var data in samples.ForwardOnly())
             {
-                for (int i = 0; i < data.SessionData.DriverInfo.Drivers.Length; i++)
-					CorrectDistance(data.SessionData.DriverInfo.Drivers[i].UserName,
-						ref data.Telemetry.CarIdxLap[i],
-						ref data.Telemetry.CarIdxLapDistPct[i],
-						ref maxDistance[i],
-						ref lastAdjustment[i]);
-
+                for (int i = 0; i < data.SessionData.DriverInfo.CompetingDrivers.Length; i++)
+                    CorrectDistance(data.SessionData.DriverInfo.CompetingDrivers[i].UserName,
+                        ref data.Telemetry.CarIdxLap[i],
+                        ref data.Telemetry.CarIdxLapDistPct[i],
+                        ref maxDistance[i],
+                        ref lastAdjustment[i]);
 
                 yield return data;
             }
         }
 
-		static void CorrectDistance(string driverName, ref int lap, ref float distance, ref float maxDistance, ref int lastAdjustment)
-		{
-			var totalDistance = lap + distance;
-			var roundedDistance = (int)(totalDistance * 1000.0);
-			var roundedMaxDistance = (int)(maxDistance * 1000.0);
+        static void CorrectDistance(string driverName, ref int lap, ref float distance, ref float maxDistance, ref int lastAdjustment)
+        {
+            var totalDistance = lap + distance;
+            var roundedDistance = (int)(totalDistance * 1000.0);
+            var roundedMaxDistance = (int)(maxDistance * 1000.0);
 
-			if(roundedDistance > roundedMaxDistance && roundedDistance > 0)
-				maxDistance = totalDistance;
+            if (roundedDistance > roundedMaxDistance && roundedDistance > 0)
+                maxDistance = totalDistance;
 
-			if(roundedDistance < roundedMaxDistance)
-			{
-				lastAdjustment = roundedDistance;
-				lap = (int)maxDistance;
-				distance = maxDistance - (int)maxDistance;
-			}
-		}
+            if (roundedDistance < roundedMaxDistance)
+            {
+                lastAdjustment = roundedDistance;
+                lap = (int)maxDistance;
+                distance = maxDistance - (int)maxDistance;
+            }
+        }
     }
 }

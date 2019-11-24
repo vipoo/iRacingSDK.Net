@@ -27,7 +27,7 @@ namespace iRacingSDK
         public bool IsFinalLap;
         public bool LeaderHasFinished;
         public bool[] HasRetired;
-
+            
         public bool HasData(int carIdx)
         {
             return this.CarIdxTrackSurface[carIdx] != TrackLocation.NotInWorld;

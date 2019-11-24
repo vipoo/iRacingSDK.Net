@@ -26,17 +26,51 @@ namespace iRacingSDK.Net.Tests
     [TestFixture]
     public class IncidentsSupport
     {
-        DataSample[] CreateSamplesFromFrameNumbers(params int[] frameNumbers)
+        private List<DataSample> samples;
+
+        IncidentsSupport BuildSamples()
         {
-            return frameNumbers.Select(n =>
-                new DataSample
+            samples = new List<DataSample>();
+
+            return this;
+        }
+
+        List<DataSample> Samples()
+        {
+            return samples;
+        }
+
+        IncidentsSupport OnACar(int countOfSamples = 1)
+        {
+            int frameNumber = samples.Count;
+            for ( var i = 0; i < countOfSamples; i++)
+                samples.Add(new DataSample
                 {
                     IsConnected = true,
                     Telemetry = new Telemetry
-                    {
-                        { "ReplayFrameNum", n }
-                    }
-                }).ToArray();
+                        {
+                            { "CamCarIdx", 1 },
+                            { "ReplayFrameNum", frameNumber }
+                        }
+                });
+
+            return this;
+        }
+        IncidentsSupport OnAPaceCar(int countOfSamples = 1)
+        {
+            int frameNumber = samples.Count;
+            for (var i = 0; i < countOfSamples; i++)
+                samples.Add(new DataSample
+                {
+                    IsConnected = true,
+                    Telemetry = new Telemetry
+                        {
+                            { "CamCarIdx", 0 },
+                            { "ReplayFrameNum", frameNumber }
+                        }
+                });
+
+            return this;
         }
 
         int[] FrameNumbersFromSamples(IEnumerable<DataSample> samples)
@@ -50,56 +84,32 @@ namespace iRacingSDK.Net.Tests
         [Test]
         public void should_find_single_incidents()
         {
-            var start = 10;
-            var incidentFrame = 30;
+            var inputSamples = BuildSamples().OnACar().OnAPaceCar().OnACar(3).Samples();
 
-            var inputSamples = CreateSamplesFromFrameNumbers(start, start, incidentFrame, incidentFrame);
+            var samples = iRacingSDK.IncidentsSupport.FindIncidents(inputSamples, 3).ToList();
 
-            var receivedSamples = new List<DataSample>();
+            Assert.That(FrameNumbersFromSamples(samples), Is.EqualTo(new[] { 2 }));
 
-            var samples = iRacingSDK.IncidentsSupport.FindIncidents(inputSamples, d => { receivedSamples.Add(d); });
-
-            Assert.That(FrameNumbersFromSamples(samples), Is.EqualTo(new[] { incidentFrame }));
-
-            Assert.That(FrameNumbersFromSamples(receivedSamples), Is.EqualTo(new[] { start, incidentFrame }));
         }
 
         [Test]
         public void should_find_two_incidents()
         {
-            var start = 10;
-            var incidentFrame1 = 30;
-            var incidentFrame2 = 60;
+            var inputSamples = BuildSamples().OnACar().OnAPaceCar().OnACar(4).OnAPaceCar().OnACar(4).Samples();
 
-            var inputSamples = CreateSamplesFromFrameNumbers(start, incidentFrame1, incidentFrame2);
+            var samples = iRacingSDK.IncidentsSupport.FindIncidents(inputSamples, 3);
 
-            var samples = iRacingSDK.IncidentsSupport.FindIncidents(inputSamples, d => { });
-
-            Assert.That(FrameNumbersFromSamples(samples), Is.EqualTo(new[] { incidentFrame1, incidentFrame2 }));
+            Assert.That(FrameNumbersFromSamples(samples), Is.EqualTo(new[] { 2, 7 }));
         }
-
+        
         [Test]
         public void should_stop_if_frame_number_does_not_advance()
         {
-            var start = 10;
-            var incidentFrame = 30;
-            var neverReached = 1000;
+            var inputSamples = BuildSamples().OnACar().OnAPaceCar().OnACar(4).OnAPaceCar(10).Samples();
 
-            var frameNumbers = new List<int>();
-            frameNumbers.Add(start);
-            for (int i = 0; i < 110; i++)
-                frameNumbers.Add(incidentFrame);
-            frameNumbers.Add(neverReached);
+            var samples = iRacingSDK.IncidentsSupport.FindIncidents(inputSamples, 3);
 
-            var inputSamples = CreateSamplesFromFrameNumbers(frameNumbers.ToArray());
-
-            var receivedSamples = new List<DataSample>();
-
-            var samples = iRacingSDK.IncidentsSupport.FindIncidents(inputSamples, (d) => { receivedSamples.Add(d); });
-
-            Assert.That(FrameNumbersFromSamples(samples), Is.EqualTo(new[] { incidentFrame }));
-
-            Assert.That(FrameNumbersFromSamples(receivedSamples), Is.EqualTo(new[] { start, incidentFrame }));
+            Assert.That(FrameNumbersFromSamples(samples), Is.EqualTo(new[] { 2 }));
         }
     }
 }

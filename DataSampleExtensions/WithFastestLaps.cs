@@ -40,7 +40,7 @@ namespace iRacingSDK
                     .CarIdxLap
                     .Select((l, i) => new { CarIdx = i, Lap = l })
                     .Skip(1)
-                    .Take(data.SessionData.DriverInfo.Drivers.Length - 1);
+                    .Take(data.SessionData.DriverInfo.CompetingDrivers.Length - 1);
 
                 foreach (var lap in carsAndLaps)
                 {
@@ -61,7 +61,7 @@ namespace iRacingSDK
                             lastFastLap = new FastLap
                             {
                                 Time = TimeSpan.FromSeconds(lapTime),
-                                Driver = data.SessionData.DriverInfo.Drivers[lap.CarIdx]
+                                Driver = data.SessionData.DriverInfo.CompetingDrivers[lap.CarIdx]
                             };
                         }
                     }

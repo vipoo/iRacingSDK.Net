@@ -16,18 +16,15 @@
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Linq;
 using iRacingSDK;
-using System.Threading;
-using System.Runtime.InteropServices;
-using System.IO;
-using YamlDotNet.RepresentationModel;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Windows.Forms;
 using Sample;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace iRacingSDKSample
 {
@@ -37,12 +34,7 @@ namespace iRacingSDKSample
 
         public static void Main(string[] args)
         {
-            foreach (var data in iRacing.GetDataFeed().TakeWhile(d => !d.IsConnected))
-            {
-                Console.WriteLine("Waiting to connect ...");
-                continue;
-            }
-
+            
             GuiSamples();
             //EventDataExample();
 
@@ -69,36 +61,6 @@ namespace iRacingSDKSample
         static void iRacing_NewData(DataSample data)
         {
             Console.WriteLine("Received Data {0}", data.Telemetry.TickCount);
-        }
-
-        private static void VerifyDriverDistances()
-        {
-            foreach (var data in iRacing.GetDataFeed().WithCorrectedPercentages().WithCorrectedDistances().WithFinishingStatus())
-            {
-                Console.Clear();
-                foreach( var c in data.Telemetry.Cars)
-                {
-                    Console.WriteLine("{0} at {1}", c.UserName, c.TotalDistance);
-                }
-
-                Thread.Sleep(100);
-            }
-        }
-
-        private static void VerifyLapSectors()
-        {
-            LapSector lastSector = new LapSector();
-
-            foreach( var data in iRacing.GetDataFeed().WithCorrectedPercentages().WithCorrectedDistances().WithFinishingStatus() )
-            {
-                if( data.Telemetry.RaceLapSector != lastSector)
-                {
-                    Console.WriteLine("{0} {1}", data.Telemetry.RaceLapSector.LapNumber, data.Telemetry.RaceLapSector.Sector);
-                }
-
-                lastSector = data.Telemetry.RaceLapSector;
-             
-            }
         }
 
         static void Recorder()
@@ -163,7 +125,7 @@ namespace iRacingSDKSample
                 if (next == null)
                     break;
 
-                var number = data.SessionData.DriverInfo.Drivers[next.CarIdx].CarNumber;
+                var number = data.SessionData.DriverInfo.CompetingDrivers[next.CarIdx].CarNumberRaw;
 
                 iRacing.Replay.CameraOnDriver((short)number, (short)camera.GroupNum, 0);
 
@@ -183,7 +145,7 @@ namespace iRacingSDKSample
 //                Console.WriteLine("Final Lap is {0}", data.Telemetry.IsFinalLap);
   //              Console.WriteLine("Is Finished {0}", data.Telemetry.LeaderHasFinished);
 
-                for (int i = 1; i < data.SessionData.DriverInfo.Drivers.Length; i++)
+                for (int i = 1; i < data.SessionData.DriverInfo.CompetingDrivers.Length; i++)
                 {
                     //Console.WriteLine("{0} lap is {1}", data.SessionData.DriverInfo.Drivers[i].UserName, data.Telemetry.CarIdxLap[i]);
                     //Console.WriteLine("{0} is finished {1}", data.SessionData.DriverInfo.Drivers[i].UserName, data.Telemetry.HasSeenCheckeredFlag[i]);
@@ -195,7 +157,7 @@ namespace iRacingSDKSample
 
                     if (data.Telemetry.CarIdxTrackSurface[i] == TrackLocation.NotInWorld)
                     {
-                        Console.WriteLine("{0} has no data at {1}", data.SessionData.DriverInfo.Drivers[i].UserName, data.Telemetry.SessionTime, data.Telemetry.ReplayFrameNum);
+                        Console.WriteLine("{0} has no data at {1}", data.SessionData.DriverInfo.CompetingDrivers[i].UserName, data.Telemetry.SessionTime, data.Telemetry.ReplayFrameNum);
                     }
                 }
 
@@ -227,7 +189,7 @@ namespace iRacingSDKSample
                     if( lastLaps[i] != data.Telemetry.CarIdxLap[i])
                     {
                         lastLaps[i] = data.Telemetry.CarIdxLap[i];
-                        var name = data.SessionData.DriverInfo.Drivers[i].UserName;
+                        var name = data.SessionData.DriverInfo.CompetingDrivers[i].UserName;
                         var position = data.SessionData.SessionInfo.Sessions[2].ResultsPositions.First(r => r.CarIdx == i).Position;
 
                        // if (lastLaps[i] == data.SessionData.SessionInfo.Sessions[2].ResultsLapsComplete + 1)
@@ -238,15 +200,13 @@ namespace iRacingSDKSample
 
             return;
 
+#pragma warning disable CS0162 // Unreachable code detected
             foreach (var data in iRacing.GetDataFeed().WithCorrectedPercentages().AtSpeed(16).RaceOnly())
+#pragma warning restore CS0162 // Unreachable code detected
             {
                 Console.Clear();
 
                 Console.WriteLine("Session Data");
-
-
-
-
 
                 Console.WriteLine("Telemtary");
 

@@ -26,92 +26,47 @@ using System.Diagnostics;
 
 namespace iRacingSDK
 {
-	public partial class iRacing
-	{
-        public static readonly Replay Replay = new Replay();
-        static DataFeed dataFeed = null;
+    public static class iRacing
+    {
+        static iRacingConnection instance;
+        static iRacingEvents eventInstance;
 
-        static bool isRunning = false;
+        static iRacing()
+        {
+            instance = new iRacingConnection();
+            eventInstance = new iRacingEvents();
+        }
 
-        internal static bool IsRunning { get { return isRunning; } }
+        public static Replay Replay { get { return instance.Replay; } }
+        public static PitCommand PitCommand { get { return instance.PitCommand; } }
 
-        public static bool IsConnected { get; private set; }
+        public static bool IsConnected { get { return instance.IsConnected; } }
 
         public static IEnumerable<DataSample> GetDataFeed()
         {
-            if (isRunning)
-                throw new Exception("Can not call GetDataFeed concurrently.");
-
-            isRunning = true;
-            try
-            {
-                foreach (var notConnectedSample in WaitForInitialConnection())
-                {
-                    IsConnected = false;
-                    yield return notConnectedSample;
-                }
-
-                foreach (var sample in AllSamples())
-                {
-                    IsConnected = sample.IsConnected;
-                    yield return sample;
-                }
-            }
-            finally
-            {
-                isRunning = false;
-            }
+            return instance.GetDataFeed();
         }
 
-		static IEnumerable<DataSample> WaitForInitialConnection()
-		{
-            bool wasConnected = iRacingConnection.Accessor != null;
-            Trace.WriteLineIf(!wasConnected, "Waiting to connect to iRacing application", "INFO");
-			
-            while(!iRacingConnection.IsConnected())
-			{
-				yield return DataSample.YetToConnected;
-				Thread.Sleep(10);
-			}
-            
-            Trace.WriteLineIf(!wasConnected, "Connected to iRacing application", "INFO");
-		}
+        public static void StartListening()
+        {
+            eventInstance.StartListening();
+        }
 
-		static IEnumerable<DataSample> AllSamples()
-		{
-            if( dataFeed == null )
-			    dataFeed = new DataFeed(iRacingConnection.Accessor);
+        public static void StopListening()
+        {
+            eventInstance.StopListening();
+        }
 
-            var nextTickCount = 0;
-            var lastTickTime = DateTime.Now;
-            DataSample lastDataSample = null;
-			while(true)
-			{
-                iRacingConnection.WaitForData();
-
-                var data = dataFeed.GetNextDataSample();
-                if (data != null)
-                {
-                    data.LastSample = lastDataSample;
-                    if (lastDataSample != null)
-                        lastDataSample.LastSample = null;
-                    lastDataSample = data;
-
-                    if (data.IsConnected)
-                    {
-                        if (data.Telemetry.TickCount == nextTickCount - 1)
-                            continue; //Got the same sample - try again.
-
-                        if (data.Telemetry.TickCount != nextTickCount && nextTickCount != 0)
-                            Debug.WriteLine(string.Format("Warning dropped DataSample from {0} to {1}. Over time of {2}",
-                                nextTickCount, data.Telemetry.TickCount-1, (DateTime.Now - lastTickTime).ToString(@"s\.fff")), "WARN");
-
-                        nextTickCount = data.Telemetry.TickCount + 1;
-                        lastTickTime = DateTime.Now;
-                    }
-                    yield return data;
-                }
-			}
-		}
-	}
+        public static event Action<DataSample> NewData
+        {
+            add
+            {
+                eventInstance.NewData += value;
+            }
+            remove
+            {
+                eventInstance.NewData -= value;
+            }
+        }
+    }
 }

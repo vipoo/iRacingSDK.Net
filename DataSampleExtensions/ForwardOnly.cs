@@ -15,26 +15,30 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with iRacingSDK.  If not, see <http://www.gnu.org/licenses/>.
+
+using iRacingSDK.Support;
 using System;
 using System.Collections.Generic;
 
 namespace iRacingSDK
 {
-	public static partial class DataSampleExtensions
-	{
-		/// <summary>
-		/// Raises an error is frame numbers goes down - indicating the game is replaying in reverse.
-		/// </summary>
-		public static IEnumerable<DataSample> ForwardOnly(this IEnumerable<DataSample> samples)
-		{
-			foreach (var data in samples)
-			{
-				if(data.LastSample != null && data.LastSample.Telemetry.ReplayFrameNum > data.Telemetry.ReplayFrameNum)
-					throw new Exception("Replay data reversed.  Current enumeration only support iRacing in forward mode.");
-
-				yield return data;
-			}
-		}
-	}
+    public static partial class DataSampleExtensions
+    {
+        /// <summary>
+        /// Logs an error is frame numbers goes down - indicating the game is replaying in reverse.
+        /// Sometimes stream may glitch and the FrameNum decements
+        /// </summary>
+        public static IEnumerable<DataSample> ForwardOnly(this IEnumerable<DataSample> samples)
+        {
+            foreach (var data in samples)
+            {
+                if (data.LastSample != null && data.LastSample.Telemetry.ReplayFrameNum > data.Telemetry.ReplayFrameNum)
+                    TraceInfo.WriteLine(
+                        "WARNING! Replay data reversed.  Current enumeration only support iRacing in forward mode. Received sample {0} after sample {1}",
+                        data.Telemetry.ReplayFrameNum, data.LastSample.Telemetry.ReplayFrameNum);
+                else
+                    yield return data;
+            }
+        }
+    }
 }
-

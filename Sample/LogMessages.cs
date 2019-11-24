@@ -63,6 +63,7 @@ namespace Sample
                 operation.Abort();
 
             operation = null;
+            this.Close();
         }
 
         private void LogMessages_FormClosed(object sender, FormClosedEventArgs e)
@@ -74,22 +75,36 @@ namespace Sample
 
     public class MyListener : TraceListener
     {
-        TextBox textBox;
-        SynchronizationContext context;
+        static TextBox textBox;
+        static SynchronizationContext context;
 
         public MyListener(TextBox textBox)
         {
             context = SynchronizationContext.Current;
-            this.textBox = textBox;
+            MyListener.textBox = textBox;
+        }
+
+        public static void Clear()
+        {
+            context.Post(ignore =>
+            {
+                textBox.Text = "";
+            }, null);
         }
 
         public override void Write(string message, string category)
         {
+            if (category == "DEBUG")
+                return;
+
             WriteInfo(string.Format("{0} {1}", category, message));
         }
 
         public override void WriteLine(string message, string category)
         {
+            if (category == "DEBUG")
+                return;
+            
             WriteInfoLine(string.Format("{0} {1}", category, message));
         }
 
