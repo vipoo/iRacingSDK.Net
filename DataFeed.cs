@@ -143,10 +143,10 @@ namespace iRacingSDK
 
             try
             {
-                sessionInfoString.Replace(": *", ": ");
+                sessionInfoString = sessionInfoString.Replace(": *", ": ");
                 var input = new StringReader(sessionInfoString);
 
-                var deserializer = new Deserializer(ignoreUnmatched: true);
+                var deserializer = new DeserializerBuilder().IgnoreUnmatchedProperties().Build();
 
                 var result = (SessionData)deserializer.Deserialize(input, typeof(SessionData));
                 result.Raw = sessionInfoString.Replace("\n", "\r\n");
