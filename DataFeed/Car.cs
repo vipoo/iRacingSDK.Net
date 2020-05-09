@@ -43,6 +43,7 @@ namespace iRacingSDK
         public short CarNumberRaw { get { return driver == null ? (short)-1 : (short)driver.CarNumberRaw; } }
         public string UserName { get { return driver == null ? "Unknown" : driver.UserName; } }
         public bool IsPaceCar { get { return carIdx == 0; } }
+        
 
         public Car Car(DataSample data)
         {
@@ -79,6 +80,7 @@ namespace iRacingSDK
         public bool HasRetired { get { return telemetry.HasRetired[carIdx]; } }
         public TrackLocation TrackSurface { get { return telemetry.CarIdxTrackSurface[carIdx]; } }
         public int PitStopCount { get { return telemetry.CarIdxPitStopCount[carIdx]; } }
+        public bool IsInPits { get { return TrackSurface == TrackLocation.InPitStall; } }
 
         public SessionData._SessionInfo._Sessions._ResultsPositions ResultPosition
         {

@@ -44,6 +44,8 @@
             this.button14 = new System.Windows.Forms.Button();
             this.button15 = new System.Windows.Forms.Button();
             this.button16 = new System.Windows.Forms.Button();
+            this.dateTimePicker_RacePosition = new System.Windows.Forms.DateTimePicker();
+            this.button17 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -206,11 +208,34 @@
             this.button16.UseVisualStyleBackColor = true;
             this.button16.Click += new System.EventHandler(this.button16_Click);
             // 
+            // dateTimePicker_RacePosition
+            // 
+            this.dateTimePicker_RacePosition.CustomFormat = "HH:MM";
+            this.dateTimePicker_RacePosition.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.dateTimePicker_RacePosition.Location = new System.Drawing.Point(12, 399);
+            this.dateTimePicker_RacePosition.Name = "dateTimePicker_RacePosition";
+            this.dateTimePicker_RacePosition.Size = new System.Drawing.Size(136, 20);
+            this.dateTimePicker_RacePosition.TabIndex = 17;
+            this.dateTimePicker_RacePosition.Value = new System.DateTime(2019, 3, 16, 0, 0, 0, 0);
+            this.dateTimePicker_RacePosition.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
+            // 
+            // button17
+            // 
+            this.button17.Location = new System.Drawing.Point(169, 396);
+            this.button17.Name = "button17";
+            this.button17.Size = new System.Drawing.Size(136, 23);
+            this.button17.TabIndex = 18;
+            this.button17.Text = "Set Replay Position";
+            this.button17.UseVisualStyleBackColor = true;
+            this.button17.Click += new System.EventHandler(this.button17_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(503, 445);
+            this.Controls.Add(this.button17);
+            this.Controls.Add(this.dateTimePicker_RacePosition);
             this.Controls.Add(this.button16);
             this.Controls.Add(this.button15);
             this.Controls.Add(this.button14);
@@ -253,5 +278,7 @@
         private System.Windows.Forms.Button button14;
         private System.Windows.Forms.Button button15;
         private System.Windows.Forms.Button button16;
+        private System.Windows.Forms.DateTimePicker dateTimePicker_RacePosition;
+        private System.Windows.Forms.Button button17;
     }
 }
