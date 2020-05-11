@@ -42,6 +42,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="iRacingSDK, Version=1.0.0.40, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\iRacingSDK.1.0.0.40\lib\net40-client\iRacingSDK.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
@@ -53,6 +56,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SampleCarPosition.cs" />
     <Compile Include="SampleFindIncidents.cs" />
     <Compile Include="SampleConventionEventData.cs" />
     <Compile Include="SampleIRacingDataStreamConnection.cs" />
@@ -89,12 +93,6 @@
     <None Include="app.config" />
     <None Include="LICENSE.txt" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\iRacingSDK.csproj">
-      <Project>{5422AE20-F220-4BE1-9E61-5296981ABB5C}</Project>
-      <Name>iRacingSDK</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="LogMessages.resx">

@@ -120,7 +120,7 @@ namespace Sample
 
         private void button15_Click(object sender, EventArgs e)
         {
-            logMessages.StartOperation(SampleCarAndSessionState.Sample);
+            logMessages.StartOperation(SampleCarPositon.Sample);
 
         }
 
@@ -144,6 +144,21 @@ namespace Sample
             iRacing.Replay.MoveToFrame(targetframe);
 
             Trace.WriteLine("Moved to Frame");
+        }
+
+        private void toolStripStatusLabel2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripStatusLabel1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void statusStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
         }
     }
 }
