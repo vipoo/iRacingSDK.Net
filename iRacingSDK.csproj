@@ -8,8 +8,9 @@
     <ProjectGuid>{5422AE20-F220-4BE1-9E61-5296981ABB5C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>iRacingSDK</RootNamespace>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
