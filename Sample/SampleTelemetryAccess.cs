@@ -39,7 +39,7 @@ namespace Sample
 
                 //Trace.WriteLine(data.SessionData.Raw);
 
-                System.Diagnostics.Debugger.Break();
+                //System.Diagnostics.Debugger.Break();
 
             }
         }

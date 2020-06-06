@@ -46,6 +46,12 @@
             this.button16 = new System.Windows.Forms.Button();
             this.dateTimePicker_RacePosition = new System.Windows.Forms.DateTimePicker();
             this.button17 = new System.Windows.Forms.Button();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.button18 = new System.Windows.Forms.Button();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -70,7 +76,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(169, 75);
+            this.button3.Location = new System.Drawing.Point(169, 12);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(136, 46);
             this.button3.TabIndex = 3;
@@ -80,7 +86,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(169, 138);
+            this.button4.Location = new System.Drawing.Point(169, 75);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(136, 46);
             this.button4.TabIndex = 4;
@@ -100,7 +106,7 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(169, 204);
+            this.button6.Location = new System.Drawing.Point(169, 141);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(136, 46);
             this.button6.TabIndex = 6;
@@ -120,7 +126,7 @@
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(169, 268);
+            this.button8.Location = new System.Drawing.Point(169, 205);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(136, 46);
             this.button8.TabIndex = 8;
@@ -140,7 +146,7 @@
             // 
             // button10
             // 
-            this.button10.Location = new System.Drawing.Point(169, 333);
+            this.button10.Location = new System.Drawing.Point(169, 270);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(136, 46);
             this.button10.TabIndex = 10;
@@ -150,7 +156,7 @@
             // 
             // button11
             // 
-            this.button11.Location = new System.Drawing.Point(324, 75);
+            this.button11.Location = new System.Drawing.Point(324, 12);
             this.button11.Name = "button11";
             this.button11.Size = new System.Drawing.Size(136, 46);
             this.button11.TabIndex = 11;
@@ -160,7 +166,7 @@
             // 
             // button12
             // 
-            this.button12.Location = new System.Drawing.Point(324, 138);
+            this.button12.Location = new System.Drawing.Point(324, 75);
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(136, 46);
             this.button12.TabIndex = 12;
@@ -170,7 +176,7 @@
             // 
             // button13
             // 
-            this.button13.Location = new System.Drawing.Point(324, 204);
+            this.button13.Location = new System.Drawing.Point(324, 141);
             this.button13.Name = "button13";
             this.button13.Size = new System.Drawing.Size(136, 46);
             this.button13.TabIndex = 13;
@@ -190,7 +196,7 @@
             // 
             // button15
             // 
-            this.button15.Location = new System.Drawing.Point(324, 268);
+            this.button15.Location = new System.Drawing.Point(324, 205);
             this.button15.Name = "button15";
             this.button15.Size = new System.Drawing.Size(136, 46);
             this.button15.TabIndex = 15;
@@ -200,7 +206,7 @@
             // 
             // button16
             // 
-            this.button16.Location = new System.Drawing.Point(324, 333);
+            this.button16.Location = new System.Drawing.Point(169, 333);
             this.button16.Name = "button16";
             this.button16.Size = new System.Drawing.Size(136, 46);
             this.button16.TabIndex = 16;
@@ -229,14 +235,62 @@
             this.button17.UseVisualStyleBackColor = true;
             this.button17.Click += new System.EventHandler(this.button17_Click);
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1,
+            this.toolStripStatusLabel3,
+            this.toolStripStatusLabel2});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 444);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(503, 22);
+            this.statusStrip1.TabIndex = 19;
+            this.statusStrip1.Text = "statusStrip1";
+            this.statusStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.statusStrip1_ItemClicked);
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(151, 17);
+            this.toolStripStatusLabel1.Text = "iRacing Connections Status";
+            this.toolStripStatusLabel1.Click += new System.EventHandler(this.toolStripStatusLabel1_Click);
+            // 
+            // toolStripStatusLabel3
+            // 
+            this.toolStripStatusLabel3.AutoSize = false;
+            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(118, 17);
+            // 
+            // toolStripStatusLabel2
+            // 
+            this.toolStripStatusLabel2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripStatusLabel2.ForeColor = System.Drawing.Color.Red;
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(84, 17);
+            this.toolStripStatusLabel2.Text = "not connected";
+            this.toolStripStatusLabel2.Click += new System.EventHandler(this.toolStripStatusLabel2_Click);
+            // 
+            // button18
+            // 
+            this.button18.Location = new System.Drawing.Point(324, 270);
+            this.button18.Name = "button18";
+            this.button18.Size = new System.Drawing.Size(136, 46);
+            this.button18.TabIndex = 15;
+            this.button18.Text = "Car Position";
+            this.button18.UseVisualStyleBackColor = true;
+            this.button18.Click += new System.EventHandler(this.button15_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(503, 445);
+            this.ClientSize = new System.Drawing.Size(503, 466);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.button17);
             this.Controls.Add(this.dateTimePicker_RacePosition);
             this.Controls.Add(this.button16);
+            this.Controls.Add(this.button18);
             this.Controls.Add(this.button15);
             this.Controls.Add(this.button14);
             this.Controls.Add(this.button13);
@@ -256,7 +310,10 @@
             this.Text = "Main";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -280,5 +337,10 @@
         private System.Windows.Forms.Button button16;
         private System.Windows.Forms.DateTimePicker dateTimePicker_RacePosition;
         private System.Windows.Forms.Button button17;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
+        private System.Windows.Forms.Button button18;
     }
 }
