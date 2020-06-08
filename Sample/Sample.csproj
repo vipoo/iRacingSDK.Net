@@ -85,6 +85,7 @@
     <Compile Include="SampleLapSectors.cs" />
     <Compile Include="SampleTakeUntilAfter.cs" />
     <Compile Include="SampleQueuedDataFeed.cs" />
+    <Compile Include="SampleCameraInfo.cs" />
     <Compile Include="SampleWithFinishingStatuses.cs" />
     <Compile Include="SampleTotalDistance.cs" />
   </ItemGroup>
