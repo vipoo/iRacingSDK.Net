@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		NuGet.config = NuGet.config
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRacingSDK.Net.Tests", "iRacingSDK.Net.Tests\iRacingSDK.Net.Tests.csproj", "{947BD2B6-FFF4-4762-8C0E-718112CDA72E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,18 @@ Global
 		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Release|x64.ActiveCfg = Release|Any CPU
 		{8BDF1915-3140-478E-827F-25D495B8CDC5}.Release|x86.ActiveCfg = Release|Any CPU
+		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
+		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Debug|Mixed Platforms.Build.0 = Debug|x64
+		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Debug|x64.ActiveCfg = Debug|x64
+		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Debug|x64.Build.0 = Debug|x64
+		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Debug|x86.ActiveCfg = Debug|x64
+		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Release|Any CPU.ActiveCfg = Release|x64
+		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Release|Mixed Platforms.ActiveCfg = Release|x64
+		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Release|Mixed Platforms.Build.0 = Release|x64
+		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Release|x64.ActiveCfg = Release|x64
+		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Release|x64.Build.0 = Release|x64
+		{947BD2B6-FFF4-4762-8C0E-718112CDA72E}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
