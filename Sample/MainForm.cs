@@ -160,5 +160,10 @@ namespace Sample
         {
 
         }
+
+        private void button19_Click(object sender, EventArgs e)
+        {
+            logMessages.StartOperation(SampleCameraInfo.Sample);
+        }
     }
 }
