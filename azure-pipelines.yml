@@ -11,9 +11,9 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  solution: '**/iRacingData.sln'
+  solution: '**/iRacingSDK.csproj'
 
 steps:
 
-- script: dotnet build --configuration $(buildConfiguration)
+- script: dotnet build $(solution) --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
