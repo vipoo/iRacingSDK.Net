@@ -11,9 +11,17 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  solution: '**/*iRacingSDK.*'
+  solution: '**/*iRacingSDK.csproj*'
 
-steps:
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '*'
 
-- script: dotnet build $(solution) --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+- task: NuGetCommand@2
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/iRacingSDK.csproj'
+    versioningScheme: 'byBuildNumber'
+
+    
