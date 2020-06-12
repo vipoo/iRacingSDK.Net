@@ -34,7 +34,13 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="YamlDotNet, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\YamlDotNet.5.3.1\lib\net35\YamlDotNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataFeed\Telemetry\TelemetryCamCarTests.cs" />
@@ -48,17 +54,7 @@
     <Compile Include="main.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <PackageReference Include="NUnit">
-      <Version>2.6.3</Version>
-    </PackageReference>
-    <PackageReference Include="NUnit.Runners">
-      <Version>2.6.3</Version>
-    </PackageReference>
-    <PackageReference Include="YamlDotNet">
-      <Version>5.3.1</Version>
-    </PackageReference>
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\iRacingSDK.csproj">
       <Project>{5422AE20-F220-4BE1-9E61-5296981ABB5C}</Project>
@@ -67,5 +63,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
