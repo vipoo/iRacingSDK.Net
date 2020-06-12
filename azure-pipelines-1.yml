@@ -39,8 +39,8 @@ steps:
     command: 'build'
     projects: '**/*iRacingSDK.csproj'
 
-    - task: DotNetCoreCLI@2
-      inputs:
-        command: 'pack'
-        packagesToPack: '**/iRacingSDK.csproj'
-        versioningScheme: 'byBuildNumber'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/iRacingSDK.NET.csproj'
+    versioningScheme: 'byBuildNumber'
