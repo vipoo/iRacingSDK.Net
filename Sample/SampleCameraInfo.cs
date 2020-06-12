@@ -21,7 +21,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using iRacingSDK.Support;
-using System.Threading;
 
 namespace Sample
 {
