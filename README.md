@@ -1,4 +1,5 @@
 #iRacingSDK.Net - Alternative
+-------------------------------
 [![CI status on Azure Pipelines](https://dev.azure.com/MerlinCooperDev/iRacingSDK/_apis/build/status/MerlinCooper.iRacingSDK.Net?branchName=master)](https://dev.azure.com/MerlinCooperDev/iRacingSDK/_build/latest?definitionId=1&branchName=master)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/853b0br452jiflwg?svg=true)](https://ci.appveyor.com/project/vipoo/iracingsdk-net)
