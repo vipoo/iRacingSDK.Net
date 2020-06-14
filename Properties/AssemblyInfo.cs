@@ -6,15 +6,15 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTitle("iRacingSDK")]
 [assembly: AssemblyDescription("Accesses iRacing's published data feed for use in dot.net based applications.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Dean Netherton")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("Dean Netherton")]
+[assembly: AssemblyCopyright("Dean Netherton, Merlin Cooper")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 // The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
 // The form "{Major}.{Minor}.*" will automatically update the build and revision,
 // and "{Major}.{Minor}.{Build}.*" will update just the revision.
-[assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("1.13.*")]
 // The following attributes are used to specify the signing key for the assembly,
 // if desired. See the Mono documentation for more information about signing.
 //[assembly: AssemblyDelaySign(false)]

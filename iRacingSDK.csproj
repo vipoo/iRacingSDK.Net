@@ -47,9 +47,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="YamlDotNet, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\YamlDotNet.5.3.1\lib\net35\YamlDotNet.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CrossThreadEvents.cs" />
@@ -137,7 +134,6 @@
     <None Include="Docs\DataSample.md" />
     <None Include="iRacingSDK.nuspec" />
     <None Include="LICENSE.txt" />
-    <None Include="packages.config" />
     <None Include="README.md" />
     <None Include="tools\package.cmd" />
   </ItemGroup>
@@ -153,6 +149,10 @@
   <ItemGroup>
     <Content Include="tools\nuget.exe" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <PackageReference Include="YamlDotNet">
+      <Version>5.3.1</Version>
+    </PackageReference>
+  </ItemGroup>
   <ItemGroup />
 </Project>
