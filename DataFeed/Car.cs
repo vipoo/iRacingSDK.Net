@@ -43,6 +43,7 @@ namespace iRacingSDK
         public short CarNumberRaw { get { return driver == null ? (short)-1 : (short)driver.CarNumberRaw; } }
         public string UserName { get { return driver == null ? "Unknown" : driver.UserName; } }
         public bool IsPaceCar { get { return carIdx == 0; } }
+        public bool IsOnPitRoad { get { return telemetry.OnPitRoad; } }
         
 
         public Car Car(DataSample data)
