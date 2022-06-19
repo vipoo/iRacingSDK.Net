@@ -1,6 +1,5 @@
 #iRacingSDK.Net - Alternative
 -------------------------------
-[![CI status on Azure Pipelines](https://dev.azure.com/MerlinCooperDev/iRacingSDK/_apis/build/status/MerlinCooper.iRacingSDK.Net?branchName=master)](https://dev.azure.com/MerlinCooperDev/iRacingSDK/_build/latest?definitionId=1&branchName=master)
 
 [![Build status](https://dev.azure.com/MerlinCooper/iRacingSDK_Nuget/_apis/build/status/iRacingSDK_Nuget-.NET%20Desktop-CI?branchName=master)
 
