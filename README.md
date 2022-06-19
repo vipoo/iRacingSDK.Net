@@ -2,7 +2,7 @@
 -------------------------------
 [![CI status on Azure Pipelines](https://dev.azure.com/MerlinCooperDev/iRacingSDK/_apis/build/status/MerlinCooper.iRacingSDK.Net?branchName=master)](https://dev.azure.com/MerlinCooperDev/iRacingSDK/_build/latest?definitionId=1&branchName=master)
 
-[![Build status](https://ci.appveyor.com/api/projects/status/853b0br452jiflwg?svg=true)](https://ci.appveyor.com/project/vipoo/iracingsdk-net)
+[![Build status](https://dev.azure.com/MerlinCooper/iRacingSDK_Nuget/_apis/build/status/iRacingSDK_Nuget-.NET%20Desktop-CI?branchName=master)
 
 This dot.net library allows access to the raw data stream from the iRacing Motorsport Racing simulation (www.iracing.com).  It also provides an interface to control certain aspects of the game.  It is based on the official C++ SDK.
 
