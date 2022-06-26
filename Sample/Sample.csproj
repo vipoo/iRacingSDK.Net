@@ -104,7 +104,7 @@
       <Version>1.0.0.40</Version>
     </PackageReference>
     <PackageReference Include="YamlDotNet">
-      <Version>5.3.1</Version>
+      <Version>[11.2.1]</Version>
     </PackageReference>
   </ItemGroup>
 </Project>
