@@ -101,10 +101,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="iRacingSDK">
-      <Version>1.0.0.40</Version>
+      <Version>1.0.1.23</Version>
     </PackageReference>
     <PackageReference Include="YamlDotNet">
-      <Version>[11.2.1]</Version>
+      <Version>13.0.1</Version>
     </PackageReference>
   </ItemGroup>
 </Project>
